@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../partials/head.ejs', {titulo: 'Iniciá Sesión - Uptown Urban', css:'login'})%>
+  
+<body>
+    <main class="login">
+        <section class="loginWindow">
+            <div class="encabezadoLogin">
+                <h1>Iniciá Sesión</h1>
+                <span>
+                    ¿No tenés cuenta? <a href="register">¡Create una acá!</a>
+                </span>
+            </div>
+            <form action="/users/login" class="loginForm" method="post">
+                <div class="form__group field">
+                    <input id="email" type="email" class="form__field" placeholder="Name" required name="email">
+                    <label for="email" class="form__label">Correo electrónico</label>
+                    <% if (locals.errors && errors.email) { %>
+                        <span class="text-error">
+                            <%= errors.email.msg %>
+                        </span>
+                    <% } %>
+                    <p class="error" id="error_email" style ="display: none">Ingrese un email</p>
+                </div>
+                <div class="form__group field">
+                    <input id="password" type="password" class="form__field" placeholder="Name" required name="password">
+                    <label for="name" class="form__label">Contraseña</label>
+                    <% if (locals.errors && errors.password) { %>
+                        <span class="text-error">
+                            <%= errors.password.msg %>
+                        </span>
+                    <% } %>
+                    <p class="error" id="error_password" style ="display: none">Ingrese una Contraseña</p>
+                </div>
+                <div class="check">
+                    <input type="checkbox" name="remember" id="remember-user">
+                    <label for="remember">Recordar mis datos</label>
+                </div>
+                <input class="boton-primario" type="submit" value="Iniciar Sesión">  
+                <div class="forgotPass">
+                    <a href="#">¿Olvidaste tu contraseña?</a>
+                </div>              
+            </form>
+        </section>
+        <section class="bg">
+            <div class="animation-container">
+                <h2 class="animate-heading">¡Que gusto verte de nuevo!</h2>
+                <span class="animate-subtext">Ingresá tus datos y vení a seguir comprando en:</span>
+              </div>
+        </section>
+    </main>
+    <%- include("../partials/footer.ejs") %>
+</body>
+<script src="/js/login.js"></script>
+</html>

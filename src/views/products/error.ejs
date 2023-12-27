@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<%- include('../partials/head.ejs',{titulo:'Tienda - Uptown Urban',css:'productsList'})%>
+
+    <body>
+        <%- include("../partials/header.ejs") %>
+
+        <main>
+            <h1>Lo sentimos ☹</h1>
+            <section class="not-found-product">
+                <p class="message-error-product"><%= message %></p>
+                <div>
+                    <a href="/products" class="boton-primario btn-volver">Volver al catálogo</a>
+                </div>
+            </section>
+        </main>
+        
+
+    </body>
+
+    <%- include("../partials/footer.ejs") %>
+
+</html>

@@ -1,0 +1,56 @@
+main{
+    text-align: center;
+
+    display:flex;
+    flex-direction: column;
+}
+
+.error h1{
+    margin: 5rem 0 2rem;
+
+    font-size: 100px;
+    font-weight: 900;
+    
+    color:#f25;
+    text-shadow: 0 0 15px #f547;
+}
+
+.error h2{
+    font-size: 25px;
+    font-weight: 900;
+
+    color: #222;
+}
+
+.descrip-error{
+    margin: 4rem 0;
+
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.descrip-error a{
+    font-weight: 900;
+
+    color:#777;
+
+    transition: all .3s;
+    transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+
+.descrip-error a:hover{
+    font-weight: 900;
+
+    color:#333;
+}
+
+@media(min-width: 768px){
+    .error h1{
+        font-size: 160px;
+    }
+
+    .error h2{
+        font-size: 40px;
+    }
+}

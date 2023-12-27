@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<%- include('../partials/head.ejs',{titulo:'Tienda - Uptown Urban',css:'productsList'})%>
+
+    <body>
+        <%- include("../partials/header.ejs") %>
+
+        <main>
+            <h1>Tienda Virtual</h1>
+            <section class="list">
+                <% if (products) { %>
+                    <% for( let product of products) { %>
+                        <%- include("../partials/article-card.ejs",{product:product}) %>
+                    <% } %>
+                <% }  %> 
+            </section>
+        </main>
+
+    </body>
+
+    <%- include("../partials/footer.ejs") %>
+
+</html>

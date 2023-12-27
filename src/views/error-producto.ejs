@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<%- include('./partials/head',{titulo:'Página no encontrada - Uptown Urban',css:'error404'})%>
+
+    <body>
+        <%- include("./partials/header.ejs") %>
+
+        <main class="error">
+            <h1>¡ Error !</h1>
+            <h2>¡No existe el producto N° <%= id %>!</h2>
+            <span class="descrip-error">El producto al que quisite acceder no está registrado, te recomendamos <a href="/products/">volver a la tienda.</a></span>
+        </main>
+
+    </body>
+
+    <%- include("./partials/footer.ejs") %>
+
+</html>

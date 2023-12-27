@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../partials/head.ejs'), {titulo: 'Tu carrito - Uptown Urban' , css: 'productCart' }%>
+      
+<body>
+    <%- include("../partials/header.ejs") %>
+    <h1>Carrito<i class="carrito fa-solid fa-cart-shopping"></i></h1>
+    <div class="barra">
+        <p class="producto">Producto</p>
+        <p class="cantidad">Cantidad</p>
+        <p class="subtotal">Subtotal</p>
+    </div>
+    <div class="productos">
+        <div class="carrito1">
+            <img class="imagen" src="/img/carrito1.jpg">
+            <p class="nombre">Nombre del producto</p>
+            <form class="cant" action="cant">
+                <label for="lang"></label>
+                <input type="number" id="lang">
+            </form>
+            <p class="precio">$XXX</p>
+            <i class="basura fa-solid fa-trash-can"></i>
+        </div>
+    
+        <div class="carrito2">
+            <img class="imagen" src="/img/carrito2.jpg">
+            <p class="nombre">Nombre del producto </p>
+            <form class="cant" action="cant">
+                <label for="lang"></label>
+                <input type="number" id="lang">
+            </form>
+            <p class="precio">$XXX</p>
+            <i class="basura fa-solid fa-trash-can"></i>
+        </div>
+    </div>
+    <div class="barra2">
+        <p class="producto"></p>
+        <p class="cantidad"></p>
+        <p class="subtotal">Total: $XXXX</p>
+    </div>
+    <div class="botones">
+        <button type="submit" class="boton-primario">Confirmar</button>
+        <button class="boton-secundario"><i class="fa-solid fa-trash-can"></i> Vaciar Carrito</button>
+    </div>
+    <%- include("../partials/footer.ejs") %>
+</body>
+</html>

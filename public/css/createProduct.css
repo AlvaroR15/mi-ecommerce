@@ -1,0 +1,79 @@
+main {
+    width: 90vw;
+    padding: 3rem;
+    margin: auto;
+    display: flex;
+}
+
+main .container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+main .container form {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+main form input,
+main form select,
+main form textarea {
+    display: block;
+    background-color: #fff;
+    border: 1px solid #777;
+    border-radius: 7px;
+    color: #222;
+    font-size: 1rem;
+    margin: 0 0 1rem;
+    padding: .5rem;
+    width: 100%;
+    outline: none;
+    text-indent: 3px;
+    resize: none;
+}
+
+main .img-product-add .add-img{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 200px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 8px;
+    position: relative;
+}
+
+
+.custom-file-input {
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+
+main .container .img-product-add p {
+    color: #333;
+    font-weight: 600;
+    margin: 8px 0;
+} 
+
+main .container .img-product-add textarea {
+    min-width: 252px;
+    max-width: 252px;
+    min-height: 100px;
+    max-height: 110px;
+    outline: none;
+    border-radius: 7px;
+    text-indent: 3px;
+    font-weight: bolder;
+}
+.error{
+    color:#842029;
+    text-align: center;
+    border-radius: 10px;
+}

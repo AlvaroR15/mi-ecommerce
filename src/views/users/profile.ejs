@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../partials/head.ejs', {titulo: 'Informacion de Perfil - Uptown Urban', css:'profile'})%>
+  
+<body>
+    <%- include("../partials/header.ejs") %>
+    <main>
+      <h1>Mi Perfil</h1>
+      <section class="seccion-perfil-usuario">
+           <div class="usuario-header">
+                <div class="usuario-caja">
+                    <div class="usuario-img">
+                        <img src="/img/users/<%=user.profilePicture%>" alt="Imagen de usuario">
+                        <button type="button" class="boton-img">
+                        <i class="far fa-image"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+           <div class="perfil-usuario-body">
+               <div class="perfil-usuario-bio">
+                   <h3 class="titulo"><%= user.fullname %></h3>
+                   <p class="text"><%= user.email %></p>
+               </div>
+           </div>
+        </section>
+        <a href="/users/profile/edit" class="boton-primario btn-edit">Editar mi perfil</a>
+    </main>
+    <%- include("../partials/footer.ejs") %>
+</body>
+</html>

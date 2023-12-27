@@ -1,0 +1,248 @@
+main{
+    display:flex;
+    background-color: #222;
+}
+
+h1{
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 900;
+    font-size: 48px;
+    margin-bottom: 1rem;
+}
+
+.login .bg {
+    background: url("/img/Logo-Claro-chico-alt.png") no-repeat center;
+}
+
+.login .bg h2{
+    color:#eee;
+    font-size: 2.5rem;
+}
+.login .bg p{
+    color: #FFF;
+}
+
+a{    
+    color: #222;
+    text-decoration: none;
+}
+
+a:hover{
+    text-decoration: underline;
+}
+
+/* Login / Registro */
+
+.form__group {
+    position: relative;
+    padding: 30px 0 0;
+    width: 100%;
+  }
+  
+  .form__field {
+    font-family: inherit;
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid #9b9b9b;
+    outline: 0;
+    font-size: 17px;
+    color: #444;
+    padding: 7px 0;
+    background: transparent;
+    transition: border-color 0.2s;
+  }
+  
+  .form__field::placeholder {
+    color: transparent;
+  }
+  
+  .form__field:placeholder-shown ~ .form__label {
+    font-size: 17px;
+    cursor: text;
+    top: 20px;
+  }
+  
+  .form__label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: 17px;
+    color: #9b9b9b;
+    pointer-events: none;
+  }
+  
+  .form__field:focus {
+    padding-bottom: 6px;
+    font-weight: 700;
+    border-width: 2px;
+    border-color: #222;
+  }
+  
+  .form__field:focus ~ .form__label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: 17px;
+    color: #111;
+  }
+  
+  /* reset input */
+  .form__field:required, .form__field:invalid {
+    box-shadow: none;
+  }
+
+
+
+/* /////////////////////*/
+
+.loginWindow{
+    background: #eee;
+    flex-wrap: wrap;
+    padding: 5vw 3vw;
+    width: 100%;
+    border-radius: 10px;
+}
+
+.encabezadoLogin{
+    width: 100%;
+    text-align: center;
+    margin: 15px auto;
+}
+
+.loginForm{
+    width: 100%;
+}
+
+.encabezadoLogin span{
+    color:dimgray;
+}
+
+
+.loginForm label{
+    font-size: 18px;
+    color:dimgray;
+    margin:15px 0;
+}
+
+.check {
+    margin: 15px auto 10px auto;
+}
+
+.loginForm button{
+    display: block;
+    padding: 10px ;
+    font-size: 1rem;
+    margin: 20px auto;
+    border: none;
+    width: 100%;
+    cursor:pointer;
+}
+
+.loginForm input[type="checkbox"]{
+    margin:1rem 0;
+}
+
+/* Input de texto */
+.textInput{
+    margin:1rem 0;
+    position: relative;
+}
+
+.textInput input{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    height:2rem;
+    padding:0 5px;
+}
+
+.forgotPass{
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.bg{
+    display:none;
+    width: 80%;
+}
+
+.txt-small{
+    font-size: 12px;
+}
+
+.txt-center{
+    text-align: center;
+}
+.error{
+  color:#842029;
+  text-align: center;
+  border-radius: 10px;
+}
+
+
+
+/* ANIMACIONES */
+
+.animation-container {
+    text-align: center;
+  }
+  
+  .animate-heading {
+    font-size: 32px;
+    font-weight: bold;
+    position: relative;
+    opacity: 0;
+    transform: translateX(50px);
+    animation: slideInUp 2s ease 1s forwards, fadeIn 2s ease 1s forwards;
+}
+  
+  .animate-subtext {
+    color:#eee;
+    display: block;
+    font-size: 20px;
+    margin: 15px 0;
+    font-weight: 800;
+    position: relative;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: sweepIn 2s ease 2s forwards, fadeIn 2s ease 2s forwards;  }
+  @keyframes slideInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes sweepIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+/* Responsive design */
+
+  @media (min-width: 361px){
+    main{
+        padding:2rem;
+    }
+}
+
+@media (min-width:1125px){
+    .bg{
+        display:block;
+    }
+    .loginWindow{
+        margin:.5rem;
+    }
+}

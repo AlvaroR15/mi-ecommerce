@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../partials/head.ejs', {titulo: 'Publicar Producto - Uptown Urban' , css: 'createProduct' })%>
+
+    <body>
+        <%- include("../partials/header.ejs") %>
+            <main>
+                <div class="container">
+                    <form action="/products" method="POST" enctype="multipart/form-data" class="createProduct">
+                        <label for="nombreProd">Nombre del Producto</label>
+                        <div>
+                            <input id="nombreProd" name="nombreProd" type="text" placeholder="Ej. Buzo Nike" required value="<%= locals.oldData ? oldData.nombreProd : null %>">
+                            <% if (locals.errors && errors.nombreProd) { %>
+                                <span class="text-error">
+                                    <%= errors.nombreProd.msg %>
+                                </span>
+                            <% } %>
+                            <p class="error" id="error_nombreProd" style ="display: none">Ingrese un nombre para el producto.</p>
+                            <p class="error" id="error_nombreProd_length" style ="display: none">El nombre tiene que tener mas de 5 caracteres.</p>
+                        </div>
+                        <label for="precio">Precio</label>
+                        <div>
+                            <input id="precio" name="precio" type="number" placeholder="Ej. $4000" min="1" required value="<%= locals.oldData ? oldData.precio : null %>">
+                                <% if (locals.errors && errors.precio) { %>
+                                <span class="text-error">
+                                    <%= errors.precio.msg %>
+                                </span>
+                            <% } %>
+                            <p class="error" id="error_precio" style ="display: none">Ingrese un precio para el producto.</p>
+                        </div>
+
+                        <label for="categoria">Categoría</label>
+                        <select id="categoria" name="categoria" required>
+                            <option value="" selected disabled>Selecciona la categoría</option>
+                            <% if (categorias) { %>
+                                <% for (let categoria of categorias) { %>
+                                    <option value="<%= categoria.idCategoria %>"><%= categoria.categoria %></option>
+                                <% } %>
+                            <% } %>
+                        </select>
+                        <% if (locals.errors && errors.categoria) { %>
+                            <span class="text-error">
+                                <%= errors.categoria.msg %>
+                            </span>
+                        <% } %>
+                        <p class="error" id="error_categoria" style ="display: none">Elija una categoria.</p>
+                        <label for="talle">Tamaño / Talle</label>
+                        <input id="talle" name="talle" type="text" placeholder="Ej. XL, 45cm, 40" required value="<%= locals.oldData ? oldData.talle : null %>">
+                        <% if (locals.errors && errors.talle) { %>
+                            <span class="text-error">
+                                <%= errors.talle.msg %>
+                            </span>
+                        <% } %>
+                        <p class="error" id="error_talle" style ="display: none">Ingrese una Talle</p>
+                        <label for="descripcion">Descripción del Producto</label>
+                        <textarea name="descripcion" id="descripcion" cols="40" rows="5" required value="<%= locals.oldData ? oldData.descripcion : null %>">
+                        </textarea>
+                        <% if (locals.errors && errors.descripcion) { %>
+                            <span class="text-error">
+                                <%= errors.descripcion.msg %>
+                            </span>
+                        <% } %>
+                        <p class="error" id="error_descripcion" style ="display: none">Ingrese una descripcion.</p>
+                        <p class="error" id="error_descripcion_length" style ="display: none">La descripcion debe contener al menos 20 caracteres</p>
+                        <label for="imagen">Imagen</label>
+                        <input id="imagen" name="imagen" type="file">
+                        <% if (locals.errors && errors.imagen) { %>
+                            <span class="text-error">
+                                <%= errors.imagen.msg %>
+                            </span>
+                        <% } %>
+                        <p class="error" id="error_imagen" style ="display: none">Ingrese una imagen.</p>
+                        <button type="sumbit" class="boton-primario">¡Publicar!</button>
+                    </form>
+
+                </div>
+                </div>
+            </main>
+            <%- include("../partials/footer.ejs") %>
+    </body>
+    <script src="/js/createProduct.js"></script>
+</html>

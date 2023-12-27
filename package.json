@@ -1,0 +1,40 @@
+{
+  "name": "grupo_6_usedfashion",
+  "version": "1.0.0",
+  "description": "Queremos ofrecerles a las personas la posibilidad de comprar ropa más economico desde la comodidad de su casa. El publico al que va dirigido es a todo aquel que se encuentre interesado en vender o comprar ropa de segunda mano.",
+  "main": "./src/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ./src/server.js",
+    "start": "node ./src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aldanagaspar/grupo_6_UsedFashion.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aldanagaspar/grupo_6_UsedFashion/issues"
+  },
+  "homepage": "https://github.com/Aldanagaspar/grupo_6_UsedFashion#readme",
+  "devDependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^3.0.1"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.9",
+    "express-session": "^1.17.3",
+    "express-validator": "^7.0.1",
+    "method-override": "^3.0.0",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.6.2",
+    "react-router-dom": "^6.20.1",
+    "sequelize": "5.21"
+  }
+}
