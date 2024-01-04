@@ -1,0 +1,119 @@
+
+header {
+    box-shadow: 0 0px 10px #2223;
+    padding: 5px;
+    margin: 0 auto;
+}
+
+header nav .nav-mobile {
+    padding: 4vw 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+header nav .nav-mobile div .header-logo {
+    width: 100px;
+    display: block;
+    margin: 5px;
+}
+
+header nav .nav-mobile div {
+    width: 85vw;
+    margin: 1px 3px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header nav .nav-mobile div > div {
+    width: 20%;
+    display: flex;
+    color: #333;
+    font-size: 1.2rem;
+}
+
+header nav .nav-md-lg {
+    display: none;
+}
+
+
+header nav .nav-mobile form {
+    margin: 1rem 0 0;
+    width: 75%;
+    box-shadow: 0 0 5px #ccc;
+    border-radius: 5px;
+    display: block;
+    display: flex;
+    align-items: center;
+    padding: 0.5vw;
+}
+
+header nav .nav-mobile form input {
+    display: block;
+    width: 90%;
+    font-size: 1rem;
+    border: none;
+    outline: none;
+    padding: 1vw;
+    color: #333;
+}
+
+header nav .nav-mobile form i {
+    display: block;
+    width: 10%;
+    font-size: 1.1rem;
+}
+
+header nav .nav-md-lg {
+    border: 1px solid;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+header nav .nav-md-lg .header-logo {
+    width: 80px;
+    display: block
+}
+
+
+
+header nav .nav-md-lg form {
+    display: flex;
+    box-shadow: 0 0 5px #ccc;
+    border-radius: 5px;
+}
+
+header nav .nav-md-lg form label input {
+    width: 40rem;
+    border: none;
+    border-radius: 5px;
+    padding: .5rem;
+}
+
+.search-btn{
+    background-color: #0000;
+    border: none;
+    height: 100%;
+    padding: .5rem;
+}
+
+.search-btn:hover{
+    background-color: #eee;
+    cursor: pointer;
+}
+
+header .nav-md-lg .navigator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 15px auto;
+    background-color: blue;
+}
+
+header .nav-md-lg .nav-options .nav-bar {
+    display: flex;
+    background-color: red;
+}

@@ -1,0 +1,46 @@
+.carrusel .container-img {
+    height: 370px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.carrusel .container-img .img-mobile {
+    width: 100%;
+    object-fit: contain;
+}
+
+.carrusel .container-img .img-carrusel {
+    object-fit: contain;
+    display: none;
+}
+
+
+@media (min-width: 768px) {
+    main .carrusel .container-img div .img-carrusel {
+        display: block;
+        width: 100%;
+    }
+
+    main .carrusel .container-img div .img-mobile {
+        display: none;
+    }
+
+    .container-secciones {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .container-secciones .seccion {
+        width: 40%;
+    }
+}
+
+@media (min-width:1024px) {
+    main .carrusel .container-img div {
+        background-color: #eee;
+    }
+    main .carrusel .container-img div .img-carrusel {
+        object-fit: cover;
+    }
+
+}

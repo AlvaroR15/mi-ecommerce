@@ -1,0 +1,82 @@
+footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    background-color: #222;
+    color: #777;
+    text-align: center;
+    box-shadow: 0 0px 10px #2223;
+}
+
+footer h2 {
+    color: #eee;
+    padding-bottom: 1rem;
+}
+
+footer div {
+    margin: 2rem;
+}
+
+footer ul {
+    list-style: none;
+}
+
+footer ul li {
+    margin: 0 0 .5rem;
+}
+
+footer ul li a {
+    color: #888;
+    text-decoration: none;
+}
+
+footer ul li a:hover {
+    color: #eee;
+}
+
+.logo-footer {
+    display: block;
+    margin: auto;
+    width: 50%;
+}
+
+.container-sociales {
+    display: block;
+    margin: 0 auto 2rem;
+    width: 40%;
+}
+
+.redes-sociales {
+    display: flex;
+    justify-content: space-around;
+}
+
+.redes-sociales li a i {
+    font-size: 36px;
+}
+
+.redes-sociales li a i:hover {
+    color: #eee;
+}
+
+.contacto-info {
+    display: flex;
+    align-items: center;
+}
+
+.contacto-info .icon-footer {
+    color: #bbb;
+    padding: 0 .5rem 0 0;
+}
+
+.icon-footer.fa-whatsapp {
+    color: #5c7;
+}
+
+.text-error {
+    color: #952121;
+    font-size: 14px;
+    margin-top: -15px;
+    margin-bottom: 5px;
+}
+

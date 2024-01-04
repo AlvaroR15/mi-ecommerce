@@ -1,0 +1,178 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'DM Sans', sans-serif;
+}
+
+
+
+
+
+
+
+/* NOT FOUN PRODUCT */
+.not-found-product {
+    margin: 4rem 0;
+    text-align: center;
+}
+
+.message-error-product {
+    text-align: center;
+    margin: 30px 0;
+    font-size: 25px;
+}
+
+.btn-volver {
+    display: inline-block;
+    margin: auto;
+    align-content: center;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+/* --   --   --  --   --  --  */
+
+
+/* Botones */
+button{
+    border: none;
+}
+
+.boton-primario{
+    padding: 1rem;
+
+    font-weight: 600;
+    text-decoration: none;
+    color: #eee;
+
+    background-color: #222;
+    box-shadow: 0 0 5px #2223;
+
+    border-radius: 5px;
+
+    transition: all .1s;
+    transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+}
+
+.boton-primario:hover{        
+    outline: solid 4px #eee;
+    outline-offset: -5px;
+}
+
+.boton-primario:active{
+    background-color: #000;
+    color: #999;
+     
+    outline: solid 4px #ccc;
+    outline-offset: -5px;
+}
+
+
+.boton-secundario{
+    padding: 1rem;
+
+    font-weight: 400;
+    text-decoration: none;
+    color: #222;
+
+    background-color: #fff;
+    box-shadow: 0 0 5px #2223;
+
+    border-radius: 5px;
+      
+    outline: solid 1px #222;
+    outline-offset: -1px;
+
+    transition: all .1s;
+    transition-timing-function: cubic-bezier(0.23, 1, 0.320, 1);
+
+}
+
+.boton-secundario:hover{        
+    outline: solid 2px #222;
+    outline-offset: -2px;
+}
+
+.boton-secundario:active{
+    background-color: #ddd;
+    color: #333;
+     
+    outline: solid 2px #333;
+    outline-offset: -2px;
+}
+
+.boton-primario, .boton-secundario{
+    text-align: center;
+}
+
+.boton-primario:hover, .boton-secundario:hover{    
+    cursor: pointer;
+}
+
+.boton-chiquito{
+    padding: .6rem;
+}
+
+.boton-peligroso{
+    background-color: #f45;
+
+    transition: all .1s;
+    transition-timing-function: cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+/* Clases útiles */
+.negrita{
+    font-weight: 600;
+}
+
+.sutil{ /* Oculta los bordes y sombras de un elemento (pensado para botones principalmente) */
+    outline:none;
+    box-shadow: none;
+}
+
+
+@media (min-width: 1233px) {
+    header nav .nav-mobile {
+        display: none;
+    }
+
+    header nav .nav-md-lg {
+        display: flex;
+    }
+    footer {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+}
+
+@media (min-width: 1180px) {
+    header nav .nav-mobile {
+        display: none;
+    }
+
+    header nav .nav-md-lg {
+        display: flex;
+    }
+    header nav .nav-md-lg div {
+        display: none;
+    }
+
+    footer {
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 2rem 3rem;
+        flex-wrap: nowrap;
+        text-align: left;
+    }
+
+    header nav .nav-md-lg .login-bar {
+        display: flex;
+    }
+
+    .container-sociales {
+        width: auto;
+        text-align: center;
+        margin: auto;
+    }
+}
