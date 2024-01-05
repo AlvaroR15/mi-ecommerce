@@ -1,8 +1,10 @@
 
 header {
+    background-color: #555;
     box-shadow: 0 0px 10px #2223;
     padding: 5px;
     margin: 0 auto;
+    color: #fff;
 }
 
 header nav .nav-mobile {
@@ -11,6 +13,7 @@ header nav .nav-mobile {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+
 }
 
 header nav .nav-mobile div .header-logo {
@@ -30,7 +33,7 @@ header nav .nav-mobile div {
 header nav .nav-mobile div > div {
     width: 20%;
     display: flex;
-    color: #333;
+    color: #000;
     font-size: 1.2rem;
 }
 
@@ -42,7 +45,7 @@ header nav .nav-md-lg {
 header nav .nav-mobile form {
     margin: 1rem 0 0;
     width: 75%;
-    box-shadow: 0 0 5px #ccc;
+    box-shadow: 0 0 5px #222;
     border-radius: 5px;
     display: block;
     display: flex;
@@ -52,18 +55,20 @@ header nav .nav-mobile form {
 
 header nav .nav-mobile form input {
     display: block;
+    background-color: transparent;
     width: 90%;
     font-size: 1rem;
     border: none;
     outline: none;
     padding: 1vw;
-    color: #333;
+    color: #ccc;
 }
 
 header nav .nav-mobile form i {
     display: block;
     width: 10%;
     font-size: 1.1rem;
+    color: #000;
 }
 
 header nav .nav-md-lg {

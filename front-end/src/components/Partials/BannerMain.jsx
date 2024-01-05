@@ -1,4 +1,4 @@
-import bannerMobile from '../../assets/partials-img/banner-mobile.png'
+import bannerMobile from '../../assets/partials-img/banner-mobile.jpg'
 import bannerDesktop from '../../assets/partials-img/banner-home.png'
 import './banner.css'
 

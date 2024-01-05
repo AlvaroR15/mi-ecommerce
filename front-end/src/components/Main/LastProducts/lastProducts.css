@@ -1,0 +1,28 @@
+.last-products {
+    width: 90vw;
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+}
+
+.last-products div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(30, 157, 55,.3);
+    border-radius: 3px;
+}
+
+.last-products .last-product-img {
+    width: 80%;
+}
+
+.last-products-title {
+    margin: 15px auto;
+    text-align: center;
+}
+
+.last-products .link-view {
+    grid-column-start: span 2;
+}

@@ -1,11 +1,18 @@
+.carrusel {
+    height: 40vh;
+    margin-top: 20px;
+}
+
 .carrusel .container-img {
-    height: 370px;
-    margin-top: 5px;
+    display: block;
+    height: 100%;
+    width: 100%;
     overflow: hidden;
 }
 
 .carrusel .container-img .img-mobile {
     width: 100%;
+    height: 100%;
     object-fit: contain;
 }
 
