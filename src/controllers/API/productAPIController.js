@@ -1,6 +1,4 @@
 const db = require('../../database/models/index');
-const fs = require('fs');
-const path = require('path');
 
 const productAPIController = {
     product: async (req, res) => {

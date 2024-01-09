@@ -4,18 +4,6 @@ const db = require('../database/models/index');
 
 
 const usersController = {
-    loginView: (req, res) => {
-        res.render("./users/login", {
-            titulo: 'Iniciá Sesión - Used Fashion',
-            css: 'login'
-        });
-    },
-    registerView: async (req, res) => {
-        res.render("./users/register", {
-            titulo: 'Creá tu cuenta - Used Fashion',
-            css: 'login'
-        });
-    },
     register: async (req, res) => {
         try {
             let resultValidation = validationResult(req);
@@ -68,29 +56,6 @@ const usersController = {
         }
         catch (error) {
             console.error('Error al iniciar sesión:', error);
-        }
-    },
-    profile: async (req, res) => {
-        try {
-            const user = await db.User.findOne({ where: { email: req.session.userLogged } })
-            return res.render('./users/profile', { user });
-        } catch (error) {
-            console.log(error);
-        }
-    },
-    logout: (req, res) => {
-        res.clearCookie('userLogged');
-        req.session.destroy();
-        res.redirect('/')
-    },
-    editView: async (req, res) => {
-        try {
-            const user = await db.User.findOne({ where: { email: req.session.userLogged } });
-            res.render("./users/edit", {
-                user: user,
-            });
-        } catch (error) {
-            console.log(error);
         }
     },
     edit: async (req, res) => {

@@ -1,41 +1,43 @@
-module.exports = (sequelize, DataTypes)=>{
-    const User = sequelize.define("User",{
-        id:{
+module.exports = (sequelize, DataTypes) => {
+    const User = sequelize.define('User', {
+        id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
+            allowNull: false
         },
-        fullname:{
+        first_name: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: false
         },
-        email:{
-            type:DataTypes.STRING,
-            unique: true,
-            allowNull: false,
-        },
-        password:{
+        last_name: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: false
         },
-        profilePicture:{
+        email: {
             type: DataTypes.STRING,
-            allowNull: true,
+            allowNull: false
+        },
+        address: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        product_id: {
+            type: DataTypes.INTEGER,
+            foreignKey: true
+        },
+        createdAt: {
+            type: DataTypes.DATE
+        },
+        updated_at: {
+            type: DataTypes.DATE
+        },
+        picture: {
+            type: DataTypes.STRING
         }
-    },
-    {
-        tableName: "users",
-        timestamps: false,
-        paranoid: true
-    });
-
-    User.associate = function(models){
-        User.belongsToMany(models.Product,{
-            through: 'usersproducts',
-            foreignKey:"idProd",
-            as: "products",
-        });
-    }
-
+    }, {
+        tableName: 'users',
+        timestamps: true
+    })
     return User;
 }

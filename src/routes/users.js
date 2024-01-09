@@ -20,18 +20,18 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage});
 
-router.get('/profile', authMiddleware,usersController.profile);
-router.get('/profile/edit',authMiddleware,usersController.editView)
+// router.get('/profile', authMiddleware,usersController.profile);
+// router.get('/profile/edit',authMiddleware,usersController.editView)
 router.put('/profile/edit', upload.single('profilePicture'),usersController.edit);
 
-router.get('/register', guestMiddleware,usersController.registerView);
+// router.get('/register', guestMiddleware,usersController.registerView);
 router.post('/register', upload.single('profilePicture'), validationUser,usersController.register);
 
-router.get('/:id/myProducts',productsController.listadoProductosUsuario);
+// router.get('/:id/myProducts',productsController.listadoProductosUsuario);
 
-router.get('/login', guestMiddleware,usersController.loginView);
+// router.get('/login', guestMiddleware,usersController.loginView);
 router.post('/login', validationUser,usersController.login);
 
-router.get('/logout', usersController.logout);
+// router.get('/logout', usersController.logout);
 
 module.exports = router;

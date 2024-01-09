@@ -1,51 +1,46 @@
-module.exports = (sequelize, DataTypes)=>{
-    const Product = sequelize.define("Product",{
-        idProd:{
+module.exports = (sequelize, DataTypes) => {
+    const Product = sequelize.define('Product', {
+        id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
+            allowNull: false
         },
-        nombreProd:{
+        name: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: false
         },
-        descripcion:{
+        description: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: false
         },
-        precio:{
-            type: DataTypes.DOUBLE,
+        price: {
+            type: DataTypes.FLOAT,
             allowNull: false,
+            unsigned: true
         },
-        talle:{
+        picture: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: false
         },
-        idCategoria: {
-            type: DataTypes.INTEGER.UNSIGNED,
-        },
-        imagen:{
+        category_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            foreignKey: true
+        },
+        user_id: {
+            type: DataTypes.INTEGER,
+            foreignKey: true
+        },
+        createdAt: {
+            type: DataTypes.DATE
+        },
+        updatedAt: {
+            type: DataTypes.DATE
         }
-    },
-    {
-        tableName: "products",
-        timestamps: false,
+    }, {
+        tableName: 'products',
         paranoid: true
-    });
-
-    Product.associate = function(models){
-        Product.belongsTo(models.ProductCategorie,{
-            as: "Category",
-            foreignKey: "idCategoria",
-        });
-        Product.belongsToMany(models.User,{
-            through: 'usersproducts',
-            foreignKey:"id",
-            as: "users",
-        });
-    }
-
-    return Product;
+    })
+    return Product
 }

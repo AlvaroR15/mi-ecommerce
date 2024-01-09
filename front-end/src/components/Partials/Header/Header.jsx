@@ -1,16 +1,24 @@
 import logo from '../../../assets/partials-img/Logo.png'
 import './header.css'
+import { NavMobile } from '../../Main/NavMobile/NavMobile';
+
+import { useState } from 'react';
 
 export const Header = () => {
+    const [clicked, setCliked] = useState(false);
+    const handleClick = () => {
+        setCliked(!clicked);
+    }
     return (
         <header>
+            < NavMobile clicked={clicked} handleClick={handleClick} />
             <nav>
                 <div className="nav-mobile">
                     <div>
                         <a href="#"><img className="header-logo" src={logo} alt="Logo de la marca" /></a>
                         <div>
-                            <i className="fa-solid fa-bars"></i>
                             <i className="fa-solid fa-cart-shopping"></i>
+                            <i onClick={handleClick} className="fa-solid fa-bars"></i>
                         </div>
                     </div>
                     <form>

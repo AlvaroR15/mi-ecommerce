@@ -1,10 +1,17 @@
 import './navMobile.css';
 import user from '../../../assets/partials-img/usuarionormal.jpg'
 
-export const NavMobile = () => {
+import { useRef } from 'react';
+
+export const NavMobile = (props) => {
+    const nav = useRef();
+    const changeClass = () => {
+        nav.current.classList.toggle('show')
+    }
     return (
         <>
-            <nav className="nav-mobile-container">
+            <nav ref={nav} className={`nav-mobile-container ${props.clicked ? 'show': ''}`}>
+                <span onClick={changeClass} className='close-nav'>X</span>
                 <div className="info-user">
                     <img src={user} alt="user" />
                     <p>Username</p>

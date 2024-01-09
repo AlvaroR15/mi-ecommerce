@@ -6,12 +6,10 @@ const methodOverride = require('method-override');
 const session = require('express-session');
 const cookies = require('cookie-parser');
 
-const mainRoutes = require("./routes");
 const productRoutes = require("./routes/products");
 const usersRoutes = require("./routes/users");
 const usersApiRoutes = require('./routes/API/users');
 const productApiRoutes = require('./routes/API/productApi');
-const generalApiRoutes = require('./routes/API/index');
 
 const userLoggedMiddleware = require('./middlewares/userLoggedMiddleware');
 const adminLoggedMiddleware = require('./middlewares/adminLoggedMiddleware');
@@ -48,10 +46,9 @@ app.listen(PORT, () => {
     console.log(`Ingresá a localhost:${PORT} para empezar a visualizar el sitio`);
 });
 
-app.use('/', mainRoutes);
 app.use('/users', usersRoutes);
 app.use('/products', productRoutes);
-app.use('/api', usersApiRoutes,productApiRoutes, generalApiRoutes);
+app.use('/api', usersApiRoutes,productApiRoutes);
 
 
 

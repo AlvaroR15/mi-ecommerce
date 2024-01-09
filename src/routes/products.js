@@ -4,6 +4,7 @@ const multer = require('multer');
 const path = require('path');
 
 const productsController = require('../controllers/productsController');
+const adminController = require("../controllers/Admin/adminController");
 
 const authMiddleware = require('../middlewares/authMiddleware');
 const validationCreateProduct = require('../middlewares/validationCreateProduct');
@@ -17,27 +18,22 @@ const storage = multer.diskStorage({
 });
 const upload = multer({storage});
 
-router.get('/cart', authMiddleware,productsController.carrito);
-router.get('/create/', authMiddleware,productsController.crearProducto);  
+// router.get('/create/', authMiddleware,productsController.crearProducto);  
 
-// ***** RUTAS DEL CRUD *****
-// *** rutas para OBTENER PRODUCTOS ***
-router.get('/',productsController.listadoProductos);
-router.get('/item/:id', productsController.item);
-router.get('/:category', productsController.productosPorCategoria);
+router.get('/',productsController.productList);
+router.get('/:id', productsController.detail);
 
 // *** rutas para AGREGAR PRODUCTOS ***
-router.post('/', upload.single('imagen'), validationCreateProduct,productsController.guardarProducto);
+router.post('/', upload.single('picture'), validationCreateProduct,adminController.saveProduct);
 
 // *** rutas para EDITAR PRODUCTOS ***
-router.get('/edit/:id/', authMiddleware,productsController.editarProducto);
-router.put('/edit/:id/', upload.single('imagen'), validationEditProduct,productsController.actualizarProducto);
+router.put('/edit/:id/', upload.single('picture'), validationEditProduct,adminController.editProduct);
 
 /* Ruta para BUSCAR PRODUCTOS */
 router.post('/search', productsController.buscarProducto)
 
 // *** rutas para BORRAR PRODUCTOS ***
-router.delete('/:id', productsController.borrarProducto);
+router.delete('/:id', adminController.deleteProduct);
 
 
 module.exports = router;
