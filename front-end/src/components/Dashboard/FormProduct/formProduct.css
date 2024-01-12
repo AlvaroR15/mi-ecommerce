@@ -1,0 +1,51 @@
+.container {
+    width: 100%;
+    border: 1px solid;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.container h1 {
+    font-size: 1.8rem;
+    margin: 3vh auto;
+}
+
+.container label {
+    font-size: .9rem;
+}
+
+.container form {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+form input,
+form select,
+form textarea {
+    display: block;
+    background-color: #fff;
+    border: 1px solid #777;
+    border-radius: 7px;
+    color: #222;
+    font-size: 1rem;
+    margin: 0 0 1rem;
+    padding: .5rem;
+    width: 100%;
+    outline: none;
+    text-indent: 3px;
+    resize: none;
+}
+
+
+.container .img-product-add textarea {
+    min-width: 252px;
+    max-width: 252px;
+    min-height: 100px;
+    max-height: 110px;
+    outline: none;
+    border-radius: 7px;
+    text-indent: 3px;
+    font-weight: bolder;
+}
