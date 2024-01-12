@@ -26,6 +26,7 @@
 
 .nav-mobile-container .info-user img {
     width: 25%;
+    border-radius: 50%;
 }
 
 .nav-mobile-container .info-user p {
