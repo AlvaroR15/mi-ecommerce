@@ -3,6 +3,7 @@ import './header.css'
 import { NavMobile } from '../../Main/NavMobile/NavMobile';
 
 import { useState } from 'react';
+import { Link } from 'react-router-dom'
 
 export const Header = () => {
     const [clicked, setCliked] = useState(false);
@@ -15,9 +16,9 @@ export const Header = () => {
             <nav>
                 <div className="nav-mobile">
                     <div>
-                        <a href="#"><img className="header-logo" src={logo} alt="Logo de la marca" /></a>
+                        <Link to='/'><img className="header-logo" src={logo} alt="Logo de la marca" /></Link>
                         <div>
-                            <i className="fa-solid fa-cart-shopping"></i>
+                            <Link to='/cart'><i className="fa-solid fa-cart-shopping"></i></Link>
                             <i onClick={handleClick} className="fa-solid fa-bars"></i>
                         </div>
                     </div>
@@ -27,7 +28,7 @@ export const Header = () => {
                     </form>
                 </div>
                 <div className="nav-md-lg">
-                    <a href="#"><img className="header-logo" src={logo} alt="Logo de la marca" /></a>
+                    <a to="#"><img className="header-logo" src={logo} alt="Logo de la marca" /></a>
                     <form action="/products/search" method="post">
                         <label>
                             <input type="text" placeholder="Buscar..." name="search" />
@@ -35,17 +36,17 @@ export const Header = () => {
                         </label>
                     </form>
                     <ul className='navigator'>
-                        <li><a href="#">Profile</a></li>
-                        <li><a href="#">Mis Compras</a></li>
-                        <li><a href="#">❤</a></li>
-                        <li><a href="#">🛒</a></li>
+                        <li><a to="#">Profile</a></li>
+                        <li><a to="#">Mis Compras</a></li>
+                        <li><a to="#">❤</a></li>
+                        <li><a to="#">🛒</a></li>
                     </ul>
                     <div className='nav-options'>
                         <ul className='nav-bar'>
-                            <li><a href="#">Categorias</a></li>
-                            <li><a href="#">Promociones</a></li>
-                            <li><a href="#">Devoluciones</a></li>
-                            <li><a href="#">Ayuda</a></li>
+                            <li><a to="#">Categorias</a></li>
+                            <li><a to="#">Promociones</a></li>
+                            <li><a to="#">Devoluciones</a></li>
+                            <li><a to="#">Ayuda</a></li>
                         </ul>
                     </div>
                 </div>

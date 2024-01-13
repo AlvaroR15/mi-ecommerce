@@ -2,6 +2,7 @@ import './navMobile.css';
 import user from '../../../assets/partials-img/usuarionormal.jpg'
 
 import { useRef } from 'react';
+import { Link } from 'react-router-dom';
 
 export const NavMobile = (props) => {
     const nav = useRef();
@@ -17,18 +18,18 @@ export const NavMobile = (props) => {
                     <p>Username</p>
                 </div>
                 <ul className="nav-bar">
-                    <li><a href="#">Inicio</a></li>
-                    <li><a href="#">Buscar</a></li>
-                    <li><a href="#">Mis compras</a></li>
-                    <li><a href="#">Favoritos</a></li>
-                    <li><a href="#">Promos</a></li>
-                    <li><a href="#">Ayuda</a></li>
-                    <li><a href="#">Botón de arrepentimiento</a></li>
+                    <li><Link to='/'>Inicio</Link></li>
+                    <li><a to="#">Buscar</a></li>
+                    <li><Link to='/cart'>Carrito de compras</Link></li>
+                    <li><a to="#">Favoritos</a></li>
+                    <li><a to="#">Promos</a></li>
+                    <li><a to="#">Ayuda</a></li>
+                    <li><a to="#">Botón de arrepentimiento</a></li>
                 </ul>
                 <ul className="login-bar">
-                    <li><a href="#">Registrate</a></li>
-                    <li><a href="#">Inicia sesión</a></li>
-                    <li><a href="#">Cerrar sesión</a></li>
+                    <li><Link to='/register'>Registrate</Link></li>
+                    <li><Link to='/login'>Inicia sesión</Link></li>
+                    <li><Link to='/'>Cerrar sesión</Link></li>
                 </ul>
             </nav>
         </>

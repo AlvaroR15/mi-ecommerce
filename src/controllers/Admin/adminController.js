@@ -1,20 +1,9 @@
-const { validationResult } = require('express-validator')
 const db = require('../../database/models/index');
 
 const adminController = {
     saveProduct: async (req, res) => {        
         try {
-            // const categorias = await db.Category.findAll({raw:true});
-            // let resultValidation = validationResult(req);
             let file;
-            // if (resultValidation.errors.length > 0) {
-            //     return res.render('./products/createProduct', {
-            //         errors: resultValidation.mapped(),
-            //         oldData: req.body,
-            //         categorias
-            //     })
-            // };
-
             if (req.file.filename) {
                 file = req.file.filename;
             };
@@ -23,12 +12,13 @@ const adminController = {
                 name: req.body.name,
                 description: req.body.description,
                 price: +req.body.price,
-                category_id: +req.body.category,
-                picture: file
+                size: req.body.size,
+                picture: file,
+                category_id: +req.body.category_id,
             });
 
             return res.status(500).json({
-                status: 'okkkk'
+                status: 'Product created'
             })
         } catch(error) {
             console.log(error);
@@ -36,16 +26,6 @@ const adminController = {
     },
      editProduct: async (req, res) => {
         try {
-            // let resultValidation = validationResult(req);
-            // const categoriasData = await db.ProductCategorie.findAll({raw:true})
-            // if (resultValidation.errors.length > 0) {
-            //     return res.render('./products/editProduct', {
-            //         errors: resultValidation.mapped(),
-            //         oldData: req.body,
-            //         categoriasData
-            //     })
-            // };
-
             const productToUpdate = await db.Product.findByPk(req.params.id,{raw:true});
             const file = req.file;
 

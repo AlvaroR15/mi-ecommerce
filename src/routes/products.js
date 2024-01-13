@@ -7,8 +7,7 @@ const productsController = require('../controllers/productsController');
 const adminController = require("../controllers/Admin/adminController");
 
 const authMiddleware = require('../middlewares/authMiddleware');
-const validationCreateProduct = require('../middlewares/validationCreateProduct');
-const validationEditProduct = require('../middlewares/validationEditProduct');
+
 
 const storage = multer.diskStorage({
     destination:path.join(__dirname, '../../public/img/products'), 
@@ -24,10 +23,10 @@ router.get('/',productsController.productList);
 router.get('/:id', productsController.detail);
 
 // *** rutas para AGREGAR PRODUCTOS ***
-router.post('/', upload.single('picture'), validationCreateProduct,adminController.saveProduct);
+router.post('/create', upload.single('picture'), adminController.saveProduct);
 
 // *** rutas para EDITAR PRODUCTOS ***
-router.put('/edit/:id/', upload.single('picture'), validationEditProduct,adminController.editProduct);
+router.put('/edit/:id', upload.single('picture'),adminController.editProduct);
 
 /* Ruta para BUSCAR PRODUCTOS */
 router.post('/search', productsController.buscarProducto)

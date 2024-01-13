@@ -47,7 +47,7 @@ app.listen(PORT, () => {
 });
 
 app.use('/users', usersRoutes);
-app.use('/products', productRoutes);
+app.use('/admin', productRoutes);
 app.use('/api', usersApiRoutes,productApiRoutes);
 
 
