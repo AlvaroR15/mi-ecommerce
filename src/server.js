@@ -6,7 +6,7 @@ const methodOverride = require('method-override');
 const session = require('express-session');
 const cookies = require('cookie-parser');
 
-const productRoutes = require("./routes/products");
+// const productRoutes = require("./routes/products");
 const usersRoutes = require("./routes/users");
 const usersApiRoutes = require('./routes/API/users');
 const productApiRoutes = require('./routes/API/productApi');
@@ -47,7 +47,7 @@ app.listen(PORT, () => {
 });
 
 app.use('/users', usersRoutes);
-app.use('/admin', productRoutes);
+// app.use('/admin', productRoutes);
 app.use('/api', usersApiRoutes,productApiRoutes);
 
 

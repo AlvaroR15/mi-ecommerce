@@ -4,7 +4,7 @@ const multer = require('multer');
 const path = require('path');
 
 const usersController = require('../controllers/usersController');
-const productsController = require('../controllers/productsController');
+// const productsController = require('../controllers/productsController');
 
 const authMiddleware = require('../middlewares/authMiddleware');
 const guestMiddleware = require('../middlewares/guestMiddleware');
