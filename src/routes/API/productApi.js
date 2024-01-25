@@ -19,7 +19,7 @@ router.get('/products',productAPIController.list);
 router.get('/products/:id', productAPIController.detail);
 
 // *** rutas para AGREGAR PRODUCTOS ***
-router.post('products/create', upload.single('picture'), productAPIController.saveProduct);
+router.post('/products/create', upload.single('picture'), productAPIController.saveProduct);
 
 // *** rutas para EDITAR PRODUCTOS ***
 router.put('/products/edit/:id', upload.single('picture'),productAPIController.editProduct);

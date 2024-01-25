@@ -4,7 +4,6 @@ export async function getProducts(){
         const data = await response.json()
         if(response.status !== 200) throw new Error("Error en la conexion")
 
-    
         return data
 
         } catch(error){

@@ -3,19 +3,29 @@
     margin: 20px auto;
     display: grid;
     grid-template-columns: repeat(2,1fr);
+    grid-template-rows: repeat(2,1fr);
+    grid-gap: 10px 0;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 2px;
 }
 
 .last-products div {
+    margin: 3px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    border: 1px solid rgba(30, 157, 55,.3);
+    border: 1px solid #eee;
     border-radius: 3px;
+    padding: 5px;
 }
 
 .last-products .last-product-img {
-    width: 80%;
+    width: 90%;
+    height: 30vh;
+    border: 1px solid #888;
+    border-radius: 2px;
 }
 
 .last-products-title {
@@ -23,6 +33,21 @@
     text-align: center;
 }
 
+.last-products span {
+    font-size: .9rem;
+    display: block;
+    color: #333;
+}
+
+.last-products p {
+    font-size: 1.3rem;
+}
+
 .last-products .link-view {
+    background-color: #333;
     grid-column-start: span 2;
+}
+
+.last-products .link-view a {
+    color: #eee;
 }

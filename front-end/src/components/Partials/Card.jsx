@@ -1,17 +1,18 @@
-import product from '../../assets/partials-img/zapatillasAdidas.jpg';
 import './card.css'
 
-export const Card = () => {
+import { Link } from 'react-router-dom'
+
+export const Card = (props) => {
     return (
         <article>
-    <a href="#" className="card">
-        <img className="contenedor-img" src={product} alt="" />
-        
-        <div className="card__price">$1000</div>
-        <div className="card__title">Articulo</div>
-        <div className="card__subtitle">Tamaño / Talle: <b>XL</b></div>
-    </a>
+            <Link to='/' className="card">
+                <img className="contenedor-img" src={props.picture} alt={props.name} />
+                <div className="card__price">${props.price}</div>
+                <div className="card__title">{props.name}</div>
+                <span className='price-original'>{props.priceOriginal}</span>
+                <div className="card__subtitle">Tamaño / Talle: <b>{props.size}</b></div>
+            </Link>
 
-</article>
+        </article>
     )
 }

@@ -13,6 +13,7 @@ import { Route, Routes } from 'react-router-dom';
 import { Register } from './components/Forms/AuthForm/Register';
 import { Login } from './components/Forms/AuthForm/Login';
 import { Cart } from './components/ListProducts/Cart/Cart'
+import ContentRow from './components/Dashboard/ContentRow/ContentRow';
 
 function App() {
 

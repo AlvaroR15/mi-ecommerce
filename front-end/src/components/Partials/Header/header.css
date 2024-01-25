@@ -1,9 +1,9 @@
 header {
-    background-color: #555;
+    background-color: #fff;
     box-shadow: 0 0px 10px #2223;
     padding: 5px;
     margin: 0 auto;
-    color: #fff;
+    color: #333;
 }
 
 header nav .nav-mobile {
@@ -43,29 +43,35 @@ header nav .nav-md-lg {
 
 header nav .nav-mobile form {
     margin: 1rem 0 0;
-    width: 75%;
+    width: 78%;
+    height: 8vh;
     box-shadow: 0 0 5px #222;
     border-radius: 5px;
-    display: block;
     display: flex;
     align-items: center;
-    padding: 0.5vw;
+    justify-content: center;
+    position: relative;
+    /* padding: 0.5vw; */
 }
 
 header nav .nav-mobile form input {
+    position: absolute;
+    top: 3px;
+    left: 2px;
     display: block;
     background-color: transparent;
-    width: 90%;
+    width: 87%;
     font-size: 1rem;
     border: none;
     outline: none;
-    padding: 1vw;
-    color: #ccc;
+    color: #333;
 }
 
 header nav .nav-mobile form i {
+    position: absolute;
+    top: 15px;
+    right: 10px;
     display: block;
-    width: 10%;
     font-size: 1.1rem;
     color: #000;
 }
@@ -91,10 +97,11 @@ header nav .nav-md-lg form {
 }
 
 header nav .nav-md-lg form label input {
-    width: 40rem;
-    border: none;
-    border-radius: 5px;
-    padding: .5rem;
+    width: 40%;
+    /* border: none; */
+    border: 3px solid green;
+    /* border-radius: 5px; */
+    /* padding: .5rem */
 }
 
 .search-btn{
