@@ -13,7 +13,7 @@ import { Route, Routes } from 'react-router-dom';
 import { Register } from './components/Forms/AuthForm/Register';
 import { Login } from './components/Forms/AuthForm/Login';
 import { Cart } from './components/ListProducts/Cart/Cart'
-import ContentRow from './components/Dashboard/ContentRow/ContentRow';
+import { Detail } from './components/ListProducts/Detail/Detail';
 
 function App() {
 
@@ -21,11 +21,11 @@ function App() {
       <>
       < Header />
          <main>
-            < Routes>
+            <Routes>
                < Route path='/' exact={true} element={<MainPage/>} />
                < Route path='/' exact={true} element={<FilterProducts/>} />
                < Route path='/' exact={true} element={<BannerMain/>} />
-               < Route path='/' exact={true} element={<BannerMain/>} />
+               < Route path='/products/:id' exact={true} element={<Detail/>} />
                < Route path='/register' exact={true} element={
                   <AuthForm title='Completa el formulario con tus datos'>
                < Register /></AuthForm>}/>
@@ -34,8 +34,6 @@ function App() {
                < Login /></AuthForm>}/>
                < Route path='/products' exact={true} element={<ListProducts/>} />
                < Route path='/cart' exact={true} element={<Cart/>} />
-               < Route path='admin/create' exact={true} element={< FormCreate />} />
-               < Route path='admin/edit' exact={true} element={< FormEdit />} />
             </Routes>
          </main>
       < Footer />

@@ -1,10 +1,23 @@
-import zapatillas from '../../../assets/partials-img/zapatillasAdidas.jpg'
 import './detail.css'
+import zapatillas from '../../../assets/partials-img/zapatillasAdidas.jpg'
+import { useState, useEffect } from 'react';
+import { getProduct } from '../../../services/detailProductService';
+import { useParams } from 'react-router-dom';
 
-export const Detail = (props) => {
+export const Detail = () => {
+    const {id} = useParams();
+    const [product, setProduct] = useState('');
+
+    useEffect(() => {
+        const getData = async () => {
+            const response = await getProduct(id);
+            setProduct(response)
+        }
+        getData()
+    }, [id])
     return (
         <section className="detalle">
-            <h1 className='name'>{props.name}</h1>
+            <h1 className='name'>{product.name}</h1>
             <div className="stars-genre">
                 <div className="califications">
                     <i class="fa-solid fa-star"></i>
@@ -19,12 +32,12 @@ export const Detail = (props) => {
             <div className="container-img-data">
                 <div className="info">
                     <div className="price-talle">
-                        <h3>${props.price}</h3>
-                        <span>Tamaño/Talle: <b>{props.talle}</b> </span>
+                        <h3>${product.price}</h3>
+                        <span>Tamaño/Talle: <b>{product.size}</b> </span>
                     </div>
                     <h3>DESCRIPCION</h3>
                     <p>
-                        {props.description}
+                        {product.description}
                     </p>
                     <h3>CANTIDAD</h3>
                     <select name="cantidad">

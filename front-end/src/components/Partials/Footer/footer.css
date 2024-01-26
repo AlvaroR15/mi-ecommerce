@@ -2,8 +2,8 @@ footer {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    background-color: #222;
-    color: #777;
+    background-color: #333;
+    color: #eee;
     text-align: center;
     box-shadow: 0 0px 10px #2223;
 }
@@ -22,11 +22,12 @@ footer ul {
 }
 
 footer ul li {
+    color: #fff;
     margin: 0 0 .5rem;
 }
 
 footer ul li a {
-    color: #888;
+    color: #fff;
     text-decoration: none;
 }
 
@@ -53,6 +54,7 @@ footer ul li a:hover {
 
 .redes-sociales li a i {
     font-size: 36px;
+    color: #fff;
 }
 
 .redes-sociales li a i:hover {

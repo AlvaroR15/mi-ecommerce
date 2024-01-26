@@ -1,7 +1,7 @@
 import './lastProducts.css'
 
 import { useState, useEffect } from 'react';
-import { getProducts } from '../../../services/productService';
+import { getProducts } from '../../../services/productsService';
 
 export const LastProducts = () => {
     const [products, setProducts] = useState([]);

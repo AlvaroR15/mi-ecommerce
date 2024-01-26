@@ -1,7 +1,7 @@
 import { Card } from "../Partials/Card"
 import './listProducts.css'
 
-import { getProducts } from "../../services/productService"
+import { getProducts } from "../../services/productsService"
 import { useState, useEffect } from "react"
 
 export const ListProducts = () => {
