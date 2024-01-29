@@ -32,12 +32,12 @@ const productAPIController = {
                 where: {id: idRandom}
             })
 
-            const productSelected = {
+            const productSelected = chooseProduct ? {
                 id: chooseProduct.id,
                 name: chooseProduct.name,
                 price: chooseProduct.price,
                 picture: req.protocol + '://' + req.get('host') + '/img/products/' + chooseProduct.picture
-            }
+            } : null;
 
             return res.status(200).json({
                 status: 'ok',
@@ -53,7 +53,14 @@ const productAPIController = {
     },
     detail: async (req, res) => {
         try {
-            const product = await db.Product.findByPk(req.params.id);
+            const searchProduct = await db.Product.findByPk(req.params.id);
+            const product = searchProduct ? {
+                id: searchProduct.id,
+                name: searchProduct.name,
+                price: searchProduct.price,
+                description: searchProduct.description,
+                picture: req.protocol + '://' + req.get('host') + '/img/products/' + searchProduct.picture
+            } : null;
             return res.status(200).json({ product })
 
         } catch (error) {

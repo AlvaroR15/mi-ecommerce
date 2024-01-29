@@ -5,17 +5,25 @@ import { getProduct } from '../../../services/detailProductService';
 import { useParams } from 'react-router-dom';
 
 export const Detail = () => {
-    const {id} = useParams();
-    const [product, setProduct] = useState('');
-
+    const [product, setProduct] = useState(null);
+    const { id } = useParams();
+    
     useEffect(() => {
         const getData = async () => {
             const response = await getProduct(id);
-            setProduct(response)
+            if (!response || response.error) {
+                console.error('Producto no encontrado o error en la solicitud:', response);
+                setProduct(null);
+                return;
+              }
+
+            setProduct(response.product)
         }
         getData()
     }, [id])
     return (
+        <>
+        {product ? (
         <section className="detalle">
             <h1 className='name'>{product.name}</h1>
             <div className="stars-genre">
@@ -28,7 +36,7 @@ export const Detail = () => {
                 </div>
                 <span>Hombre</span>
             </div>
-            <img className="container-img-big" src={zapatillas} alt="" />
+            <img className="container-img-big" src={product.picture} alt="" />
             <div className="container-img-data">
                 <div className="info">
                     <div className="price-talle">
@@ -54,5 +62,9 @@ export const Detail = () => {
                 </div>
             </div>
         </section>
+        ): (
+            <p>{product === null ? 'Cargando...' : 'Producto no encontrado'}</p>
+        )}
+        </>
     )
 }

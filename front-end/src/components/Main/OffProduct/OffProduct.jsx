@@ -14,13 +14,16 @@ export const OffProduct = () => {
     }, [])
 
     return (
-        <section className="off-product">
+        <a className="off-product">
             <h2>Oferta del día</h2>
-            {/* 
-                aca podria poner un texto que diga "OFF" de oferta
-                y los precios en (precio de oferta) precio original(tachado)
-            */}
-            < Card name={product.name} price={product.price * 0.8} picture={product.picture} priceOriginal={product.price} />
-        </section>
+            {
+                product ? (
+                    < Card id={product.id}  name={product.name} price={product.price * 0.8} picture={product.picture} priceOriginal={product.price} />
+                ) : (
+                    <p>{product === null ? 'Cargando...' : 'Producto no encontrado' }</p>
+                )
+            }
+
+        </a>
     )
 }

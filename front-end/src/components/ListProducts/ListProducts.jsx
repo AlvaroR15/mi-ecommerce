@@ -21,7 +21,7 @@ export const ListProducts = () => {
             <div className="container-list-products">
                 {
                     Array.isArray(products) && products.map((product,i) => (
-                        <Card name={product.name} picture={product.picture} price={product.price} size={product.size} key={i} />
+                        <Card id={product.id} name={product.name} picture={product.picture} price={product.price} size={product.size} key={i} />
                     ))
                 }
             </div>

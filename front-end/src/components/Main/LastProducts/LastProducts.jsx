@@ -2,6 +2,8 @@ import './lastProducts.css'
 
 import { useState, useEffect } from 'react';
 import { getProducts } from '../../../services/productsService';
+import { Link } from 'react-router-dom';
+
 
 export const LastProducts = () => {
     const [products, setProducts] = useState([]);
@@ -28,7 +30,7 @@ export const LastProducts = () => {
                     ))
                 }
                 <div className='link-view'>
-                    <a href="#">Ver más</a>
+                    <Link to='/products'>Ver más</Link>
                 </div>
             </section>
         </>

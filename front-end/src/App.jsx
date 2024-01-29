@@ -6,7 +6,6 @@ import './components/Partials/partials.css'
 import { FilterProducts } from './components/Main/FilterProducts/FilterProducts';
 import { BannerMain } from './components/Partials/BannerMain';
 import { FormCreate } from './components/Dashboard/FormProduct/FormCreate';
-import { FormEdit } from './components/Dashboard/FormProduct/FormEdit';
 import { ListProducts } from './components/ListProducts/ListProducts'
 import { AuthForm } from './components/Forms/AuthForm/AuthForm'
 import { Route, Routes } from 'react-router-dom';
