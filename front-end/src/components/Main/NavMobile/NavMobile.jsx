@@ -19,7 +19,6 @@ export const NavMobile = (props) => {
                 </div>
                 <ul className="nav-bar">
                     <li><Link to='/'>Inicio</Link></li>
-                    <li><a to="#">Buscar</a></li>
                     <li><Link to='/cart'>Carrito de compras</Link></li>
                     <li><a to="#">Favoritos</a></li>
                     <li><a to="#">Promos</a></li>

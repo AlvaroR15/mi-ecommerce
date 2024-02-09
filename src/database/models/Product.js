@@ -7,35 +7,33 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         name: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(40),
             allowNull: false
         },
         description: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(180),
             allowNull: false
         },
         price: {
-            type: DataTypes.FLOAT,
+            type: DataTypes.DECIMAL(10,2),
             allowNull: false,
             unsigned: true
         },
-        picture: {
-            type: DataTypes.STRING,
-            allowNull: false
+        image: {
+            type: DataTypes.STRING(20)
         },
-        category_id: {
+        categoryId: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            foreignKey: true
-        },
-        user_id: {
-            type: DataTypes.INTEGER,
             foreignKey: true
         },
         createdAt: {
             type: DataTypes.DATE
         },
         updatedAt: {
+            type: DataTypes.DATE
+        },
+        deletedAt: {
             type: DataTypes.DATE
         }
     }, {

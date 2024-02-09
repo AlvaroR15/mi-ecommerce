@@ -1,29 +1,32 @@
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define('User', {
         id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.INTEGER.UNSIGNED,
             primaryKey: true,
             autoIncrement: true,
             allowNull: false
         },
-        first_name: {
-            type: DataTypes.STRING,
+        firstName: {
+            type: DataTypes.STRING(30),
             allowNull: false
         },
-        last_name: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        email: {
-            type: DataTypes.STRING,
+        lastName: {
+            type: DataTypes.STRING(25),
             allowNull: false
         },
         address: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        product_id: {
-            type: DataTypes.INTEGER,
+        country: {
+            type: DataTypes.STRING(70)
+        },
+        email: {
+            type: DataTypes.STRING(25),
+            allowNull: false
+        },
+        password: {
+            type: DataTypes.INTEGER(150),
             foreignKey: true
         },
         createdAt: {
@@ -32,8 +35,8 @@ module.exports = (sequelize, DataTypes) => {
         updated_at: {
             type: DataTypes.DATE
         },
-        picture: {
-            type: DataTypes.STRING
+        deletedAt: {
+            type: DataTypes.DATE
         }
     }, {
         tableName: 'users',
