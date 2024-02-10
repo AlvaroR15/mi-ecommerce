@@ -1,38 +1,36 @@
-// const express = require("express");
-// const router = express.Router();
-// const multer = require('multer');
-// const path = require('path');
-
-// const productsController = require('../controllers/productsController');
-// const adminController = require("../controllers/Admin/adminController");
-
-// const authMiddleware = require('../middlewares/authMiddleware');
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const router = express.Router();
 
 
-// const storage = multer.diskStorage({
-//     destination:path.join(__dirname, '../../public/img/products'), 
-//     filename: (req, file, cb) =>{
-//         cb(null, Date.now() + path.extname(file.originalname));
-//     }
-// });
-// const upload = multer({storage});
+const productAPIController = require('../controllers/API/productAPIController.js');
 
-// // router.get('/create/', authMiddleware,productsController.crearProducto);  
-
-// router.get('/products',productsController.list);
-// router.get('/products/:id', productsController.detail);
-
-// // *** rutas para AGREGAR PRODUCTOS ***
-// router.post('products/create', upload.single('picture'), adminController.saveProduct);
-
-// // *** rutas para EDITAR PRODUCTOS ***
-// router.put('/products/edit/:id', upload.single('picture'),adminController.editProduct);
-
-// /* Ruta para BUSCAR PRODUCTOS */
-// router.post('/products/search', productsController.searchProduct)
-
-// // *** rutas para BORRAR PRODUCTOS ***
-// router.delete('/products/:id', adminController.deleteProduct);
+const storage = multer.diskStorage({
+    destination:path.join(__dirname, '../uploads/products'), 
+    filename: (req, file, cb) =>{
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+const upload = multer({storage});
 
 
-// module.exports = router;
+router.get('/',productAPIController.list);
+router.get('/:id', productAPIController.detail);
+
+// *** rutas para AGREGAR PRODUCTOS ***
+router.post('/create', upload.single('image'), productAPIController.saveProduct);
+
+// rout for add products to cart
+router.post('/add', productAPIController.addCart);
+
+// *** rutas para EDITAR PRODUCTOS ***
+router.put('/edit/:id', upload.single('image'),productAPIController.editProduct);
+
+/* Ruta para BUSCAR PRODUCTOS */
+router.post('/search', productAPIController.searchProduct)
+
+// *** rutas para BORRAR PRODUCTOS ***
+router.delete('/:id', productAPIController.deleteProduct);
+
+module.exports = router;

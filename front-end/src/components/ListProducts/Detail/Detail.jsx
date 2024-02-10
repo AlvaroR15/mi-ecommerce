@@ -1,5 +1,4 @@
 import './detail.css'
-import zapatillas from '../../../assets/partials-img/zapatillasAdidas.jpg'
 import { useState, useEffect } from 'react';
 import { getProduct } from '../../../services/detailProductService';
 import { useParams } from 'react-router-dom';
@@ -36,7 +35,7 @@ export const Detail = () => {
                 </div>
                 <span>Hombre</span>
             </div>
-            <img className="container-img-big" src={product.picture} alt="" />
+            <img className="container-img-big" src={product.image} alt="" />
             <div className="container-img-data">
                 <div className="info">
                     <div className="price-talle">

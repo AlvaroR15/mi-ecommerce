@@ -5,30 +5,31 @@ const productAPIController = {
         try {
             const productsInfo = await db.Product.findAll({
                 raw: true,
-                attributes: ['id', 'name', 'description', 'price', 'category_id', 'picture']
+                attributes: ['id', 'name', 'description', 'price', 'size','image'],
+                include: ['categories']
             })
             const getLastProducts = await db.Product.findAll({
                 raw: true,
-                attributes: ['id', 'name', 'price', 'picture'],
+                attributes: ['id', 'name', 'price', 'image'],
                 order: [['id', 'DESC']],
                 limit: 4
             })
 
             const products = productsInfo.map(product => ({
                 ...product,
-                picture: req.protocol + '://' + req.get('host') + '/img/products/' + product.picture
+                image: req.protocol + '://' + req.get('host') + '/uploads/products/' + product.image
             }))
 
             const lastProducts = getLastProducts.map(product => ({
                 ...product,
-                picture: req.protocol + '://' + req.get('host') + '/img/products/' + product.picture
+                image: req.protocol + '://' + req.get('host') + '/uploads/products/' + product.image
             }))
 
             const countProducts = await db.Product.count();
             const idRandom = Math.floor(Math.random() * countProducts + 1);
             const chooseProduct = await db.Product.findOne({
                 raw: true,
-                attributes: ['id','name','price','picture'],
+                attributes: ['id','name','price','image'],
                 where: {id: idRandom}
             })
 
@@ -36,14 +37,19 @@ const productAPIController = {
                 id: chooseProduct.id,
                 name: chooseProduct.name,
                 price: chooseProduct.price,
-                picture: req.protocol + '://' + req.get('host') + '/img/products/' + chooseProduct.picture
+                image: req.protocol + '://' + req.get('host') + '/uploads/products/' + chooseProduct.image
             } : null;
 
             return res.status(200).json({
-                status: 'ok',
-                products,
-                lastProducts,
-                productSelected
+                meta: {
+                    success: true,
+                    status: 200
+                },
+                data: {
+                    products,
+                    lastProducts,
+                    productSelected
+                }
             })
         }
         catch (error) {
@@ -53,18 +59,23 @@ const productAPIController = {
     },
     detail: async (req, res) => {
         try {
-            const searchProduct = await db.Product.findByPk(req.params.id);
+            const searchProduct = await db.Product.findOne({
+                where: {id: req.params.id},
+                attributes: ['id','name','description','price','size','image']
+            });
             const product = searchProduct ? {
                 id: searchProduct.id,
                 name: searchProduct.name,
                 price: searchProduct.price,
                 description: searchProduct.description,
-                picture: req.protocol + '://' + req.get('host') + '/img/products/' + searchProduct.picture
+                size: searchProduct.size,
+                image: req.protocol + '://' + req.get('host') + '/uploads/products/' + searchProduct.image
             } : null;
             return res.status(200).json({ product })
 
         } catch (error) {
-            res.status(500).json('Ha ocurrido un error.', error)
+            console.log(error);
+            res.status(500).json({'Ha ocurrido un error.': error})
         }
     },
     searchProduct: async (req, res) => {
@@ -83,7 +94,9 @@ const productAPIController = {
             res.status(500).json('Ha ocurrido un error.', error)
         }
     },
+    addCart: async(req,res) => {
 
+    },
     saveProduct: async (req, res) => {
         try {
             let file;
@@ -91,20 +104,26 @@ const productAPIController = {
                 file = req.file.filename;
             };
 
-            await db.Product.create({
+            const product = await db.Product.create({
                 name: req.body.name,
                 description: req.body.description,
                 price: +req.body.price,
                 size: req.body.size,
-                picture: file,
-                category_id: +req.body.category_id,
+                image: file,
+                categoryId: +req.body.categoryId,
             });
 
-            return res.status(500).json({
-                status: 'Product created'
+            return res.status(201).json({
+                success: true,
+                msg: 'successfully created product',
+                product: product
             })
         } catch (error) {
             console.log(error);
+            return res.status(500).json({
+                success: false,
+                msg: 'error saving product'
+            })
         }
     },
     editProduct: async (req, res) => {
@@ -116,7 +135,9 @@ const productAPIController = {
                 name: req.body.name,
                 description: req.body.description,
                 price: +req.body.price,
-                category_id: req.body.category_id,
+                size: req.body.size,
+                image: file,
+                categoryId: +req.body.categoryId,
             }
 
             if (file) {

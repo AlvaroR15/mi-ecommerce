@@ -41,6 +41,17 @@ module.exports = (sequelize, DataTypes) => {
     }, {
         tableName: 'users',
         timestamps: true
-    })
+    });
+
+    User.associate = models => {
+        User.hasMany(models.Cart, {
+            as: 'userCart',
+            foreignKey: 'userId'
+        });
+        User.hasMany(models.Order, {
+            as: 'orderUser',
+            foreignKey: 'userId'
+        })
+    }
     return User;
 }

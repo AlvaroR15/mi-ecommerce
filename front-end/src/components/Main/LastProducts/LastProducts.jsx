@@ -23,7 +23,7 @@ export const LastProducts = () => {
                 {
                     Array.isArray(products) && products.map((product, i) => (
                         <div key={i}>
-                            <img src={product.picture} className='last-product-img' />
+                            <img src={product.image} className='last-product-img' />
                             <span>{product.name}</span>
                             <p>${product.price}</p>
                         </div>

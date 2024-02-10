@@ -26,6 +26,7 @@
     height: 30vh;
     border: 1px solid #888;
     border-radius: 2px;
+    object-fit: contain;
 }
 
 .last-products-title {

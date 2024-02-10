@@ -1,22 +1,24 @@
 const express = require("express");
 const cors = require('cors');
-const path = require("path");
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const session = require('express-session');
+const path = require('path');
 const cookies = require('cookie-parser');
 
 // const productRoutes = require("./routes/products");
 const usersRoutes = require("./routes/users");
-const usersApiRoutes = require('./routes/API/users');
-const productApiRoutes = require('./routes/API/productApi');
+const productApiRoutes = require('./routes/products');
 
 const userLoggedMiddleware = require('./middlewares/userLoggedMiddleware');
 const adminLoggedMiddleware = require('./middlewares/adminLoggedMiddleware');
 const cookiesMiddleware = require("./middlewares/cookiesMiddleware");
 
 const app = express();
-const PORT = 8000;
+
+
+require('dotenv').config()
+const PORT = process.env.PORT || 4080;
 
 // ***** configurando body-parser *****
 app.use(bodyParser.urlencoded({extended: false}));
@@ -34,11 +36,9 @@ app.use(cookiesMiddleware);
 
 app.use(methodOverride('_method'))
 
-app.use(express.static('public'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname,"/views"));
 
 app.listen(PORT, () => {
     console.log("\n¡Servidor en línea! :D");
@@ -48,10 +48,4 @@ app.listen(PORT, () => {
 
 app.use('/users', usersRoutes);
 // app.use('/admin', productRoutes);
-app.use('/api', usersApiRoutes,productApiRoutes);
-
-
-
-// app.use((req,res,next) => {
-//     res.status(404).render('error404');
-// })
+app.use('/api/products', productApiRoutes);

@@ -6,7 +6,7 @@ export const Card = (props) => {
     return (
         <article>
             <Link to={`/products/${props.id}`} className="card">
-                <img className="contenedor-img" src={props.picture} alt={props.name} />
+                <img className="contenedor-img" src={props.image} alt={props.name} />
                 <div className="card__price">${props.price}</div>
                 <div className="card__title">{props.name}</div>
                 <span className='price-original'>{props.priceOriginal}</span>

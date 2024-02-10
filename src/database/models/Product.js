@@ -19,6 +19,9 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             unsigned: true
         },
+        size: {
+            type: DataTypes.STRING(10)
+        },
         image: {
             type: DataTypes.STRING(20)
         },
@@ -40,5 +43,23 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'products',
         paranoid: true
     })
+
+    Product.associate = models => {
+        Product.belongsTo(models.Category, {
+            as: 'categories',
+            foreignKey: 'categoryId'
+        });
+        
+        Product.belongsTo(models.Cart, {
+            as: 'cartProduct',
+            foreignKey: 'productId'
+        });
+
+        Product.belongsTo(models.Order, {
+            as: 'orderProduct',
+            foreignKey: 'productId'
+        });
+    };
+
     return Product
 }

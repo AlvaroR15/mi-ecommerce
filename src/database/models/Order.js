@@ -27,5 +27,15 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: false
     });
 
-    return Cart
+    Order.associate = models => {
+        Order.belongsTo(models.User, {
+            as: 'orderUser',
+            foreignKey: 'userId'
+        });
+        Order.hasMany(models.Product, {
+            as: 'orderProduct',
+            foreignKey: 'productId'
+        })
+    }
+    return Order;
 }
