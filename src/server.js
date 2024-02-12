@@ -46,6 +46,5 @@ app.listen(PORT, () => {
     console.log(`Ingresá a localhost:${PORT} para empezar a visualizar el sitio`);
 });
 
-app.use('/users', usersRoutes);
-// app.use('/admin', productRoutes);
+app.use('/api/users', usersRoutes);
 app.use('/api/products', productApiRoutes);

@@ -43,14 +43,20 @@
 .main-form .container form input{
     display: block;
     background-color: transparent;
-    border-bottom: 2px solid #333;
+    border-bottom: 1px solid #333;
     color: #222;
     font-size: 1rem;
     padding: .5rem;
+    margin: 5px 0;
     outline: none;
     text-indent: 3px;
     resize: none;
     width: 100%;
+}
+
+input[type="text"]::placeholder, input[type="email"]::placeholder {
+    color: #999;
+    font-size: .8rem;
 }
 
 

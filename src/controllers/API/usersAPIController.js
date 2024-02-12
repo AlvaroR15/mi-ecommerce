@@ -1,44 +1,104 @@
+const bcrypt = require('bcryptjs');
+const { validationResult } = require('express-validator');
 const db = require('../../database/models/index');
+const pictureDefault = '../uploads/users/user';
 
-const usersAPIController = {
-    users: async (req,res) => {
+const usersController = {
+    register: async (req, res) => {
         try {
-            const usersData = await db.User.findAll({
-                attributes: ['id','fullname','email'],
-                raw:true
-            });
-            const users = usersData.map(user => ({
-                ...user,
-                detail: req.protocol + '://' + req.get('host') + '/api' + req.url + '/' +user.id
-            }))
-            return res.status(200).json({
-                count: users.length,
-                users
+            let resultValidation = validationResult(req);
+            if (resultValidation.errors.length > 0) {
+                return res.status(422).json({
+                    errors: resultValidation.mapped(),
+                    oldData: req.body
+                })
+            };
+            const file = req.file;
+            const newUser = await db.User.create({
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                email: req.body.email,
+                addres: req.body.addres,
+                country: req.body.country,
+                password: bcrypt.hashSync(req.body.password, 10),
+                // password: req.body.password,
+                picture: file ? file.filename : pictureDefault
             })
-        } catch(error) {
-            return res.json('Ha ocurrido un error.',error)
+            return res.status(200).json({
+                meta: {
+                    success: true,
+                    status:200,
+                    msg: 'User created succefully'
+                },
+                newUser
+            })
+        } catch (error) {
+            console.error('Error', error);
+            return res.status(500).json({
+                meta: {
+                    success: false,
+                    status: 500,
+                    msg: 'Ha ocurrido un error'
+                },
+                error
+            })
         }
     },
-    user: async (req,res) => {
+    login: async (req, res) => {
         try {
-            const usersData = await db.User.findByPk(req.params.id, {
-                attributes: ['id','fullname','email', 'profilePicture'],
-                raw: true
-            });
+            const { email, password } = req.body;
+            const user = await db.User.findOne({ where: { email } });
 
-            const user = {
-                id: usersData.id,
-                nombre: usersData.fullname,
-                email: usersData.email,
-                imagen: req.protocol + '://' + req.get('host') + '/img/users/' + usersData.profilePicture
+            if (!user) {
+                return res.render('./users/login', {
+                    errors: {
+                        email: { msg: 'Este email no está registrado.' }
+                    }
+                })
             }
-            
-            return res.status(200).json(user)
 
-        } catch(error) {
-            res.json(error)
+            const isPasswordValid = bcrypt.compareSync(password, user.password);
+            if (!isPasswordValid) {
+                return res.render('./users/login', {
+                    errors: {
+                        email: { msg: 'Las credenciales que pusiste son inválidas.' }
+                    }
+                })
+            };
+
+            req.session.userLogged = user.email;
+            if (req.body.remember) {
+                res.cookie('userLogged', req.session.userLogged, { maxAge: (1000 * 60) * 60 })
+            }
+
+            return res.redirect('/users/profile');
+        }
+        catch (error) {
+            console.error('Error al iniciar sesión:', error);
+        }
+    },
+    edit: async (req, res) => {
+        try {
+            const userToUpdate = await db.User.findOne({ where: { email: req.session.userLogged } });
+            let dataFile = req.file;
+            let userFile;
+            if (dataFile) {
+                userFile = dataFile.filename;
+            } else {
+                userFile = userToUpdate.profilePicture;
+            }
+
+            await db.User.update({
+                fullname: req.body.fullname,
+                password: bcrypt.hashSync(req.body.password, 10),
+                profilePicture: userFile
+            }, { where: { id: userToUpdate.id } });
+
+            res.redirect('/users/profile')
+
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
         }
     }
 };
-
-module.exports = usersAPIController;
+module.exports = usersController;
