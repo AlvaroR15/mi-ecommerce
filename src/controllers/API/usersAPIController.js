@@ -21,7 +21,6 @@ const usersController = {
                 addres: req.body.addres,
                 country: req.body.country,
                 password: bcrypt.hashSync(req.body.password, 10),
-                // password: req.body.password,
                 picture: file ? file.filename : pictureDefault
             })
             return res.status(200).json({
@@ -50,28 +49,38 @@ const usersController = {
             const user = await db.User.findOne({ where: { email } });
 
             if (!user) {
-                return res.render('./users/login', {
-                    errors: {
-                        email: { msg: 'Este email no está registrado.' }
-                    }
-                })
+                return res.status(404).json({
+                    meta: {
+                        success: false,
+                        status: 404,
+                    },
+                    msg: 'No se encontro este correo electronico'
+                });
             }
 
             const isPasswordValid = bcrypt.compareSync(password, user.password);
             if (!isPasswordValid) {
-                return res.render('./users/login', {
-                    errors: {
-                        email: { msg: 'Las credenciales que pusiste son inválidas.' }
-                    }
+                return res.status(500).json({
+                    meta: {
+                        success: false,
+                        status: 500
+                    },
+                    msg: 'Contraseña incorrecta'
                 })
             };
 
             req.session.userLogged = user.email;
             if (req.body.remember) {
-                res.cookie('userLogged', req.session.userLogged, { maxAge: (1000 * 60) * 60 })
+                res.cookie('userLogged', req.session.userLogged, { maxAge: (1000 * 60) * 60 });
+                return res.status(200).json({
+                    meta: {
+                        success: true,
+                        status: 200,
+                        msg: 'Usuario logueado correctamente'
+                    },
+                    user
+                });
             }
-
-            return res.redirect('/users/profile');
         }
         catch (error) {
             console.error('Error al iniciar sesión:', error);

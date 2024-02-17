@@ -1,7 +1,7 @@
 export const BoxInput = (props) => {
     return (
         <div>
-            <input value={props.value} type={props.type} placeholder={props.placeholder}/>
+            <input type={props.type} name={props.name} placeholder={props.placeholder} value={props.value} onChange={props.onChange} />
         </div>
     )
 }
