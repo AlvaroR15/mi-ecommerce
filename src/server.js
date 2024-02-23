@@ -5,14 +5,15 @@ const methodOverride = require('method-override');
 const session = require('express-session');
 const path = require('path');
 const cookies = require('cookie-parser');
+const crypto = require('crypto');
 
 // const productRoutes = require("./routes/products");
 const usersRoutes = require("./routes/users");
 const productApiRoutes = require('./routes/products');
 
-const userLoggedMiddleware = require('./middlewares/userLoggedMiddleware');
-const adminLoggedMiddleware = require('./middlewares/adminLoggedMiddleware');
-const cookiesMiddleware = require("./middlewares/cookiesMiddleware");
+// const userLoggedMiddleware = require('./middlewares/userLoggedMiddleware');
+// const adminLoggedMiddleware = require('./middlewares/adminLoggedMiddleware');
+// const cookiesMiddleware = require("./middlewares/cookiesMiddleware");
 
 const app = express();
 
@@ -24,15 +25,30 @@ const PORT = process.env.PORT || 4080;
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-app.use(cors());
+app.use(cors({
+    origin: ['http://localhost:3000'],
+    methods: ['POST','GET'],
+    credentials: true
+}));
+app.use(cookies())
 
-app.use(session({secret: "nabrunwotpu"}));
+const secret = crypto.randomBytes(32).toString('hex');
+app.use(session(
+    {
+    secret: secret,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: false,
+        maxAge: 1000 * 60 * 60 * 24
+    }
+}));
 
-app.use(userLoggedMiddleware);
-app.use(adminLoggedMiddleware);
+// app.use(userLoggedMiddleware);
+// app.use(adminLoggedMiddleware);
 
-app.use(cookies());
-app.use(cookiesMiddleware);
+// app.use(cookies());
+// app.use(cookiesMiddleware);
 
 app.use(methodOverride('_method'))
 

@@ -14,7 +14,11 @@ const storage = multer.diskStorage({
 });
 const upload = multer({storage});
 
+router.get('/profile', usersAPIController.profile);
 
-router.post('/create', upload.single('picture'),usersAPIController.register);
+router.post('/register', upload.single('picture'),usersAPIController.register);
+router.post('/login', usersAPIController.login);
+
+
 
 module.exports = router;

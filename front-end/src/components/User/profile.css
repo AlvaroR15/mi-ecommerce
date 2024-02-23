@@ -1,0 +1,109 @@
+
+.seccion-perfil-usuario .perfil-usuario-body,
+.seccion-perfil-usuario {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+}
+
+.seccion-perfil-usuario .usuario-header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+}
+
+.seccion-perfil-usuario .usuario-caja {
+    display: block;
+    position: relative;
+    width: 90%;
+    height: 14rem;
+}
+
+.seccion-perfil-usuario .usuario-img {
+    display: flex;
+    width: 180px;
+    height: 180px;
+    align-items: center;
+    justify-content: center;
+    border: 7px solid white;
+    background-color: #DFE5F2;
+    border-radius: 50%;
+    box-shadow: 0 0 12px rgba(0, 0, 0, .2);
+    position: absolute;
+    bottom: -10px;
+    left: calc(50% - 90px);
+    z-index: 1;
+}
+
+.seccion-perfil-usuario .usuario-img img {
+    width: 180px;
+    height: 180px;
+    position: relative;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.seccion-perfil-usuario .usuario-img .boton-img {
+    position: absolute;
+    left: -2px;
+    top: -2px;
+    border: 0;
+    background-color: #fff;
+    box-shadow: 0 0 12px rgba(0, 0, 0, .2);
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.seccion-perfil-usuario .perfil-usuario-body {
+    width: 70%;
+    position: relative;
+    max-width: 750px;
+}
+
+.seccion-perfil-usuario .perfil-usuario-body .titulo {
+    display: block;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    font-size: 1.25em;
+}
+
+.seccion-perfil-usuario .perfil-usuario-body p {
+    margin-left: 40%;
+    color: #848484;
+    text-align: center;
+    font-size: 0.95em;
+}
+
+.seccion-perfil-usuario .perfil-usuario-bio {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 0 12px rgba(0, 0, 0, .2);
+    background-color: #fff;
+    border-radius: 15px;
+    width: 100%;
+}
+
+.seccion-perfil-usuario .perfil-usuario-bio {
+    margin-bottom: 1.25rem;
+    text-align: center;
+}
+
+main .btn-edit {
+    display: inline-block;
+    margin: 20px 0;
+}
+
+@media (max-width: 750px) {
+    .seccion-perfil-usuario .usuario-caja,
+    .seccion-perfil-usuario .perfil-usuario-body {
+        width: 95%;
+    }
+    .seccion-perfil-usuario .perfil-usuario-body p {
+        margin-left: 20%;
+    }
+}

@@ -1,10 +1,8 @@
-export async function getUsers(){
+export async function getUser(){
     try{
-        const response = await fetch("http://localhost:8000/api/users" , {method: 'GET'})
+        const response = await fetch("http://localhost:3099/api/users/profile" , {method: 'GET', credentials: "include"})
         const data = await response.json()
-        if(response.status !== 200) throw new Error("Error en la conexion")
 
-    
         return data
 
         } catch(error){

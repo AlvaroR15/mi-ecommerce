@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const { validationResult } = require('express-validator');
-const db = require('../../database/models/index');
+const { User } = require('../../database/models/index');
 const pictureDefault = '../uploads/users/user';
 
 const usersController = {
@@ -14,7 +14,7 @@ const usersController = {
                 })
             };
             const file = req.file;
-            const newUser = await db.User.create({
+            const newUser = await User.create({
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
                 email: req.body.email,
@@ -26,7 +26,7 @@ const usersController = {
             return res.status(200).json({
                 meta: {
                     success: true,
-                    status:200,
+                    status: 200,
                     msg: 'User created succefully'
                 },
                 newUser
@@ -46,49 +46,85 @@ const usersController = {
     login: async (req, res) => {
         try {
             const { email, password } = req.body;
-            const user = await db.User.findOne({ where: { email } });
+            const user = await User.findOne({ where: { email: email } });
 
             if (!user) {
-                return res.status(404).json({
+                return res.status(422).json({
                     meta: {
                         success: false,
-                        status: 404,
+                        status: 422,
                     },
-                    msg: 'No se encontro este correo electronico'
+                    msg: 'Este correo no se encuentra registrado.'
                 });
             }
 
             const isPasswordValid = bcrypt.compareSync(password, user.password);
             if (!isPasswordValid) {
-                return res.status(500).json({
+                return res.status(401).json({
                     meta: {
                         success: false,
-                        status: 500
+                        status: 401
                     },
-                    msg: 'Contraseña incorrecta'
+                    msg: 'Contraseña incorrecta.'
                 })
             };
 
             req.session.userLogged = user.email;
-            if (req.body.remember) {
-                res.cookie('userLogged', req.session.userLogged, { maxAge: (1000 * 60) * 60 });
-                return res.status(200).json({
-                    meta: {
-                        success: true,
-                        status: 200,
-                        msg: 'Usuario logueado correctamente'
-                    },
-                    user
-                });
-            }
+            return res.status(200).json({
+                meta: {
+                    success: true,
+                    status: 200,
+                    msg: 'Usuario logueado correctamente'
+                },
+                user: {
+                    id: user.id,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: req.session.userLogged,
+                    addres: user.addres,
+                    country: user.country
+                },
+                emailSession: req.session.userLogged
+            });
+
         }
         catch (error) {
             console.error('Error al iniciar sesión:', error);
         }
     },
+    profile: async (req, res) => {
+        try {
+            if (req.session.userLogged) {
+                const user = await User.findOne({
+                    attributes: ['id','firstName','lastName','email','addres','country'],
+                    where: { email: req.session.userLogged }
+                });
+                if (user) {
+                    return res.status(200).json({
+                        meta: {
+                            success: true,
+                            status: 200,
+                            msg: 'User econtrado'
+                        },
+                        user
+                    });
+                }
+            }
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({
+                meta: {
+                    success: false,
+                    status: 500,
+                    msg: 'Hubo un problema'
+                },
+                error
+            })
+        }
+    },
     edit: async (req, res) => {
         try {
-            const userToUpdate = await db.User.findOne({ where: { email: req.session.userLogged } });
+            const userToUpdate = await User.findOne({ where: { email: req.session.userLogged } });
             let dataFile = req.file;
             let userFile;
             if (dataFile) {
@@ -97,7 +133,7 @@ const usersController = {
                 userFile = userToUpdate.profilePicture;
             }
 
-            await db.User.update({
+            await User.update({
                 fullname: req.body.fullname,
                 password: bcrypt.hashSync(req.body.password, 10),
                 profilePicture: userFile
@@ -108,6 +144,9 @@ const usersController = {
         } catch (error) {
             return res.status(500).json({ message: error.message });
         }
+    },
+    logout: (req,res) => {
+        req.session.destroy();
     }
 };
 module.exports = usersController;

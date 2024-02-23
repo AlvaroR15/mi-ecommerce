@@ -27,12 +27,12 @@ module.exports = (sequelize, DataTypes) => {
         },
         password: {
             type: DataTypes.INTEGER(150),
-            foreignKey: true
+            allowNull: false
         },
         createdAt: {
             type: DataTypes.DATE
         },
-        updated_at: {
+        updatedAt: {
             type: DataTypes.DATE
         },
         deletedAt: {

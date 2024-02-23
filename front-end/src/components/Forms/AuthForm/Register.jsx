@@ -18,7 +18,7 @@ export const Register = () => {
     const store = async (e) => {
         e.preventDefault();
         try {
-            axios.post('http://localhost:3099/api/users/create', {
+            axios.post('http://localhost:3099/api/users/register', {
                 firstName: firstName,
                 lastName: lastName,
                 email: email,
