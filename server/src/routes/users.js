@@ -19,6 +19,6 @@ router.get('/profile', usersAPIController.profile);
 router.post('/register', upload.single('picture'),usersAPIController.register);
 router.post('/login', usersAPIController.login);
 
-
+router.get('/logout', usersAPIController.logout);
 
 module.exports = router;

@@ -21,7 +21,7 @@ export const Login = () => {
         }
         setTimeout(() => {
             navigate('/profile')
-        }, 300)
+        }, 600)
     }
 
     return (

@@ -7,7 +7,6 @@ const path = require('path');
 const cookies = require('cookie-parser');
 const crypto = require('crypto');
 
-// const productRoutes = require("./routes/products");
 const usersRoutes = require("./routes/users");
 const productApiRoutes = require('./routes/products');
 

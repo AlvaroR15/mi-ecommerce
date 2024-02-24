@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const { validationResult } = require('express-validator');
 const { User } = require('../../database/models/index');
-const pictureDefault = '../uploads/users/user';
+const pictureDefault = '/uploads/users/user.webp';
 
 const usersController = {
     register: async (req, res) => {
@@ -14,22 +14,21 @@ const usersController = {
                 })
             };
             const file = req.file;
-            const newUser = await User.create({
+            await User.create({
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
                 email: req.body.email,
                 addres: req.body.addres,
                 country: req.body.country,
                 password: bcrypt.hashSync(req.body.password, 10),
-                picture: file ? file.filename : pictureDefault
+                picture: file ? file.filename : null
             })
             return res.status(200).json({
                 meta: {
                     success: true,
                     status: 200,
                     msg: 'User created succefully'
-                },
-                newUser
+                }
             })
         } catch (error) {
             console.error('Error', error);
@@ -95,19 +94,26 @@ const usersController = {
     profile: async (req, res) => {
         try {
             if (req.session.userLogged) {
-                const user = await User.findOne({
-                    attributes: ['id','firstName','lastName','email','addres','country'],
+                const findUser = await User.findOne({
+                    attributes: ['id','firstName','lastName','email','addres','country', 'picture'],
                     where: { email: req.session.userLogged }
                 });
-                if (user) {
+                
+                if (findUser) {
                     return res.status(200).json({
                         meta: {
                             success: true,
                             status: 200,
-                            msg: 'User econtrado'
+                            msg: 'Registered user found'
                         },
-                        user
-                    });
+                        user: {
+                            fullname: `${findUser.firstName} ${findUser.lastName}`,
+                            email: findUser.email,
+                            adress: findUser.addres,
+                            country: findUser.country,
+                            picture: findUser.picture ? `${req.protocol}://${req.get('host')}/uploads/users/${findUser.picture}` : `${req.protocol}://${req.get('host')}/uploads/users/${pictureDefault}`
+                        }
+                    })
                 }
             }
         } catch (error) {
@@ -146,6 +152,7 @@ const usersController = {
         }
     },
     logout: (req,res) => {
+        res.clearCookie('userLogged');
         req.session.destroy();
     }
 };

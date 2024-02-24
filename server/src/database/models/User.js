@@ -29,6 +29,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER(150),
             allowNull: false
         },
+        picture: {
+            type: DataTypes.STRING(20)
+        },
         createdAt: {
             type: DataTypes.DATE
         },

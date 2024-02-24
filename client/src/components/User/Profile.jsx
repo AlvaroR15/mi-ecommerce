@@ -5,13 +5,19 @@ import './profile.css';
 export const Profile = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [addres, setAddres] = useState('');
+    const [country, setCountry] = useState('');
+    const [picture, setPicture] = useState('');
 
     useEffect(() => {
         const getData = async () => {
             const response = await getUser();
             const user = response.user;
-            setName(user.firstName);
+            setName(user.fullname);
             setEmail(user.email);
+            setAddres(user.addres);
+            setCountry(user.country);
+            setPicture(user.picture)
         };
         getData();
     }, [])
@@ -23,7 +29,7 @@ export const Profile = () => {
                 <div className="usuario-header">
                     <div className="usuario-caja">
                         <div className="usuario-img">
-                            <img src="" alt="Imagen de usuario" />
+                            <img src={picture} alt="Imagen de usuario" />
                             <button type="button" className="boton-img">
                                 <i className="far fa-image"></i>
                             </button>

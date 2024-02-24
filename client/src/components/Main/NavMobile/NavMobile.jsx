@@ -2,13 +2,23 @@ import './navMobile.css';
 import user from '../../../assets/partials-img/usuarionormal.jpg'
 
 import { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export const NavMobile = (props) => {
     const nav = useRef();
+    const navigate = useNavigate();
     const changeClass = () => {
         nav.current.classList.toggle('show')
     }
+
+    const logout = () => {
+        axios.get('http://localhost:3099/api/users/logout')
+        setTimeout(() => {
+            navigate('/')
+        }, 1000)
+    }
+
     return (
         <>
             <nav ref={nav} className={`nav-mobile-container ${props.clicked ? 'show': ''}`}>
@@ -28,7 +38,7 @@ export const NavMobile = (props) => {
                 <ul className="login-bar">
                     <li><Link to='/register'>Registrate</Link></li>
                     <li><Link to='/login'>Inicia sesión</Link></li>
-                    <li><Link to='/'>Cerrar sesión</Link></li>
+                    <li><Link onClick={logout}>Cerrar sesión</Link></li>
                 </ul>
             </nav>
         </>
