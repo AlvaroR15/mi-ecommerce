@@ -22,6 +22,7 @@ router.get('/:id', productAPIController.detail);
 router.post('/create', upload.single('image'), productAPIController.saveProduct);
 
 // rout for add products to cart
+router.get('/cart', productAPIController.cart);
 router.post('/add', productAPIController.addCart);
 
 // *** rutas para EDITAR PRODUCTOS ***

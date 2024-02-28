@@ -7,7 +7,7 @@
 .detalle  .stars-genre {
     width: 90%;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .detalle .stars-genre span {
@@ -40,7 +40,7 @@
 .detalle .container-img-data .info .price-talle {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
     align-items: center;
 }
 
@@ -64,6 +64,7 @@
 .detalle .container-img-data .info h3 {
     font-size: 1.2rem;
     margin: 5px 0;
+    margin-top: 10px;
     color: #555;
 }
 
@@ -79,33 +80,4 @@ select {
     border-radius: 3px;
     font-size: 1rem;
     margin-bottom: 15px;
-}
-
-
-
-@media (min-width: 768px) {
-    .detalle .container-img-big {
-        width: 60%;
-    }
-    .detalle .container-img-data{
-        text-align: center;
-    }
-}
-
-@media (min-width:1024px) {
-    .detalle{
-        flex-direction: row;
-        padding: 2rem;
-    }
-    .detalle .container-img-big {
-        width: 45%;
-    }
-    .detalle .container-img-data{
-        width: 40%;
-        text-align: left;
-    }
-    .button button{
-        font-size: 14px;
-    }
-
 }

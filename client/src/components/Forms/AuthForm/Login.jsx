@@ -12,7 +12,7 @@ export const Login = () => {
     const login = async (e) => {
         try {
             e.preventDefault();
-            axios.post('http://localhost:3099/api/users/login', {
+            await axios.post('http://localhost:3099/api/users/login', {
                 email : email,
                 password: password
             });

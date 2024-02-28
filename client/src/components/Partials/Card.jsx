@@ -7,10 +7,12 @@ export const Card = (props) => {
         <article>
             <Link to={`/products/${props.id}`} className="card">
                 <img className="contenedor-img" src={props.image} alt={props.name} />
-                <div className="card__price">${props.price}</div>
+                <div className='prices'>
+                    <span className="card__price">${props.price}</span>
+                    <span className='price-original'>{props.priceOriginal}</span>
+                </div>
                 <div className="card__title">{props.name}</div>
-                <span className='price-original'>{props.priceOriginal}</span>
-                <div className="card__subtitle">Tamaño / Talle: <b>{props.size}</b></div>
+                <div className="card__subtitle">{`${props.size ? 'Tamaño / Talle: ' : ''}`}<b>{props.size}</b></div>
             </Link>
 
         </article>

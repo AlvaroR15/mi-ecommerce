@@ -28,7 +28,7 @@ export const Register = () => {
         formData.append('picture', picture);
         try {
 
-            axios.post('http://localhost:3099/api/users/register', formData,
+            await axios.post('http://localhost:3099/api/users/register', formData,
             {
                 headers: {
                     'Content-Type' : 'multipart/form-data'

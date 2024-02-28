@@ -16,13 +16,15 @@ export const OffProduct = () => {
     return (
         <a className="off-product">
             <h2>Oferta del día</h2>
-            {
-                product ? (
-                    < Card id={product.id}  name={product.name} price={product.price * 0.8} image={product.image} priceOriginal={product.price} />
-                ) : (
-                    <p>{product === null ? 'Cargando...' : 'Producto no encontrado' }</p>
-                )
-            }
+            <div>
+                {
+                    product ? (
+                        < Card id={product.id} name={product.name} price={product.price * 0.8} image={product.image} priceOriginal={product.price} size={product.size ? product.size : ''} />
+                    ) : (
+                        <p>{product === null ? 'Cargando...' : 'Producto no encontrado'}</p>
+                    )
+                }
+            </div>
 
         </a>
     )

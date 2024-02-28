@@ -12,8 +12,8 @@ export const NavMobile = (props) => {
         nav.current.classList.toggle('show')
     }
 
-    const logout = () => {
-        axios.get('http://localhost:3099/api/users/logout')
+    const logout = async () => {
+        await axios.post('http://localhost:3099/api/users/logout')
         setTimeout(() => {
             navigate('/')
         }, 1000)
@@ -33,7 +33,6 @@ export const NavMobile = (props) => {
                     <li><a to="#">Favoritos</a></li>
                     <li><a to="#">Promos</a></li>
                     <li><a to="#">Ayuda</a></li>
-                    <li><a to="#">Botón de arrepentimiento</a></li>
                 </ul>
                 <ul className="login-bar">
                     <li><Link to='/register'>Registrate</Link></li>

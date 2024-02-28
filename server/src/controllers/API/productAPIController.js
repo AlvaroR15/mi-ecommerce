@@ -1,14 +1,14 @@
-const db = require('../../database/models/index');
+const { Product, User, Cart } = require('../../database/models/index');
 
 const productAPIController = {
     list: async (req, res) => {
         try {
-            const productsInfo = await db.Product.findAll({
+            const productsInfo = await Product.findAll({
                 raw: true,
-                attributes: ['id', 'name', 'description', 'price', 'size','image'],
+                attributes: ['id', 'name', 'description', 'price', 'size', 'image'],
                 include: ['categories']
             })
-            const getLastProducts = await db.Product.findAll({
+            const getLastProducts = await Product.findAll({
                 raw: true,
                 attributes: ['id', 'name', 'price', 'image'],
                 order: [['id', 'DESC']],
@@ -25,18 +25,19 @@ const productAPIController = {
                 image: req.protocol + '://' + req.get('host') + '/uploads/products/' + product.image
             }))
 
-            const countProducts = await db.Product.count();
+            const countProducts = await Product.count();
             const idRandom = Math.floor(Math.random() * countProducts + 1);
-            const chooseProduct = await db.Product.findOne({
+            const chooseProduct = await Product.findOne({
                 raw: true,
-                attributes: ['id','name','price','image'],
-                where: {id: idRandom}
+                attributes: ['id', 'name', 'price', 'image', 'size'],
+                where: { id: idRandom }
             })
 
             const productSelected = chooseProduct ? {
                 id: chooseProduct.id,
                 name: chooseProduct.name,
-                price: chooseProduct.price,
+                price: Math.round(chooseProduct.price),
+                size: chooseProduct.size,
                 image: req.protocol + '://' + req.get('host') + '/uploads/products/' + chooseProduct.image
             } : null;
 
@@ -59,9 +60,9 @@ const productAPIController = {
     },
     detail: async (req, res) => {
         try {
-            const searchProduct = await db.Product.findOne({
-                where: {id: req.params.id},
-                attributes: ['id','name','description','price','size','image']
+            const searchProduct = await Product.findOne({
+                where: { id: req.params.id },
+                attributes: ['id', 'name', 'description', 'price', 'size', 'image']
             });
             const product = searchProduct ? {
                 id: searchProduct.id,
@@ -75,13 +76,13 @@ const productAPIController = {
 
         } catch (error) {
             console.log(error);
-            res.status(500).json({'Ha ocurrido un error.': error})
+            res.status(500).json({ 'Ha ocurrido un error.': error })
         }
     },
     searchProduct: async (req, res) => {
         const textInput = req.body.search;
         try {
-            const searchProducts = await db.Product.findAll({
+            const searchProducts = await Product.findAll({
                 where: {
                     name: { [Op.like]: `%${textInput}%` },
                     attributes: ['name', 'description', 'price']
@@ -94,8 +95,60 @@ const productAPIController = {
             res.status(500).json('Ha ocurrido un error.', error)
         }
     },
-    addCart: async(req,res) => {
+    cart: async (req, res) => {
+        if (!req.session.userLogged) {
+            return res.status(403).json({
+                meta: {
+                    success: false,
+                    status: 403,
+                    msg: "There is no registered user"
+                }
+            })
+        }
+        try {
+            const user = await User.findOne({
+                where: {email: req.session.userLogged},
+                include: ['Cart']
+            });
+            return res.status(200).json({
+                meta: {
+                    success: true,
+                    status: 200,
+                    msg: "User's products"
+                },
+                data: {
+                    user
+                }
+            })
+        } catch(error) {}
+    },
+    addCart: async (req, res) => {
+        if (!req.session.userLogged) {
+            return res.status(403).json({
+                meta: {
+                    success: false,
+                    status: 403,
+                    msg: "There is no registered user"
+                }
+            })
+        }
+        try {
+            const user = await User.findOne({where: {email: req.session.userLogged}});
+            await Cart.create({
+                userId: user.id,
+                productId: req.body.productId,
+                quantity: req.body.quantity
+            });
 
+            return res.status(201).json({
+                meta: {
+                    success: true,
+                    status: 201,
+                    msg: 'Product added to cart successfully'
+                }
+            })
+            
+        } catch(error) {}
     },
     saveProduct: async (req, res) => {
         try {
@@ -104,7 +157,7 @@ const productAPIController = {
                 file = req.file.filename;
             };
 
-            const product = await db.Product.create({
+            const product = await Product.create({
                 name: req.body.name,
                 description: req.body.description,
                 price: +req.body.price,
@@ -128,7 +181,7 @@ const productAPIController = {
     },
     editProduct: async (req, res) => {
         try {
-            const productToUpdate = await db.Product.findByPk(req.params.id, { raw: true });
+            const productToUpdate = await Product.findByPk(req.params.id, { raw: true });
             const file = req.file;
 
             const productUpdate = {
@@ -146,7 +199,7 @@ const productAPIController = {
                 productUpdate.picture = productToUpdate.picture;
             }
 
-            await db.Product.update(productUpdate, { where: { id: req.params.id } })
+            await Product.update(productUpdate, { where: { id: req.params.id } })
 
             return res.status(500).json({
                 status: 'ojjjj'
@@ -157,7 +210,7 @@ const productAPIController = {
     },
     deleteProduct: async (req, res) => {
         try {
-            await db.Product.destroy({
+            await Product.destroy({
                 where: { id: req.params.id }
             });
             return res.status(200).json({

@@ -93,28 +93,35 @@ const usersController = {
     },
     profile: async (req, res) => {
         try {
-            if (req.session.userLogged) {
-                const findUser = await User.findOne({
-                    attributes: ['id','firstName','lastName','email','addres','country', 'picture'],
-                    where: { email: req.session.userLogged }
-                });
-                
-                if (findUser) {
-                    return res.status(200).json({
-                        meta: {
-                            success: true,
-                            status: 200,
-                            msg: 'Registered user found'
-                        },
-                        user: {
-                            fullname: `${findUser.firstName} ${findUser.lastName}`,
-                            email: findUser.email,
-                            adress: findUser.addres,
-                            country: findUser.country,
-                            picture: findUser.picture ? `${req.protocol}://${req.get('host')}/uploads/users/${findUser.picture}` : `${req.protocol}://${req.get('host')}/uploads/users/${pictureDefault}`
-                        }
-                    })
-                }
+            if (!req.session.userLogged) {
+                return res.status(403).json({
+                    meta: {
+                        success: false,
+                        status: 403,
+                        msg: 'There is no registered user'
+                    }
+                })
+            }
+            const findUser = await User.findOne({
+                attributes: ['id','firstName','lastName','email','addres','country', 'picture'],
+                where: { email: req.session.userLogged }
+            });
+            
+            if (findUser) {
+                return res.status(200).json({
+                    meta: {
+                        success: true,
+                        status: 200,
+                        msg: 'Registered user found'
+                    },
+                    user: {
+                        fullname: `${findUser.firstName} ${findUser.lastName}`,
+                        email: findUser.email,
+                        adress: findUser.addres,
+                        country: findUser.country,
+                        picture: findUser.picture ? `${req.protocol}://${req.get('host')}/uploads/users/${findUser.picture}` : `${req.protocol}://${req.get('host')}${pictureDefault}`
+                    }
+                })
             }
         } catch (error) {
             console.log(error);
@@ -152,8 +159,14 @@ const usersController = {
         }
     },
     logout: (req,res) => {
-        res.clearCookie('userLogged');
         req.session.destroy();
+        return res.status(200).json({
+            meta: {
+                success: true,
+                status: 200,
+                msg: 'User logout successfully'
+            }
+        })
     }
 };
 module.exports = usersController;

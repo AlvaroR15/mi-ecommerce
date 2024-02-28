@@ -4,3 +4,12 @@
     margin: auto;
     margin-bottom: 4vw;
 }
+
+.off-product h2 {
+    text-align: center;
+}
+
+.off-product div article{
+    display: flex;
+    justify-content: center;
+}

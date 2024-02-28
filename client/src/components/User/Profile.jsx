@@ -1,5 +1,6 @@
 import { getUser } from "../../services/userServices";
 import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import './profile.css';
 
 export const Profile = () => {
@@ -9,15 +10,28 @@ export const Profile = () => {
     const [country, setCountry] = useState('');
     const [picture, setPicture] = useState('');
 
+
+    const navigate = useNavigate();
+
     useEffect(() => {
         const getData = async () => {
-            const response = await getUser();
-            const user = response.user;
-            setName(user.fullname);
-            setEmail(user.email);
-            setAddres(user.addres);
-            setCountry(user.country);
-            setPicture(user.picture)
+            try {
+                const response = await getUser();
+                const user = response.user;
+                const meta = response.meta;
+
+                if (!meta.success) {
+                    navigate('/login')
+                }
+
+                setName(user.fullname);
+                setEmail(user.email);
+                setAddres(user.addres);
+                setCountry(user.country);
+                setPicture(user.picture)
+            } catch (error) {
+
+            }
         };
         getData();
     }, [])
@@ -40,6 +54,8 @@ export const Profile = () => {
                     <div className="perfil-usuario-bio">
                         <h3 className="titulo">{name}</h3>
                         <p className="text">{email}</p>
+                        <p>{addres}</p>
+                        <p>{country}</p>
                     </div>
                 </div>
             </section>
