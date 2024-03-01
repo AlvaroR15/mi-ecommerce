@@ -1,40 +1,29 @@
-import { getUser } from "../../services/userServices";
-import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
 import './profile.css';
+import { useAuth } from '../../contexts/AuthContext';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Loader } from '../Partials/Loader/Loader';
 
 export const Profile = () => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [addres, setAddres] = useState('');
-    const [country, setCountry] = useState('');
-    const [picture, setPicture] = useState('');
-
-
+    const { getDataUser, user, status } = useAuth();
     const navigate = useNavigate();
 
+    if (status != 200) {
+        navigate('/login')
+    }
+
     useEffect(() => {
-        const getData = async () => {
-            try {
-                const response = await getUser();
-                const user = response.user;
-                const meta = response.meta;
-
-                if (!meta.success) {
-                    navigate('/login')
-                }
-
-                setName(user.fullname);
-                setEmail(user.email);
-                setAddres(user.addres);
-                setCountry(user.country);
-                setPicture(user.picture)
-            } catch (error) {
-
+        setTimeout(() => {
+            const getUser = async () => {
+                await getDataUser();
             }
-        };
-        getData();
-    }, [])
+            getUser();
+        }, 1000)
+    }, []);
+
+    if (!user) {
+        return <Loader />
+    }
 
     return (
         <main>
@@ -43,7 +32,7 @@ export const Profile = () => {
                 <div className="usuario-header">
                     <div className="usuario-caja">
                         <div className="usuario-img">
-                            <img src={picture} alt="Imagen de usuario" />
+                            <img src={user.picture} alt={`${user.fullname}'s photo`} />
                             <button type="button" className="boton-img">
                                 <i className="far fa-image"></i>
                             </button>
@@ -52,10 +41,10 @@ export const Profile = () => {
                 </div>
                 <div className="perfil-usuario-body">
                     <div className="perfil-usuario-bio">
-                        <h3 className="titulo">{name}</h3>
-                        <p className="text">{email}</p>
-                        <p>{addres}</p>
-                        <p>{country}</p>
+                        <h3 className="titulo">{user.fullname}</h3>
+                        <p className="text">{user.email}</p>
+                        <p>{user.addres}</p>
+                        <p>{user.country}</p>
                     </div>
                 </div>
             </section>

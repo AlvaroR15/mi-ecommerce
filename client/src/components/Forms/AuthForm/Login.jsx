@@ -1,31 +1,21 @@
 import { BoxInput } from "./BoxInput/BoxInput"
 import { useState } from "react";
-import axios from 'axios';
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useAuth } from "../../../contexts/AuthContext";
 
 export const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate();
 
-    axios.defaults.withCredentials = true;
-    const login = async (e) => {
-        try {
-            e.preventDefault();
-            await axios.post('http://localhost:3099/api/users/login', {
-                email : email,
-                password: password
-            });
-        } catch(error) {
-            console.log(error);
-        }
-        setTimeout(() => {
-            navigate('/profile')
-        }, 600)
+    const {login} = useAuth();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        await login(email,password)
     }
 
     return (
-        <form onSubmit={login}>
+        <form onSubmit={handleSubmit}>
             < BoxInput type='email' placeholder='Ingresa tu correo' name='email' value={email} onChange={(e) => {setEmail(e.target.value)}} />
             < BoxInput type='password' placeholder='Ingresa tu contraseña' name='password' value={password} onChange={(e) => {setPassword(e.target.value)}} />
             <button type="submit" className="boton-primario">Iniciar sesión</button>

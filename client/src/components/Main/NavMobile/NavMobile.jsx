@@ -1,32 +1,36 @@
 import './navMobile.css';
-import user from '../../../assets/partials-img/usuarionormal.jpg'
+import { useAuth } from '../../../contexts/AuthContext';
 
-import { useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export const NavMobile = (props) => {
     const nav = useRef();
-    const navigate = useNavigate();
+    const { getDataUser, user, isLogged, logout } = useAuth();
+
     const changeClass = () => {
         nav.current.classList.toggle('show')
     }
 
-    const logout = async () => {
-        await axios.post('http://localhost:3099/api/users/logout')
-        setTimeout(() => {
-            navigate('/')
-        }, 1000)
-    }
+    useEffect(() => {
+        const getUser = async () => {
+            await getDataUser();
+        }
+        getUser();
+    }, [])
+
 
     return (
         <>
-            <nav ref={nav} className={`nav-mobile-container ${props.clicked ? 'show': ''}`}>
+            <nav ref={nav} className={`nav-mobile-container ${props.clicked ? 'show' : ''}`}>
                 <span onClick={changeClass} className='close-nav'>X</span>
-                <div className="info-user">
-                    <img src={user} alt="user" />
-                    <p>Username</p>
-                </div>
+                {
+                    (user != null) &&
+                    <div className="info-user">
+                        <img src={user.picture} alt={`${user.fullname}'s photo`} />
+                        <p>{user.fullname}</p>
+                    </div>
+                }
                 <ul className="nav-bar">
                     <li><Link to='/'>Inicio</Link></li>
                     <li><Link to='/cart'>Carrito de compras</Link></li>
@@ -35,9 +39,15 @@ export const NavMobile = (props) => {
                     <li><a to="#">Ayuda</a></li>
                 </ul>
                 <ul className="login-bar">
-                    <li><Link to='/register'>Registrate</Link></li>
-                    <li><Link to='/login'>Inicia sesión</Link></li>
-                    <li><Link onClick={logout}>Cerrar sesión</Link></li>
+                    {
+                        (!isLogged) && <li><Link to='/register'>Registrate</Link></li>
+                    }
+                    {
+                        (!isLogged) && <li><Link to='/login'>Inicia sesión</Link></li>
+                    }
+                    {
+                        (isLogged) && <li><Link onClick={logout}>Cerrar sesión</Link></li>
+                    }
                 </ul>
             </nav>
         </>

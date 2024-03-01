@@ -6,7 +6,7 @@ import axios from 'axios';
 
 export const Detail = () => {
     const [product, setProduct] = useState(null);
-    const [quantity, setQuantity] = useState(null);
+    const [quantity, setQuantity] = useState(1);
     const { id } = useParams();
     
     useEffect(() => {
