@@ -16,22 +16,19 @@ const upload = multer({storage});
 
 
 router.get('/',productAPIController.list);
+
+router.get('/cart', productAPIController.cart);
+
 router.get('/:id', productAPIController.detail);
 
-// *** rutas para AGREGAR PRODUCTOS ***
 router.post('/create', upload.single('image'), productAPIController.saveProduct);
 
-// rout for add products to cart
-router.get('/cart', productAPIController.cart);
 router.post('/add', productAPIController.addCart);
 
-// *** rutas para EDITAR PRODUCTOS ***
 router.put('/edit/:id', upload.single('image'),productAPIController.editProduct);
 
-/* Ruta para BUSCAR PRODUCTOS */
 router.post('/search', productAPIController.searchProduct)
 
-// *** rutas para BORRAR PRODUCTOS ***
 router.delete('/:id', productAPIController.deleteProduct);
 
 module.exports = router;

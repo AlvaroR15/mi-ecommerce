@@ -1,7 +1,24 @@
 import zapatillas from '../../../assets/partials-img/zapatillasAdidas.jpg'
 import './cart.css'
+import { cartProducts } from '../../../services/cartProductService';
+import { useEffect, useState } from 'react';
 
 export const Cart = () => {
+    const [image, setImage] = useState(null);
+
+    useEffect(() => {
+        const get = async () => {
+            try {
+                const response = await cartProducts();
+                const data = response.data;
+                const cartUser = data.cartUser;
+
+            } catch(error) {
+                console.log(error);
+            }
+        }
+        get()
+    }, [])
     return (
         <>
             <section className='products-cart'>

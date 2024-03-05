@@ -96,31 +96,74 @@ const productAPIController = {
         }
     },
     cart: async (req, res) => {
-        if (!req.session.userLogged) {
-            return res.status(403).json({
-                meta: {
-                    success: false,
-                    status: 403,
-                    msg: "There is no registered user"
-                }
-            })
-        }
+        // if (!req.session.userLogged) {
+        //     return res.status(403).json({
+        //         meta: {
+        //             success: false,
+        //             status: 403,
+        //             msg: "There is no registered user"
+        //         }
+        //     })
+        // }
+        // try {
+        //     const user = await User.findOne({where: {email: req.session.userLogged}});
+        //     const cartUser = await Cart.findAll({
+        //         include: ['cartUser'],
+        //         include: ['cartProduct']
+        //     });
+        //     const products = await Product.findAll({where: {id: cartUser.productId}, include: ['productCart']})
+        //     return res.status(200).json({
+        //         meta: {
+        //             success: true,
+        //             status: 200,
+        //             msg: "User's products"
+        //         },
+        //         data: {
+        //             user,
+        //             cartUser,
+        //             products
+        //         }
+        //     })
+        // } catch(error) {
+        //     console.log(error);
+        // }
         try {
-            const user = await User.findOne({
-                where: {email: req.session.userLogged},
-                include: ['Cart']
-            });
-            return res.status(200).json({
-                meta: {
-                    success: true,
-                    status: 200,
-                    msg: "User's products"
-                },
-                data: {
-                    user
-                }
-            })
-        } catch(error) {}
+            // Buscar al usuario por su correo electrónico
+            // const user = await User.findOne({ where: { email: req.session.userLogged } });
+        
+            // Buscar el carrito del usuario
+
+            // Si se encuentra el carrito del usuario
+            // if (cartUser) {
+                // Buscar los productos asociados al carrito del usuario
+                const products = await Product.findAll()
+          
+                return res.status(200).json({
+                    meta: {
+                        success: true,
+                        status: 200,
+                        msg: "User's products"
+                    },
+                    data: {
+                        // user,
+                        // cartUser,
+                        products
+                    }
+                });
+            // } else {
+            //     // Si no se encuentra el carrito del usuario, devolver un mensaje de error o un estado de 404
+            //     return res.status(404).json({
+            //         meta: {
+            //             success: false,
+            //             status: 404,
+            //             msg: "User's cart not found"
+            //         }
+            //     });
+            // }
+        } catch (error) {
+            console.log(error);
+        }
+        
     },
     addCart: async (req, res) => {
         if (!req.session.userLogged) {

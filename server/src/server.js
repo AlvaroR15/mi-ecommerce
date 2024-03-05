@@ -1,10 +1,8 @@
 const express = require("express");
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const methodOverride = require('method-override');
 const session = require('express-session');
 const path = require('path');
-const cookies = require('cookie-parser');
 const crypto = require('crypto');
 
 const usersRoutes = require("./routes/users");
@@ -29,7 +27,7 @@ app.use(cors({
     methods: ['POST','GET'],
     credentials: true
 }));
-app.use(cookies())
+
 
 const secret = crypto.randomBytes(32).toString('hex');
 app.use(session(
@@ -45,17 +43,14 @@ app.use(session(
 // app.use(cookies());
 // app.use(cookiesMiddleware);
 
-app.use(methodOverride('_method'))
+
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+app.use('/api/users', usersRoutes);
+app.use('/api/products', productApiRoutes);
 
 
 app.listen(PORT, () => {
-    console.log("\n¡Servidor en línea! :D");
-    console.log(`Iniciado en el puerto ${PORT}`);
-    console.log(`Ingresá a localhost:${PORT} para empezar a visualizar el sitio`);
+    console.log(`[server]: running in port: ${PORT}`);
 });
-
-app.use('/api/users', usersRoutes);
-app.use('/api/products', productApiRoutes);
