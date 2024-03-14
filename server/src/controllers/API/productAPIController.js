@@ -1,4 +1,4 @@
-const { Product, User, Cart } = require('../../database/models/index');
+const { Product, User, Cart, CartDetail } = require('../../database/models/index');
 
 const productAPIController = {
     list: async (req, res) => {
@@ -111,7 +111,6 @@ const productAPIController = {
         //         include: ['cartUser'],
         //         include: ['cartProduct']
         //     });
-        //     const products = await Product.findAll({where: {id: cartUser.productId}, include: ['productCart']})
         //     return res.status(200).json({
         //         meta: {
         //             success: true,
@@ -128,28 +127,56 @@ const productAPIController = {
         //     console.log(error);
         // }
         try {
-            // Buscar al usuario por su correo electrónico
-            // const user = await User.findOne({ where: { email: req.session.userLogged } });
-        
-            // Buscar el carrito del usuario
+
 
             // Si se encuentra el carrito del usuario
             // if (cartUser) {
-                // Buscar los productos asociados al carrito del usuario
-                const products = await Product.findAll()
-          
-                return res.status(200).json({
-                    meta: {
-                        success: true,
-                        status: 200,
-                        msg: "User's products"
-                    },
-                    data: {
-                        // user,
-                        // cartUser,
-                        products
+            // Buscar los productos asociados al carrito del usuario
+            // const cartUser = await Cart.findAll({
+            //     include: [{
+            //         model: User,
+            //         as: 'cartUser',
+            //         attributes: ['id','firstName','lastName','email','country']
+            //     }]
+            // })
+            // const cartDetail = await CartDetail.findAll({
+            //     raw: true,
+            //     include: [{
+            //         model: Product,
+            //         as: 'products',
+            //         attributes: ['name','price','image']
+            //     }]
+            // })
+
+            const userCart = await User.findOne({
+                attributes: ['id','firstName','lastName','email','country'],
+                where: {id: 1},
+                include: {
+                    model: Cart,
+                    as: 'userCart',
+                    include: {
+                        model: Product,
+                        as: 'products',
+                        through: {model: CartDetail},
+                        attributes: ['id','name','price','image']
                     }
-                });
+                }
+            })
+
+            return res.status(200).json({
+                meta: {
+                    success: true,
+                    status: 200,
+                    msg: "User's products"
+                },
+                data: {
+                    // user,
+                    
+                    // products,
+                    // cartProduct
+                    userCart
+                }
+            });
             // } else {
             //     // Si no se encuentra el carrito del usuario, devolver un mensaje de error o un estado de 404
             //     return res.status(404).json({
@@ -163,7 +190,7 @@ const productAPIController = {
         } catch (error) {
             console.log(error);
         }
-        
+
     },
     addCart: async (req, res) => {
         if (!req.session.userLogged) {
@@ -176,7 +203,7 @@ const productAPIController = {
             })
         }
         try {
-            const user = await User.findOne({where: {email: req.session.userLogged}});
+            const user = await User.findOne({ where: { email: req.session.userLogged } });
             await Cart.create({
                 userId: user.id,
                 productId: req.body.productId,
@@ -190,8 +217,8 @@ const productAPIController = {
                     msg: 'Product added to cart successfully'
                 }
             })
-            
-        } catch(error) {}
+
+        } catch (error) { }
     },
     saveProduct: async (req, res) => {
         try {

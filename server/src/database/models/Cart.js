@@ -11,14 +11,11 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             foreignKey: true
         },
-        productId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            foreignKey: true
+        dateCreation: {
+            type: DataTypes.DATE
         },
-        quantity: {
-            type: DataTypes.INTEGER(11),
-            allowNull: false
+        state: {
+            type: DataTypes.ENUM('Pendiente','Completado','Cancelado')
         }
     }, {
         tableName: 'cart',
@@ -26,13 +23,15 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Cart.associate = models => {
-        Cart.hasMany(models.Product, {
-            as: 'cartProduct',
-            foreignKey: 'productId'
-        });
         Cart.belongsTo(models.User, {
             as: 'cartUser',
             foreignKey: 'userId'
+        }),
+        Cart.belongsToMany(models.Product, {
+            as: 'products',
+            through: 'cartdetail',
+            foreignKey: 'cartId',
+            otherKey: 'productId'
         })
     }
     return Cart

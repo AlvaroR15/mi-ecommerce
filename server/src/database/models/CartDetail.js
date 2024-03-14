@@ -1,12 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
-    const Order = sequelize.define('Order', {
+    const CartDetail = sequelize.define('CartDetail', {
         id: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             allowNull: false,
             primaryKey: true
         },
-        userId: {
+        cartId: {
             type: DataTypes.INTEGER,
             allowNull: false,
             foreignKey: true
@@ -17,16 +17,23 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: true
         },
         quantity: {
-            type: DataTypes.INTEGER(11)
+            type: DataTypes.INTEGER,
+            allowNull: false
         },
-        date: {
-            type: DataTypes.DATE
+        subtotal: {
+            type: DataTypes.DECIMAL(10,2)
         }
     }, {
-        tableName: 'orders',
+        tableName: 'cartdetail',
         timestamps: false
     });
 
-    
-    return Order;
+    CartDetail.associate = models => {
+        CartDetail.belongsTo(models.Product, {
+            as: 'products',
+            foreignKey: 'productId'
+        })
+    }
+
+    return CartDetail
 }

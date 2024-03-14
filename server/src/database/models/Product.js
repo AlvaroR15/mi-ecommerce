@@ -25,6 +25,10 @@ module.exports = (sequelize, DataTypes) => {
         image: {
             type: DataTypes.STRING(20)
         },
+        stock:{
+            type: DataTypes.INTEGER(11).UNSIGNED,
+            allowNull: false
+        },
         categoryId: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -50,14 +54,11 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: 'categoryId'
         });
         
-        Product.belongsTo(models.Cart, {
-            as: 'productCart',
-            foreignKey: 'productId'
-        });
-
-        Product.belongsTo(models.Order, {
-            as: 'orderProduct',
-            foreignKey: 'productId'
+        Product.belongsToMany(models.Cart, {
+            as: 'carts',
+            through: 'cartdetail',
+            foreignKey: 'productId',
+            otherKey: 'cartId'
         });
     };
 
