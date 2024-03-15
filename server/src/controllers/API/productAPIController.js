@@ -96,61 +96,20 @@ const productAPIController = {
         }
     },
     cart: async (req, res) => {
-        // if (!req.session.userLogged) {
-        //     return res.status(403).json({
-        //         meta: {
-        //             success: false,
-        //             status: 403,
-        //             msg: "There is no registered user"
-        //         }
-        //     })
-        // }
-        // try {
-        //     const user = await User.findOne({where: {email: req.session.userLogged}});
-        //     const cartUser = await Cart.findAll({
-        //         include: ['cartUser'],
-        //         include: ['cartProduct']
-        //     });
-        //     return res.status(200).json({
-        //         meta: {
-        //             success: true,
-        //             status: 200,
-        //             msg: "User's products"
-        //         },
-        //         data: {
-        //             user,
-        //             cartUser,
-        //             products
-        //         }
-        //     })
-        // } catch(error) {
-        //     console.log(error);
-        // }
+        if (!req.session.userLogged) {
+            return res.status(403).json({
+                meta: {
+                    success: false,
+                    status: 403,
+                    msg: "There is no registered user"
+                }
+            })
+        }
         try {
-
-
-            // Si se encuentra el carrito del usuario
-            // if (cartUser) {
-            // Buscar los productos asociados al carrito del usuario
-            // const cartUser = await Cart.findAll({
-            //     include: [{
-            //         model: User,
-            //         as: 'cartUser',
-            //         attributes: ['id','firstName','lastName','email','country']
-            //     }]
-            // })
-            // const cartDetail = await CartDetail.findAll({
-            //     raw: true,
-            //     include: [{
-            //         model: Product,
-            //         as: 'products',
-            //         attributes: ['name','price','image']
-            //     }]
-            // })
-
+            const user = await User.findOne({where: {email: req.session.userLogged}});
             const userCart = await User.findOne({
-                attributes: ['id','firstName','lastName','email','country'],
-                where: {id: 1},
+                attributes: ['id','email'],
+                where: {id: user.id},
                 include: {
                     model: Cart,
                     as: 'userCart',
@@ -163,32 +122,49 @@ const productAPIController = {
                 }
             })
 
+            if (!userCart) {
+                return res.status(404).json({
+                    meta: {
+                        success: false,
+                        status: 404,
+                        msg: "User's cart not found"
+                    },
+                    data: {}
+                })
+            }
+            
+            const cart = userCart.userCart.map(cartItem => ({
+                id: cartItem.id,
+                userId: cartItem.userId,
+                dateCreation: cartItem.dateCreation,
+                state: cartItem.state
+            }));
+            
+            const products = userCart.userCart.flatMap(cartItem => cartItem.products);
+            
+            const cartDetail = userCart.userCart.flatMap(cartItem => cartItem.products.map(product => product.cartdetail));
+            
+            const data = { cart, products, cartDetail };
+            
+
             return res.status(200).json({
                 meta: {
                     success: true,
                     status: 200,
                     msg: "User's products"
                 },
-                data: {
-                    // user,
-                    
-                    // products,
-                    // cartProduct
-                    userCart
-                }
-            });
-            // } else {
-            //     // Si no se encuentra el carrito del usuario, devolver un mensaje de error o un estado de 404
-            //     return res.status(404).json({
-            //         meta: {
-            //             success: false,
-            //             status: 404,
-            //             msg: "User's cart not found"
-            //         }
-            //     });
-            // }
+                data
+            })
+
         } catch (error) {
             console.log(error);
+            return res.status(500).json({
+                meta: {
+                    success: false,
+                    status: 500,
+                    msg: 'Occurred an error'
+                }
+            })
         }
 
     },
@@ -204,21 +180,42 @@ const productAPIController = {
         }
         try {
             const user = await User.findOne({ where: { email: req.session.userLogged } });
-            await Cart.create({
+            const newCart = await Cart.create({
                 userId: user.id,
-                productId: req.body.productId,
-                quantity: req.body.quantity
+                state: 'Pendiente'
             });
 
-            return res.status(201).json({
+            if (newCart) {
+                const cartProductInfo = await CartDetail.create({
+                    cartId: newCart.id,
+                    productId: req.body.productId,
+                    quantity: req.body.quantity,
+                    subtotal: (req.body.price * req.body.quantity)
+                })
+                return res.status(201).json({
+                    meta: {
+                        success: true,
+                        status: 201,
+                        msg: 'Product added to cart successfully'
+                    },
+                    data: {
+                        cart: newCart,
+                        cartProductInfo
+                    }
+                })    
+            }
+
+            
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({
                 meta: {
-                    success: true,
-                    status: 201,
-                    msg: 'Product added to cart successfully'
+                    success: false,
+                    status: 500,
+                    msg: 'Occurred an error'
                 }
             })
-
-        } catch (error) { }
+        }
     },
     saveProduct: async (req, res) => {
         try {

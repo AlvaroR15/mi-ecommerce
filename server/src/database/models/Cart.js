@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: true
         },
         dateCreation: {
-            type: DataTypes.DATE
+            type: DataTypes.DATE,
+            defaultValue: DataTypes.NOW
         },
         state: {
             type: DataTypes.ENUM('Pendiente','Completado','Cancelado')

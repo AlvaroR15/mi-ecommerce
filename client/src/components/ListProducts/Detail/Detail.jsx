@@ -27,7 +27,8 @@ export const Detail = () => {
     const addToCart = async () => {
         await axios.post('http://localhost:3099/api/products/add', {
             productId: product.id,
-            quantity: quantity
+            quantity: quantity,
+            price: product.price
         });
     }
     return (
