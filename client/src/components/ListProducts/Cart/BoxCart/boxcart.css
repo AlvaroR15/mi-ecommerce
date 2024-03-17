@@ -1,0 +1,41 @@
+ article {
+     display: flex;
+     align-items: center;
+     padding: 5px;
+     border: 1px solid #aaa;
+     border-radius: 2px;
+     margin: 3vw 0;
+ }
+
+ article .box-image {
+     width: 25%;
+ }
+
+ article .info-product {
+     width: 75%;
+     display: flex;
+     flex-direction: column;
+ }
+
+ article .info-product h4 {
+     font-size: .9rem;
+ }
+
+ article .info-product div {
+     width: 85%;
+     margin: auto;
+     display: flex;
+     justify-content: space-between;
+     font-size: .8rem;
+ }
+
+ article .info-product div .price {
+     font-weight: 600;
+ }
+
+ article button,
+ article button i {
+     font-size: .9rem;
+     margin: 5px auto;
+     color: #a00;
+ }

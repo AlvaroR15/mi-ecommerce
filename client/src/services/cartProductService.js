@@ -1,6 +1,6 @@
 export const cartProducts = async () => {
     try {
-        const response = await fetch('http://localhost:3099/api/products/cart', {method:'GET'});
+        const response = await fetch('http://localhost:3099/api/products/cart', {method:'GET', credentials: 'include'});
         const data = await response.json();
 
         return data;

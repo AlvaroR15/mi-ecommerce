@@ -96,6 +96,7 @@ const productAPIController = {
         }
     },
     cart: async (req, res) => {
+        console.log(req.session.userLogged);
         if (!req.session.userLogged) {
             return res.status(403).json({
                 meta: {
@@ -106,10 +107,9 @@ const productAPIController = {
             })
         }
         try {
-            const user = await User.findOne({where: {email: req.session.userLogged}});
             const userCart = await User.findOne({
                 attributes: ['id','email'],
-                where: {id: user.id},
+                where: {email: req.session.userLogged},
                 include: {
                     model: Cart,
                     as: 'userCart',
@@ -140,11 +140,24 @@ const productAPIController = {
                 state: cartItem.state
             }));
             
-            const products = userCart.userCart.flatMap(cartItem => cartItem.products);
+            const productsData = userCart.userCart.flatMap(cartItem => cartItem.products);
+            const products = productsData.map(product => ({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                image: `${req.protocol}://${req.get('host')}/uploads/products/${product.image}`,
+                cartdetail: {
+                    id: product.cartdetail.id,
+                    cartId: product.cartdetail.cartId,
+                    productId: product.cartdetail.productId,
+                    quantity: product.cartdetail.quantity,
+                    subtotal: product.cartdetail.subtotal
+                }
+            }));
             
             const cartDetail = userCart.userCart.flatMap(cartItem => cartItem.products.map(product => product.cartdetail));
             
-            const data = { cart, products, cartDetail };
+            const data = {products};
             
 
             return res.status(200).json({

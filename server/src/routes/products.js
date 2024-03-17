@@ -14,12 +14,12 @@ const storage = multer.diskStorage({
 });
 const upload = multer({storage});
 
+router.get('/cart', productAPIController.cart);
 
 router.get('/',productAPIController.list);
 
-router.get('/cart', productAPIController.cart);
-
 router.get('/:id', productAPIController.detail);
+
 
 router.post('/create', upload.single('image'), productAPIController.saveProduct);
 

@@ -1,50 +1,45 @@
 import './cart.css'
 import { cartProducts } from '../../../services/cartProductService';
 import { useEffect, useState } from 'react';
+import { BoxCart } from './BoxCart/BoxCart';
 
 export const Cart = () => {
-    const [cart,setCart] = useState(null);
-    const [products,setProducts] = useState(null);
-    const [cartDetail,setCartDetail] = useState(null);
+    const [products, setProducts] = useState(null);
+    const [total, setTotal] = useState(0);
 
     useEffect(() => {
         const get = async () => {
             try {
                 const response = await cartProducts();
-                console.log(response);
                 const data = response.data;
-                setCart(data.cart);
                 setProducts(data.products);
-                setCartDetail(data.cartDetail);
-
-            } catch(error) {
+            } catch (error) {
                 console.log(error);
             }
         }
         get()
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        if (products) {
+            const totalAmount = products.reduce((sum, product) => sum + parseFloat(product.cartdetail.subtotal), 0);
+            setTotal(totalAmount);
+        }
+    }, [products]);
     return (
         <>
-            <section className='products-cart'>
-                <div className='info-product'>
-                    {
-                        Array.isArray(products) && products.map(product => <img src={product.image} alt="" />)
-
-                    }
-                    <div>
-                        {
-                            Array.isArray(products) && products.map(product => <p className='name'>{product.name}</p>)
-                        }
-                        {/* <span>Talle: S</span> */}
-                    </div>
-
-                    {/* <p>{cartDetail.subtotal}</p> */}
-                </div>
-                <div className='buttons-cart'>
-                    <button className='btn delete'>Quitar</button>
-                    <button className='btn modify'>Modificar</button>
-                </div>
-            </section>
+            <div className='container-cart'>
+                {
+                    Array.isArray(products) && products.map((product,i) => (
+                        <BoxCart key={i} image={product.image} name={product.name} quantity={product.cartdetail.quantity} price={product.cartdetail.subtotal}  />
+                    ))
+                }
+            </div>
+            <div className='total-buy'>
+                <p>Total:</p>
+                <p className='total'>${(total) && total.toLocaleString()}</p>
+                <button>Comprar</button>
+            </div>
         </>
     )
 }

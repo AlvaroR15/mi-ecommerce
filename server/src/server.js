@@ -45,6 +45,9 @@ app.use(session(
 
 
 
+
+
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api/users', usersRoutes);
