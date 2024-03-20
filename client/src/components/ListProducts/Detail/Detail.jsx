@@ -1,28 +1,26 @@
 import './detail.css'
 import { useState, useEffect } from 'react';
 import { getProduct } from '../../../services/detailProductService';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 export const Detail = () => {
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
+    const [status, setStatus] = useState(null);
     const { id } = useParams();
+
+    const navigate = useNavigate();
     
     useEffect(() => {
         const getData = async () => {
             const response = await getProduct(id);
-            if (!response || response.error) {
-                console.error('Producto no encontrado o error en la solicitud:', response);
-                setProduct(null);
-                return;
-              }
-
-            setProduct(response.product)
+            setProduct(response.product);
         }
         getData()
     }, [id]);
 
+    
 
     const addToCart = async () => {
         await axios.post('http://localhost:3099/api/products/add', {

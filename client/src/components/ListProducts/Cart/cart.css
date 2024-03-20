@@ -26,3 +26,13 @@
     font-size: 1rem;
     border-radius: 2px;
 }
+
+.msg-error {
+    text-align: center;
+    font-size: 1rem;
+    margin: 25vh auto;
+}
+
+.msg-error h1 {
+    font-size: 1.3rem;
+}

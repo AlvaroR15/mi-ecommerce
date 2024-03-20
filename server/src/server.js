@@ -1,59 +1,44 @@
 const express = require("express");
 const cors = require('cors');
-const bodyParser = require('body-parser');
 const session = require('express-session');
 const path = require('path');
-const crypto = require('crypto');
 
 const usersRoutes = require("./routes/users");
 const productApiRoutes = require('./routes/products');
 
-// const userLoggedMiddleware = require('./middlewares/userLoggedMiddleware');
-// const adminLoggedMiddleware = require('./middlewares/adminLoggedMiddleware');
-// const cookiesMiddleware = require("./middlewares/cookiesMiddleware");
-
 const app = express();
 
+// Load environment variables from .env file
+require('dotenv').config();
 
-require('dotenv').config()
+// Set the port number for the server
 const PORT = process.env.PORT || 4080;
 
-// ***** configurando body-parser *****
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
+// Middleware to parse incoming request bodies
+app.use(express.urlencoded({extended:false}));
+app.use(express.json());
 
+// CORS configuration to allow requests from specified origins with credentials
 app.use(cors({
     origin: ['http://localhost:3000'],
-    methods: ['POST','GET'],
     credentials: true
 }));
 
-
-const secret = crypto.randomBytes(32).toString('hex');
-app.use(session(
-    {
-    secret: secret,
+// Session middleware to manage user sessions
+app.use(session({
+    secret: 'MySecret',
     resave: false,
     saveUninitialized: false
 }));
 
-// app.use(userLoggedMiddleware);
-// app.use(adminLoggedMiddleware);
-
-// app.use(cookies());
-// app.use(cookiesMiddleware);
-
-
-
-
-
-
+// Serve static files from the 'uploads' directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Routes for user-related and product-related APIs
 app.use('/api/users', usersRoutes);
 app.use('/api/products', productApiRoutes);
 
-
+// Start the server and listen for incoming requests on specified port
 app.listen(PORT, () => {
     console.log(`[server]: running in port: ${PORT}`);
 });

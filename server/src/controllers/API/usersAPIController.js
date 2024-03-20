@@ -1,19 +1,25 @@
-const bcrypt = require('bcryptjs');
 const { validationResult } = require('express-validator');
 const { User } = require('../../database/models/index');
+const bcrypt = require('bcryptjs');
 const pictureDefault = '/uploads/users/user.webp';
 
+// Controller for user-related operations
 const usersController = {
+    // Method to register a new user
     register: async (req, res) => {
         try {
+            // Validate incoming request data
             let resultValidation = validationResult(req);
-            if (resultValidation.errors.length > 0) {
+            if (!resultValidation.isEmpty()) {
                 return res.status(422).json({
                     errors: resultValidation.mapped(),
                     oldData: req.body
-                })
-            };
+                });
+            }
+
+            // Check if file is attached to request for user picture
             const file = req.file;
+            // Create new user in database
             await User.create({
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
@@ -21,42 +27,49 @@ const usersController = {
                 addres: req.body.addres,
                 country: req.body.country,
                 password: bcrypt.hashSync(req.body.password, 10),
-                picture: file ? file.filename : null
-            })
+                picture: file ? file.filename : 'user.webp'
+            });
+
             return res.status(200).json({
                 meta: {
                     success: true,
                     status: 200,
-                    msg: 'User created succefully'
+                    msg: 'User created successfully'
                 }
-            })
+            });
         } catch (error) {
-            console.error('Error', error);
+            console.error('Error during user registration:', error);
             return res.status(500).json({
                 meta: {
                     success: false,
                     status: 500,
-                    msg: 'Ha ocurrido un error'
+                    msg: 'An error occurred during user registration'
                 },
-                error
-            })
+                error: error.message
+            });
         }
     },
+
+    // Method to login a user
     login: async (req, res) => {
         try {
+            // Extract email and password from request body
             const { email, password } = req.body;
+            // Find user in database based on email
             const user = await User.findOne({ where: { email: email } });
 
+            // If user does not exist, return error
             if (!user) {
                 return res.status(422).json({
                     meta: {
                         success: false,
-                        status: 422,
+                        status: 422
                     },
-                    msg: 'Este correo no se encuentra registrado.'
+                    msg: 'This email is not registered.'
                 });
             }
 
+            // Validate password
             const isPasswordValid = bcrypt.compareSync(password, user.password);
             if (!isPasswordValid) {
                 return res.status(401).json({
@@ -64,16 +77,17 @@ const usersController = {
                         success: false,
                         status: 401
                     },
-                    msg: 'Contraseña incorrecta.'
-                })
-            };
+                    msg: 'Incorrect password.'
+                });
+            }
 
+            // Store user's email in session to indicate login status
             req.session.userLogged = user.email;
             return res.status(200).json({
                 meta: {
                     success: true,
                     status: 200,
-                    msg: 'Usuario logueado correctamente'
+                    msg: 'User logged in successfully'
                 },
                 user: {
                     id: user.id,
@@ -86,13 +100,23 @@ const usersController = {
                 emailSession: req.session.userLogged
             });
 
-        }
-        catch (error) {
-            console.error('Error al iniciar sesión:', error);
+        } catch (error) {
+            console.error('Error during login:', error);
+            return res.status(500).json({
+                meta: {
+                    success: false,
+                    status: 500,
+                    msg: 'An error occurred during login'
+                },
+                error: error.message
+            });
         }
     },
+
+    // Method to retrieve user profile
     profile: async (req, res) => {
         try {
+            // Check if user is logged in
             if (!req.session.userLogged) {
                 return res.status(403).json({
                     meta: {
@@ -100,13 +124,16 @@ const usersController = {
                         status: 403,
                         msg: 'There is no registered user'
                     }
-                })
+                });
             }
+
+            // Find user in database based on email stored in session
             const findUser = await User.findOne({
-                attributes: ['id','firstName','lastName','email','addres','country', 'picture'],
+                attributes: ['id', 'firstName', 'lastName', 'email', 'addres', 'country', 'picture'],
                 where: { email: req.session.userLogged }
             });
-            
+
+            // If user exists, return user profile
             if (findUser) {
                 return res.status(200).json({
                     meta: {
@@ -121,52 +148,45 @@ const usersController = {
                         country: findUser.country,
                         picture: findUser.picture ? `${req.protocol}://${req.get('host')}/uploads/users/${findUser.picture}` : `${req.protocol}://${req.get('host')}${pictureDefault}`
                     }
-                })
+                });
             }
         } catch (error) {
-            console.log(error);
+            console.error('Error during profile retrieval:', error);
             return res.status(500).json({
                 meta: {
                     success: false,
                     status: 500,
-                    msg: 'Hubo un problema'
+                    msg: 'An error occurred during profile retrieval'
                 },
-                error
-            })
+                error: error.message
+            });
         }
     },
-    edit: async (req, res) => {
+
+    // Method to logout user
+    logout: (req, res) => {
         try {
-            const userToUpdate = await User.findOne({ where: { email: req.session.userLogged } });
-            let dataFile = req.file;
-            let userFile;
-            if (dataFile) {
-                userFile = dataFile.filename;
-            } else {
-                userFile = userToUpdate.profilePicture;
-            }
-
-            await User.update({
-                fullname: req.body.fullname,
-                password: bcrypt.hashSync(req.body.password, 10),
-                profilePicture: userFile
-            }, { where: { id: userToUpdate.id } });
-
-            res.redirect('/users/profile')
-
+            // Destroy user session
+            req.session.destroy();
+            return res.status(200).json({
+                meta: {
+                    success: true,
+                    status: 200,
+                    msg: 'User logged out successfully'
+                }
+            });
         } catch (error) {
-            return res.status(500).json({ message: error.message });
+            console.error('Error during logout:', error);
+            return res.status(500).json({
+                meta: {
+                    success: false,
+                    status: 500,
+                    msg: 'An error occurred during logout'
+                },
+                error: error.message
+            });
         }
-    },
-    logout: (req,res) => {
-        req.session.destroy();
-        return res.status(200).json({
-            meta: {
-                success: true,
-                status: 200,
-                msg: 'User logout successfully'
-            }
-        })
     }
 };
+
 module.exports = usersController;

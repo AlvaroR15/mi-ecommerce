@@ -20,7 +20,7 @@ export const Login = () => {
             < BoxInput type='password' placeholder='Ingresa tu contraseña' name='password' value={password} onChange={(e) => {setPassword(e.target.value)}} />
             <button type="submit" className="boton-primario">Iniciar sesión</button>
             <span className='span-question'>
-                ¿No tenés cuenta? <Link to="#">¡Registrate acá!</Link>
+                ¿No tenés cuenta? <Link to="/register">¡Registrate acá!</Link>
             </span>
         </form>
     )

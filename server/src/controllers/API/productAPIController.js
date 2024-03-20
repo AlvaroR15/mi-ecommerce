@@ -1,4 +1,5 @@
-const { Product, User, Cart, CartDetail } = require('../../database/models/index');
+const { Product, User, Cart, CartDetail, sequelize } = require('../../database/models/index');
+const {Op} = require('sequelize');
 
 const productAPIController = {
     list: async (req, res) => {
@@ -84,15 +85,33 @@ const productAPIController = {
         try {
             const searchProducts = await Product.findAll({
                 where: {
-                    name: { [Op.like]: `%${textInput}%` },
-                    attributes: ['name', 'description', 'price']
-                }
+                    name: {
+                         [Op.like]: `%${textInput}%` 
+                        }
+                },
+                attributes: ['name', 'description', 'price']
             });
+
+            if (!searchProducts) {
+                return res.status(404).json({
+                    meta: {
+                        success: false,
+                        status: 404,
+                        msg: 'Products not found'
+                    }
+                })
+            }
             return res.status(200).json({
-                searchProducts
+                meta: {
+                    success: true,
+                    status: 200,
+                    msg: 'Products found'
+                },
+                data: searchProducts
             })
         } catch (error) {
-            res.status(500).json('Ha ocurrido un error.', error)
+            console.log(error);
+            return res.status(500).json(error);
         }
     },
     cart: async (req, res) => {
@@ -133,12 +152,6 @@ const productAPIController = {
                 })
             }
             
-            const cart = userCart.userCart.map(cartItem => ({
-                id: cartItem.id,
-                userId: cartItem.userId,
-                dateCreation: cartItem.dateCreation,
-                state: cartItem.state
-            }));
             
             const productsData = userCart.userCart.flatMap(cartItem => cartItem.products);
             const products = productsData.map(product => ({
@@ -155,7 +168,6 @@ const productAPIController = {
                 }
             }));
             
-            const cartDetail = userCart.userCart.flatMap(cartItem => cartItem.products.map(product => product.cartdetail));
             
             const data = {products};
             

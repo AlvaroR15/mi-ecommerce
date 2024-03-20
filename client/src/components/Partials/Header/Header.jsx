@@ -1,15 +1,25 @@
 import logo from '../../../assets/partials-img/Logo.png'
 import './header.css'
 import { NavMobile } from '../../Main/NavMobile/NavMobile';
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom'
 
+import { useSearch } from '../../../contexts/SearchContext';
+
 export const Header = () => {
+    const { search, clickedInput, handleClickedInput } = useSearch()
+
     const [clicked, setCliked] = useState(false);
+    const [value, setValue] = useState('');
     const handleClick = () => {
         setCliked(!clicked);
     }
+
+    const handleSearch = async(e) => {
+        e.preventDefault();
+        await search(value);
+    }
+
     return (
         <header>
             < NavMobile clicked={clicked} handleClick={handleClick} />
@@ -22,8 +32,8 @@ export const Header = () => {
                             <i onClick={handleClick} className="fa-solid fa-bars"></i>
                         </div>
                     </div>
-                    <form>
-                        <input type="text" placeholder="Buscar..." />
+                    <form onSubmit={handleSearch}>
+                        <input type="text" placeholder="Buscar..." onChange={(e) => setValue(e.target.value)} onFocus={handleClickedInput} />
                         <button className="search-btn"><i className="fa-solid fa-magnifying-glass"></i></button>
                     </form>
                 </div>
