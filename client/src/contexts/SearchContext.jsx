@@ -1,4 +1,4 @@
-import React, {createContext,useContext,useState} from "react";
+import React, {createContext,useContext,useEffect,useState} from "react";
 import axios from 'axios';
 
 const SearchContext = createContext();
@@ -8,27 +8,26 @@ export const useSearch = () => useContext(SearchContext);
 
 export const SearchProvider = (props) => {
     const [productsFound, setProductsFound] = useState(null);
-    const [status, setStatus] = useState(null);
+    const [control, setControl] = useState(false);
     const [msg, setMsg] = useState('');
-    const [clickedInput, setClikedInput] = useState(false);
 
+    axios.defaults.withCredentials = true;
     const search = async (textInput) => {
         try {
-            const productsData = await axios.post('http://localhost:3099/api/products/search', textInput);
-            setStatus(productsData.meta.status);
-            if (status === 404) setMsg(`No se encontro a ${textInput}`)
-            if (status === 200) setProductsFound(productsData.data.searchProducts)
-
+            const productsData = await axios.post('http://localhost:3099/api/products/search', {search: textInput});
+            const { data } = productsData.data;
+            if (data.length > 0) setProductsFound(data);
+            setControl(true)
         } catch(error) {
             console.log(error);
+            let {response} = error;
+            if (response.data.meta.status == 404) setMsg('No se encontro ' + textInput)
         }
     }
 
-    const handleClickedInput = setClikedInput(true);
-
     return (
-        <useSearch.Provider value={{productsFound, status, msg, search, handleClickedInput, clickedInput}}>
+        <SearchContext.Provider value={{productsFound, search, msg, control, setControl}}>
             {props.children}
-        </useSearch.Provider>
+        </SearchContext.Provider>
     )
 }

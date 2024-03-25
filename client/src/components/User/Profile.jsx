@@ -3,6 +3,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loader } from '../Partials/Loader/Loader';
+import { Link } from 'react-router-dom';
 
 export const Profile = () => {
     const { getDataUser, user, status } = useAuth();
@@ -48,7 +49,7 @@ export const Profile = () => {
                     </div>
                 </div>
             </section>
-            <a href="/users/profile/edit" className="boton-primario btn-edit">Editar mi perfil</a>
+            <Link to="#" className="boton-primario btn-edit">Editar mi perfil</Link>
         </main>
     )
 }

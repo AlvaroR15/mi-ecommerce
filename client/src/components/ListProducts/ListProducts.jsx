@@ -15,6 +15,7 @@ export const ListProducts = () => {
         getInfo()
     }, [])
 
+
     return (
         <section className="list-products">
             <h2>Catálogo</h2>

@@ -92,7 +92,7 @@ const productAPIController = {
                 attributes: ['name', 'description', 'price']
             });
 
-            if (!searchProducts) {
+            if (searchProducts.length == 0) {
                 return res.status(404).json({
                     meta: {
                         success: false,
@@ -111,7 +111,14 @@ const productAPIController = {
             })
         } catch (error) {
             console.log(error);
-            return res.status(500).json(error);
+            return res.status(500).json({
+                meta: {
+                    success: false,
+                    status: 500,
+                    msg: 'Occurred an error'
+                }, 
+                error
+            });
         }
     },
     cart: async (req, res) => {

@@ -76,55 +76,7 @@ header nav .nav-mobile form i {
     color: #000;
 }
 
-header nav .nav-md-lg {
-    border: 1px solid;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-}
-
-header nav .nav-md-lg .header-logo {
-    width: 80px;
-    display: block
-}
-
-
-
-header nav .nav-md-lg form {
-    display: flex;
-    box-shadow: 0 0 5px #ccc;
-    border-radius: 5px;
-}
-
-header nav .nav-md-lg form label input {
-    width: 40%;
-    /* border: none; */
-    border: 3px solid green;
-    /* border-radius: 5px; */
-    /* padding: .5rem */
-}
-
-.search-btn{
-    background-color: #0000;
-    border: none;
-    height: 100%;
-    padding: .5rem;
-}
-
-.search-btn:hover{
-    background-color: #eee;
-    cursor: pointer;
-}
-
-header .nav-md-lg .navigator {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 15px auto;
-    background-color: blue;
-}
-
-header .nav-md-lg .nav-options .nav-bar {
-    display: flex;
-    background-color: red;
+.error-message {
+    font-size: .7rem;
+    margin: 0 auto;
 }

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { getProducts } from "../../../services/productsService";
 import { Card } from "../../Partials/Card";
 import './offProduct.css'
+import { Link } from "react-router-dom";
 
 export const OffProduct = () => {
     const [product, setProduct] = useState({});
@@ -14,7 +15,7 @@ export const OffProduct = () => {
     }, [])
 
     return (
-        <a className="off-product">
+        <Link className="off-product">
             <h2>Oferta del día</h2>
             <div>
                 {
@@ -26,6 +27,6 @@ export const OffProduct = () => {
                 }
             </div>
 
-        </a>
+        </Link>
     )
 }
