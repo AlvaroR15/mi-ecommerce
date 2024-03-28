@@ -15,15 +15,10 @@ import { Detail } from './components/ListProducts/Detail/Detail';
 import { Profile } from './components/User/Profile';
 import { Search } from './components/ListProducts/Search/Search';
 
-import { useState, useEffect } from 'react';
 import { useSearch } from './contexts/SearchContext';
 
 function App() {
    const {control} = useSearch();
-
-   useEffect(() => {
-      console.log(control);
-   }, [control])
 
    return (
       <>

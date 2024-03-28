@@ -1,4 +1,4 @@
-import React, {createContext,useContext,useEffect,useState} from "react";
+import React, {createContext,useContext,useState} from "react";
 import axios from 'axios';
 
 const SearchContext = createContext();
@@ -16,13 +16,18 @@ export const SearchProvider = (props) => {
         try {
             const productsData = await axios.post('http://localhost:3099/api/products/search', {search: textInput});
             const { data } = productsData.data;
-            if (data.length > 0) setProductsFound(data);
-            setControl(true)
+            setProductsFound(data);
+            if (data.length > 0) {
+                setMsg('')
+            }
         } catch(error) {
             console.log(error);
             let {response} = error;
-            if (response.data.meta.status == 404) setMsg('No se encontro ' + textInput)
+            if (response.data.meta.status == 404) {
+                setMsg('No se encontro ' + textInput);
+            }
         }
+        setControl(true)
     }
 
     return (

@@ -89,7 +89,7 @@ const productAPIController = {
                          [Op.like]: `%${textInput}%` 
                         }
                 },
-                attributes: ['name', 'description', 'price']
+                attributes: ['name', 'description', 'price', 'image']
             });
 
             if (searchProducts.length == 0) {
@@ -101,13 +101,21 @@ const productAPIController = {
                     }
                 })
             }
+
+            const productsFound = searchProducts.map(product => ({
+                id: product.id,
+                name: product.name,
+                description: product.description,
+                price: product.price,
+                image: `${req.protocol}://${req.get('host')}/uploads/products/${product.image}`
+            }))
             return res.status(200).json({
                 meta: {
                     success: true,
                     status: 200,
                     msg: 'Products found'
                 },
-                data: searchProducts
+                data: productsFound
             })
         } catch (error) {
             console.log(error);

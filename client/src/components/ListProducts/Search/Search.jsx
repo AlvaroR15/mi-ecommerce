@@ -1,19 +1,14 @@
 import './search.css';
 import { Card } from '../../Partials/Card';
 
-import { useEffect, useState } from 'react';
 import { useSearch } from '../../../contexts/SearchContext';
 
 export const Search = () => {
     const { productsFound, msg } = useSearch();
 
-
-    useEffect(() => {
-    }, [msg, productsFound])
-
     if (msg !== '') {
         return (
-            <p>
+            <p className='msg-not-found'>
                 {msg}
             </p>
         )
