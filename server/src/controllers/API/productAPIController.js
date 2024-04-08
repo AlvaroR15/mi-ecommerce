@@ -257,6 +257,35 @@ const productAPIController = {
             })
         }
     },
+    deleteCart: async (req,res) => {
+        try {
+            const user = await User.findOne({where:{email:req.session.userLogged}});
+            const cartDeleted = await Cart.update({
+                state: 'Cancelado'
+            }, {where: {userId: user.id}});
+
+            if (cartDeleted.state == 'Cancelado') {
+                await CartDetail.delete({where: {cartId: cartDeleted.id}})
+                return res.status(200).json({
+                    meta: {
+                        success: true,
+                        status: 200,
+                        msg: 'Cart deleted successfully'
+                    },
+                    data: cartDeleted
+                })
+            }
+        } catch(error) {
+            console.log(error);
+            return res.status(500).json({
+                meta: {
+                    success: false,
+                    status:500,
+                    msg: 'Occurred an error'
+                }
+            })
+        }
+    },
     saveProduct: async (req, res) => {
         try {
             let file;

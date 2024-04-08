@@ -25,6 +25,8 @@ router.post('/create', upload.single('image'), productAPIController.saveProduct)
 
 router.post('/add', productAPIController.addCart);
 
+router.post('/delete-cart', productAPIController.deleteCart);
+
 router.put('/edit/:id', upload.single('image'),productAPIController.editProduct);
 
 router.post('/search', productAPIController.searchProduct)

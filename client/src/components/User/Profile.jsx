@@ -44,7 +44,7 @@ export const Profile = () => {
                     <div className="perfil-usuario-bio">
                         <h3 className="titulo">{user.fullname}</h3>
                         <p className="text">{user.email}</p>
-                        <p>{user.addres}</p>
+                        <p>{user.adress}</p>
                         <p>{user.country}</p>
                     </div>
                 </div>

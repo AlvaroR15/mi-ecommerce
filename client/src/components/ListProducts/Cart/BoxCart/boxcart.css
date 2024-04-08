@@ -1,4 +1,4 @@
- article {
+ .cart-article {
      display: flex;
      align-items: center;
      padding: 5px;
@@ -7,21 +7,21 @@
      margin: 3vw 0;
  }
 
- article .box-image {
+ .cart-article .box-image {
      width: 25%;
  }
 
- article .info-product {
+ .cart-article .info-product {
      width: 75%;
      display: flex;
      flex-direction: column;
  }
 
- article .info-product h4 {
+ .cart-article .info-product h4 {
      font-size: .9rem;
  }
 
- article .info-product div {
+ .cart-article .info-product div {
      width: 85%;
      margin: auto;
      display: flex;
@@ -29,12 +29,12 @@
      font-size: .8rem;
  }
 
- article .info-product div .price {
+ .cart-article .info-product div .price {
      font-weight: 600;
  }
 
- article button,
- article button i {
+ .cart-article button,
+ .cart-article button i {
      font-size: .9rem;
      margin: 5px auto;
      color: #a00;

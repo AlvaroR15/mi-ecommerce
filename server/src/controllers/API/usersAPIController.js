@@ -162,6 +162,43 @@ const usersController = {
             });
         }
     },
+    // Method to Edit User
+    editUser: async (req, res) => {
+        // Check if user is logged in
+        try {
+            if (!req.session.userLogged) {
+                return res.status(403).json({
+                    meta: {
+                        success: false,
+                        status: 403,
+                        msg: 'There is no registered user'
+                    }
+                })
+            }
+
+            // Captures the data of inputs form
+            const { firstName, lastName, email, addres, country, picture } = req.body;
+            // Set data of inputs form in the user
+            await User.update({
+                firstName,
+                lastName,
+                email,
+                addres,
+                country,
+                picture
+            }, { where: { email: req.session.userLogged } });
+            return res.status(200).json({
+                meta: {
+                    success: true,
+                    status: 200,
+                    msg: 'User edited successfully'
+                }
+            })
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json(error);
+        }
+    },
 
     // Method to logout user
     logout: (req, res) => {

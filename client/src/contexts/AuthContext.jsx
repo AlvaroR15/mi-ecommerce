@@ -40,7 +40,7 @@ export const AuthProvider = (props) => {
             setUser({
                 fullname: user.fullname,
                 email: user.email,
-                addres: user.addres,
+                adress: user.adress,
                 country: user.country,
                 picture: user.picture
             })

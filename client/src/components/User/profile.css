@@ -1,4 +1,7 @@
-
+h1 {
+    text-align: center;
+    margin: 2vh 0;
+}
 .seccion-perfil-usuario .perfil-usuario-body,
 .seccion-perfil-usuario {
     display: flex;
