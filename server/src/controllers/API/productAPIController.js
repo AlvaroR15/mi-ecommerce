@@ -1,5 +1,5 @@
 const { Product, User, Cart, CartDetail, sequelize } = require('../../database/models/index');
-const {Op} = require('sequelize');
+const {Op, where} = require('sequelize');
 
 const productAPIController = {
     list: async (req, res) => {
@@ -258,23 +258,50 @@ const productAPIController = {
         }
     },
     deleteCart: async (req,res) => {
+        if (!req.session.userLogged) {
+            return res.status(403).json({
+                meta: {
+                    success: false,
+                    status: 403,
+                    msg: "There is no registered user"
+                }
+            })
+        }
         try {
+            // Buscar usuario logueado
             const user = await User.findOne({where:{email:req.session.userLogged}});
-            const cartDeleted = await Cart.update({
-                state: 'Cancelado'
-            }, {where: {userId: user.id}});
 
-            if (cartDeleted.state == 'Cancelado') {
-                await CartDetail.delete({where: {cartId: cartDeleted.id}})
-                return res.status(200).json({
-                    meta: {
-                        success: true,
-                        status: 200,
-                        msg: 'Cart deleted successfully'
-                    },
-                    data: cartDeleted
-                })
-            }
+            // Buscar el carrito del usuario
+            await Cart.update({
+                state: 'Cancelado'
+            }, {where: {userId:user.id}})
+
+            const cart = await Cart.findOne({
+                where: {userId: user.id, state: 'Cancelado'}
+            })
+
+            // if (!cart) {
+            //     return res.status(404).json({
+            //         meta: {
+            //             success: false,
+            //             status: 404,
+            //             msg: "No se encontró un carrito pendiente para este usuario"
+            //         }
+            //     });
+            // }
+
+            await CartDetail.destroy({
+                where: { cartId: cart.id, productId: req.body.productId}
+            })
+
+            return res.status(200).json({
+                meta: {
+                    success: true,
+                    status: 200,
+                    msg: 'Producto eliminado del carrito exitosamente'
+                }
+            });
+
         } catch(error) {
             console.log(error);
             return res.status(500).json({

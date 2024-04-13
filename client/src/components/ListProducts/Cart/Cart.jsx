@@ -49,7 +49,7 @@ export const Cart = () => {
             <div className='container-cart'>
                 {
                     Array.isArray(products) && products.map((product, i) => (
-                        <BoxCart key={i} image={product.image} name={product.name} quantity={product.cartdetail.quantity} price={product.cartdetail.subtotal} />
+                        <BoxCart productId={product.id} key={i} image={product.image} name={product.name} quantity={product.cartdetail.quantity} price={product.cartdetail.subtotal} />
                     ))
                 }
             </div>
