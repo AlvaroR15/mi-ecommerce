@@ -2,10 +2,10 @@ import './boxcart.css'
 import axios from 'axios';
 
 export const BoxCart = (props) => {
-    const deleteCart = async (productId) => {
+    const deleteCart = async (cartId) => {
         try {
-            await axios.post('http://localhost:3099/api/products/delete-cart', {
-                productId: productId
+            await axios.delete('http://localhost:3099/api/products/delete-cart', {
+                data: {cartId: cartId}
             })
         } catch(e) {
             console.log(e);
@@ -22,7 +22,7 @@ export const BoxCart = (props) => {
                     <span className='unity'>{props.quantity} {`${props.quantity > 1 ? 'Unidades' : 'Unidad'}`}</span>
                     <span className="price">${props.price}</span>
                 </div>
-                <button onClick={() => deleteCart(props.productId)} >Quitar <i class="fa-solid fa-trash"></i></button>
+                <button onClick={() => deleteCart(props.cartId)} >Quitar <i class="fa-solid fa-trash"></i></button>
             </div>
         </article>
     )

@@ -130,28 +130,29 @@ const productAPIController = {
         }
     },
     cart: async (req, res) => {
-        console.log(req.session.userLogged);
-        if (!req.session.userLogged) {
-            return res.status(403).json({
-                meta: {
-                    success: false,
-                    status: 403,
-                    msg: "There is no registered user"
-                }
-            })
-        }
         try {
+            if (!req.session.userLogged) {
+                return res.status(403).json({
+                    meta: {
+                        success: false,
+                        status: 403,
+                        msg: "There is no registered user"
+                    }
+                })
+            }
+
             const userCart = await User.findOne({
                 attributes: ['id','email'],
                 where: {email: req.session.userLogged},
                 include: {
                     model: Cart,
                     as: 'userCart',
+                    where: {state: 'Pendiente'},
                     include: {
                         model: Product,
                         as: 'products',
                         through: {model: CartDetail},
-                        attributes: ['id','name','price','image']
+                        attributes: ['id','name','price','image'],
                     }
                 }
             })
@@ -174,7 +175,7 @@ const productAPIController = {
                 name: product.name,
                 price: product.price,
                 image: `${req.protocol}://${req.get('host')}/uploads/products/${product.image}`,
-                cartdetail: {
+                cartDetail: {
                     id: product.cartdetail.id,
                     cartId: product.cartdetail.cartId,
                     productId: product.cartdetail.productId,
@@ -183,8 +184,16 @@ const productAPIController = {
                 }
             }));
             
+
             
-            const data = {products};
+            const data = userCart.userCart.map(cart => ({
+                cart: {
+                    id: cart.id,
+                    userId: cart.userId,
+                    state: cart.state,
+                },
+                products
+            }))
             
 
             return res.status(200).json({
@@ -280,18 +289,17 @@ const productAPIController = {
                 where: {userId: user.id, state: 'Cancelado'}
             })
 
-            // if (!cart) {
-            //     return res.status(404).json({
-            //         meta: {
-            //             success: false,
-            //             status: 404,
-            //             msg: "No se encontró un carrito pendiente para este usuario"
-            //         }
-            //     });
-            // }
-
+            if (!cart) {
+                return res.status(404).json({
+                    meta: {
+                        success: false,
+                        status: 404,
+                        msg: "No se encontró un carrito pendiente para este usuario"
+                    }
+                });
+            }
             await CartDetail.destroy({
-                where: { cartId: cart.id, productId: req.body.productId}
+                where: { cartId: cart.id}
             })
 
             return res.status(200).json({
