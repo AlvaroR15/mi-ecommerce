@@ -186,14 +186,7 @@ const productAPIController = {
             
 
             
-            const data = userCart.userCart.map(cart => ({
-                cart: {
-                    id: cart.id,
-                    userId: cart.userId,
-                    state: cart.state,
-                },
-                products
-            }))
+            const data = {products};
             
 
             return res.status(200).json({
@@ -277,29 +270,16 @@ const productAPIController = {
             })
         }
         try {
-            // Buscar usuario logueado
-            const user = await User.findOne({where:{email:req.session.userLogged}});
 
-            // Buscar el carrito del usuario
+            // Cancelar el carrito
             await Cart.update({
                 state: 'Cancelado'
-            }, {where: {userId:user.id}})
+            }, {where: {id:req.body.cartId}})
 
-            const cart = await Cart.findOne({
-                where: {userId: user.id, state: 'Cancelado'}
-            })
-
-            if (!cart) {
-                return res.status(404).json({
-                    meta: {
-                        success: false,
-                        status: 404,
-                        msg: "No se encontró un carrito pendiente para este usuario"
-                    }
-                });
-            }
+   
+            // Eliminar el registro del detalle del carrito
             await CartDetail.destroy({
-                where: { cartId: cart.id}
+                where: { cartId: req.body.cartId}
             })
 
             return res.status(200).json({

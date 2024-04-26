@@ -5,7 +5,7 @@ export const BoxCart = (props) => {
     const deleteCart = async (cartId) => {
         try {
             await axios.delete('http://localhost:3099/api/products/delete-cart', {
-                data: {cartId: cartId}
+                data: {cartId}
             })
         } catch(e) {
             console.log(e);

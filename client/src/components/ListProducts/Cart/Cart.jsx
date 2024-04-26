@@ -6,7 +6,6 @@ import { useNavigate, Link } from 'react-router-dom';
 
 export const Cart = () => {
     const [products, setProducts] = useState(null);
-    const [carts, setCarts] = useState(null);
     const [total, setTotal] = useState(0);
     const [status, setStatus] = useState(null);
 
@@ -21,7 +20,6 @@ export const Cart = () => {
                 if (status === 403) navigate('/login');
                 if (meta.success) {
                     setProducts(data.products);
-                    setCarts(data.cart)
                 }
             } catch (error) {
                 console.log(error);
@@ -29,18 +27,18 @@ export const Cart = () => {
         }
 
         getCart()
-    }, []);
+    }, [products]);
 
 
 
     useEffect(() => {
         if (products) {
-            const totalAmount = products.reduce((sum, product) => sum + parseFloat(product.cartdetail.subtotal), 0);
+            const totalAmount = products.reduce((sum, product) => sum + parseFloat(product.cartDetail.subtotal), 0);
             setTotal(totalAmount);
         }
     }, [products]);
 
-    if (!products || products.length === 0 && !carts || carts.length === 0) {
+    if (!products || products.length === 0) {
         return (
             <div className='msg-error'>
                 <h1>No tienes productos agregados al carrito</h1>
@@ -53,7 +51,7 @@ export const Cart = () => {
             <div className='container-cart'>
                 {
                     Array.isArray(products) && products.map((product, i) => (
-                        <BoxCart cartId={carts[i].id} productId={product.id} key={i} image={product.image} name={product.name} quantity={product.cartdetail.quantity} price={product.cartdetail.subtotal} />
+                        <BoxCart cartId={product.cartDetail.cartId} productId={product.id} key={i} image={product.image} name={product.name} quantity={product.cartDetail.quantity} price={product.cartDetail.subtotal} />
                     ))
                 }
             </div>
