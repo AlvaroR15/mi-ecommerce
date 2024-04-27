@@ -177,17 +177,21 @@ const usersController = {
                 })
             }
 
+            const file = req.file;
+
+
+            const user = await User.findOne({where: {email: req.session.userLogged}});
             // Captures the data of inputs form
-            const { firstNameUpdated, lastNameUpdated, emailUpdated, addresUpdated, countryUpdated, pictureUpdated } = req.body;
+            const { firstName, lastName, email, addres, country } = req.body;
             // Set data of inputs form in the user
             await User.update({
-                firstNameUpdated,
-                lastNameUpdated,
-                emailUpdated,
-                addresUpdated,
-                countryUpdated,
-                pictureUpdated
-            }, { where: { email: req.session.userLogged } });
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                addres: addres,
+                country: country,
+                picture: file ? file.filename: 'user.webp'
+            }, { where: { id: user.id} });
             return res.status(200).json({
                 meta: {
                     success: true,

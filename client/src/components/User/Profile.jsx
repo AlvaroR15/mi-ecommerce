@@ -9,10 +9,7 @@ export const Profile = () => {
     const { getDataUser, user, status } = useAuth();
     const navigate = useNavigate();
 
-    if (status != 200) {
-        navigate('/login')
-    }
-
+    
     useEffect(() => {
         setTimeout(() => {
             const getUser = async () => {
@@ -21,6 +18,11 @@ export const Profile = () => {
             getUser();
         }, 1000)
     }, []);
+    
+    if (status != 200) {
+        navigate('/login')
+    }
+
 
     if (!user) {
         return <Loader />
