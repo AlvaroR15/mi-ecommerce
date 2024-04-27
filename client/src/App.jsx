@@ -16,6 +16,7 @@ import { Profile } from './components/User/Profile';
 import { Search } from './components/ListProducts/Search/Search';
 
 import { useSearch } from './contexts/SearchContext';
+import { EditUser } from './components/Forms/AuthForm/EditUser';
 
 function App() {
    const {control} = useSearch();
@@ -41,6 +42,8 @@ function App() {
                < Route path='/login' exact={true} element={
                <AuthForm title='¡Que gusto verte de nuevo!'>< Login /></AuthForm>} />
                <Route path='/profile' exact={true} element={<Profile />} />
+               < Route path='/edit-my-profile' exact={true} element={
+               <AuthForm title='Actualiza tus datos'>< EditUser /></AuthForm>} />
             </Routes>
          </main>
          < Footer />

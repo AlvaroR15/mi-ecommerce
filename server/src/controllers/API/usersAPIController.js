@@ -142,7 +142,8 @@ const usersController = {
                         msg: 'Registered user found'
                     },
                     user: {
-                        fullname: `${findUser.firstName} ${findUser.lastName}`,
+                        firstName: findUser.firstName,
+                        lastName: findUser.lastName,
                         email: findUser.email,
                         adress: findUser.addres,
                         country: findUser.country,
@@ -177,15 +178,15 @@ const usersController = {
             }
 
             // Captures the data of inputs form
-            const { firstName, lastName, email, addres, country, picture } = req.body;
+            const { firstNameUpdated, lastNameUpdated, emailUpdated, addresUpdated, countryUpdated, pictureUpdated } = req.body;
             // Set data of inputs form in the user
             await User.update({
-                firstName,
-                lastName,
-                email,
-                addres,
-                country,
-                picture
+                firstNameUpdated,
+                lastNameUpdated,
+                emailUpdated,
+                addresUpdated,
+                countryUpdated,
+                pictureUpdated
             }, { where: { email: req.session.userLogged } });
             return res.status(200).json({
                 meta: {

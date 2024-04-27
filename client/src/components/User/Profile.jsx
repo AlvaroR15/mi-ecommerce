@@ -33,7 +33,7 @@ export const Profile = () => {
                 <div className="usuario-header">
                     <div className="usuario-caja">
                         <div className="usuario-img">
-                            <img src={user.picture} alt={`${user.fullname}'s photo`} />
+                            <img src={user.picture} alt={`${user.firstName}'s photo`} />
                             <button type="button" className="boton-img">
                                 <i className="far fa-image"></i>
                             </button>
@@ -42,14 +42,14 @@ export const Profile = () => {
                 </div>
                 <div className="perfil-usuario-body">
                     <div className="perfil-usuario-bio">
-                        <h3 className="titulo">{user.fullname}</h3>
+                        <h3 className="titulo">{`${user.firstName} ${user.lastName}`}</h3>
                         <p className="text">{user.email}</p>
                         <p>{user.adress}</p>
                         <p>{user.country}</p>
                     </div>
                 </div>
             </section>
-            <Link to="#" className="boton-primario btn-edit">Editar mi perfil</Link>
+            <Link to="/edit-my-profile" className="boton-primario btn-edit">Editar mi perfil</Link>
         </main>
     )
 }

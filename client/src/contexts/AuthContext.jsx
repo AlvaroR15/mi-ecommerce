@@ -38,7 +38,8 @@ export const AuthProvider = (props) => {
             setStatus(meta.status);
 
             setUser({
-                fullname: user.fullname,
+                firstName: user.firstName,
+                lastName: user.lastName,
                 email: user.email,
                 adress: user.adress,
                 country: user.country,
