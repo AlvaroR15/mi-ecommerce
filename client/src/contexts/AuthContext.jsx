@@ -60,8 +60,23 @@ export const AuthProvider = (props) => {
         }, 1000)
     }
 
+
+    const editPhoto = async(picture) => {
+        const data = new FormData();
+        data.append('picture', picture);
+        axios.defaults.withCredentials = true;
+        try {
+            const response = await axios.put('http://localhost:3099/api/users/editPhoto', data, { Headers: { 'Content-Type': 'multipart/form-data' } })
+            if (response.success) {
+                setUser(response.data)
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{user,login,logout,getDataUser, isLogged, status}}>
+        <AuthContext.Provider value={{user,login,logout,getDataUser, isLogged, status, editPhoto}}>
             {props.children}
         </AuthContext.Provider>
     )

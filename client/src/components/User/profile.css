@@ -1,112 +1,172 @@
-h1 {
-    text-align: center;
-    margin: 2vh 0;
-}
-.seccion-perfil-usuario .perfil-usuario-body,
-.seccion-perfil-usuario {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    align-items: center;
+.user-profile {
+    margin: 6vw 0;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 5vw 1vw
 }
 
-.seccion-perfil-usuario .usuario-header {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1.25rem;
-}
-
-.seccion-perfil-usuario .usuario-caja {
-    display: block;
+.user-profile .info-user-img {
     position: relative;
-    width: 90%;
-    height: 14rem;
-}
-
-.seccion-perfil-usuario .usuario-img {
-    display: flex;
-    width: 180px;
-    height: 180px;
-    align-items: center;
-    justify-content: center;
-    border: 7px solid white;
-    background-color: #DFE5F2;
+    width: 70vw;
+    height: 70vw;
+    margin: 0 auto;
+    padding: 1vw;
+    background-color: transparent;
     border-radius: 50%;
     box-shadow: 0 0 12px rgba(0, 0, 0, .2);
+}
+
+.user-profile .info-user-img img {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+.user-profile .info-user-img .boton-img {
     position: absolute;
-    bottom: -10px;
-    left: calc(50% - 90px);
+    bottom: 15px;
+    left: 55vw;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, .2);
+    background-color: #fff;
+}
+
+.user-profile .info-user-img .boton-img input {
+    width: 100%;
+    opacity: 0;
+    z-index: 10;
+}
+
+.user-profile .info-user-img .boton-img i {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.2rem;
     z-index: 1;
 }
 
-.seccion-perfil-usuario .usuario-img img {
-    width: 180px;
-    height: 180px;
-    position: relative;
-    border-radius: 50%;
-    object-fit: cover;
+
+.user-profile .info-user-text {
+    width: 90vw;
+    margin: 0 auto;
+    box-shadow: 0 0 12px rgba(0, 0, 0, .2);
+    border-radius: 5px;
+    padding: 20px 10px;
+    margin-top: 5vw;
 }
 
-.seccion-perfil-usuario .usuario-img .boton-img {
+.user-profile .info-user-text h4 {
+    font-size: 1.2rem;
+    color: #aaa;
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+
+.user-profile .info-user-text p {
+    margin-bottom: 5px;
+    color: #555;
+    letter-spacing: 1px;
+}
+
+.user-profile .info-user-text p span {
+    letter-spacing: .5px;
+    color: #555;
+    font-weight: 600;
+}
+
+
+/* Modal advice */
+
+.cardPhoto {
+    width: 90vw;
+    height: 47vh;
+    border-radius: 30px;
+    text-align: center;
+    background: #fff;
+    box-shadow: 15px 15px 30px #bebebe,
+               -15px -15px 30px #ffffff;
+    z-index: 10;
     position: absolute;
-    left: -2px;
-    top: -2px;
-    border: 0;
-    background-color: #fff;
-    box-shadow: 0 0 12px rgba(0, 0, 0, .2);
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    cursor: pointer;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 100px;
 }
 
-.seccion-perfil-usuario .perfil-usuario-body {
-    width: 70%;
-    position: relative;
-    max-width: 750px;
-}
-
-.seccion-perfil-usuario .perfil-usuario-body .titulo {
+.cardPhoto .img-question {
     display: block;
-    width: 100%;
-    margin-bottom: 0.5rem;
-    font-size: 1.25em;
+    font-size: 1.1rem;
+    padding: 10px;
+    margin: 10px auto;
 }
 
-.seccion-perfil-usuario .perfil-usuario-body p {
-    margin-left: 40%;
-    color: #848484;
-    text-align: center;
-    font-size: 0.95em;
-}
-
-.seccion-perfil-usuario .perfil-usuario-bio {
+.cardPhoto .custum-file-upload {
+    width: 80%;
+    margin: auto;
+    margin-bottom: 5vw;
+    position: relative;
     display: flex;
-    flex-wrap: wrap;
-    padding: 1.5rem 2rem;
-    box-shadow: 0 0 12px rgba(0, 0, 0, .2);
-    background-color: #fff;
-    border-radius: 15px;
-    width: 100%;
+    flex-direction: column;
+    align-items: space-between;
+    cursor: pointer;
+    align-items: center;
+    border: 2px dashed #cacaca;
+    background-color: rgba(255, 255, 255, 1);
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0px 48px 35px -48px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+}
+  
+.cardPhoto .custum-file-upload .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+.cardPhoto .custum-file-upload .icon svg {
+    height:80px;
+    fill: rgba(75, 85, 99, 1);
+  }
+  
+.cardPhoto  .custum-file-upload .text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+.cardPhoto .custum-file-upload .text span {
+    font-weight: 400;
+    color: rgba(75, 85, 99, 1);
+  }
+  
+.custum-file-upload input {
+    display: none;
+  }
+
+.cardPhoto .cardPhoto-buttons {
+    width: 80%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
 }
 
-.seccion-perfil-usuario .perfil-usuario-bio {
-    margin-bottom: 1.25rem;
-    text-align: center;
+.cardPhoto .cardPhoto-buttons button {
+    padding: 8px 15px;
+    border-radius: 4px;
 }
 
-main .btn-edit {
-    display: inline-block;
-    margin: 20px 0;
+.cardPhoto .cardPhoto-buttons .cancel {
+    border: 1px solid #555;
 }
 
-@media (max-width: 750px) {
-    .seccion-perfil-usuario .usuario-caja,
-    .seccion-perfil-usuario .perfil-usuario-body {
-        width: 95%;
-    }
-    .seccion-perfil-usuario .perfil-usuario-body p {
-        margin-left: 20%;
-    }
+.cardPhoto .cardPhoto-buttons .confirm {
+    background-color: rgb(41, 211, 174);
+    color: #fff;
 }

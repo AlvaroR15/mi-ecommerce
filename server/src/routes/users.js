@@ -20,7 +20,8 @@ const upload = multer({ storage }); // Initializing multer middleware with the d
 router.get('/profile', usersAPIController.profile);
 router.post('/register', upload.single('picture'), usersAPIController.register);
 router.post('/login', usersAPIController.login);
-router.put('/edit', upload.single('picture'),usersAPIController.editUser);
+router.put('/edit', usersAPIController.editDataUser);
+router.put('/editPhoto', upload.single('picture'), usersAPIController.editPhotoUser);
 router.post('/logout', usersAPIController.logout);
 
 module.exports = router;

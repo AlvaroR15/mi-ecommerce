@@ -31,7 +31,7 @@ export const NavMobile = (props) => {
                     (user != null) &&
                     <div className="info-user">
                         <img src={user.picture} alt={`${user.fullname}'s photo`} />
-                        <p>{user.fullname}</p>
+                        <p>{`${user.firstName} ${user.lastName}`}</p>
                     </div>
                 }
                 <ul className="nav-bar">

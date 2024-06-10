@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator');
 const { User } = require('../../database/models/index');
 const bcrypt = require('bcryptjs');
+const { where } = require('sequelize');
 const pictureDefault = '/uploads/users/user.webp';
 
 // Controller for user-related operations
@@ -164,7 +165,7 @@ const usersController = {
         }
     },
     // Method to Edit User
-    editUser: async (req, res) => {
+    editDataUser: async (req, res) => {
         // Check if user is logged in
         try {
             if (!req.session.userLogged) {
@@ -177,20 +178,15 @@ const usersController = {
                 })
             }
 
-            const file = req.file;
-
-
             const user = await User.findOne({where: {email: req.session.userLogged}});
             // Captures the data of inputs form
-            const { firstName, lastName, email, addres, country } = req.body;
+            const { firstName, lastName, addres, country } = req.body;
             // Set data of inputs form in the user
             await User.update({
                 firstName: firstName,
                 lastName: lastName,
-                email: email,
                 addres: addres,
                 country: country,
-                picture: file ? file.filename: 'user.webp'
             }, { where: { id: user.id} });
             return res.status(200).json({
                 meta: {
@@ -203,6 +199,37 @@ const usersController = {
             console.log(error);
             return res.status(500).json(error);
         }
+    },
+    editPhotoUser: async (req,res) => {
+        if (req.file) {
+            try {
+                await User.update({
+                    picture: req.file.filename
+                }, {
+                    where: {email: req.session.userLogged}
+                })
+                const userEdited = await User.findOne({where: {email: req.session.userLogged}})
+                return res.status(200).json({
+                    meta: {
+                        success: true,
+                        status: 200,
+                        msg: 'User picture edited successfully'
+                    },
+                    data: userEdited
+                })
+            } catch (error) {
+                console.log(error);
+                return res.status(500).json({
+                    meta: {
+                        success: false,
+                        status: 500,
+                        msg: 'An error occurred during the picture editing'
+                    }
+                })
+            }
+        }
+        
+
     },
 
     // Method to logout user
