@@ -1,22 +1,20 @@
 import './profile.css';
 import { useAuth } from '../../contexts/AuthContext';
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
 import { Loader } from '../Partials/Loader/Loader';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 
 export const Profile = () => {
     const { getDataUser, user, status, editPhoto } = useAuth();
     const [photo, setPhoto] = useState(null);
+    const [msgErrorFile, setMsgErrorFile] = useState(null);
     const [isCardVisible, setIsCardVisible] = useState(false);
-    const [isFileLoad, setIsFileLoad] = useState("");
     const card = useRef();
     const navigate = useNavigate();
 
 
     useEffect(() => {
-        // setTimeout(() => {
         const getUser = async () => {
             await getDataUser();
         }
@@ -34,18 +32,22 @@ export const Profile = () => {
 
     const updatePhoto = async (e) => {
         e.preventDefault();
-        await editPhoto(photo);
-        setTimeout(() => {
-            navigate('/profile')
-        }, 400);
-    }
+        try {
+            if (!photo) {
+                setMsgErrorFile("No se cargo ningún archivo");
+                return;
+            } else {
+                await editPhoto(photo);
+                setIsCardVisible(!isCardVisible);
+                setTimeout(() => {
+                    window.location.reload()
+                }, 500);
 
-    const checkFile = () => {
-        if (photo) {
-            setIsFileLoad("La foto fue cargada correctamente, aguarde unos segundos.")
-        } else {
-            setIsFileLoad("No se cargo ningún archivo")
+            }
+        }catch(error) {
+            setIsCardVisible("Ha ocurrido un error, recarga la página e intentalo de nuevo")
         }
+        
     }
 
 if (!user) {
@@ -70,10 +72,10 @@ return (
                     </label>
                     <div className='cardPhoto-buttons'>
                         <button className='cancel' onClick={handleClick}>Cancelar</button>
-                        <button type='submit' className='confirm' ref={checkFile}>Confirmar</button>
+                        <button type='submit' className='confirm'>Confirmar</button>
                     </div>
                 </form>
-                {photo && <p>{isFileLoad}</p>}
+                <p style={{padding: '10px', color: '#935'}}>{msgErrorFile ? msgErrorFile: ""}</p>
             </div>
         )}
 
