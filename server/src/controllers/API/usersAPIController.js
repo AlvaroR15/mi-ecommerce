@@ -1,7 +1,6 @@
 const { validationResult } = require('express-validator');
 const { User } = require('../../database/models/index');
 const bcrypt = require('bcryptjs');
-const { where } = require('sequelize');
 const pictureDefault = '/uploads/users/user.webp';
 
 // Controller for user-related operations
@@ -13,8 +12,12 @@ const usersController = {
             let resultValidation = validationResult(req);
             if (!resultValidation.isEmpty()) {
                 return res.status(422).json({
-                    errors: resultValidation.mapped(),
-                    oldData: req.body
+                    meta: {
+                        success: false,
+                        status: 422,
+                        errors: resultValidation.mapped(),
+                        oldData: req.body
+                    }
                 });
             }
 

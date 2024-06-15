@@ -11,7 +11,7 @@ export const Header = () => {
     const input = useRef('');
 
     const [clicked, setCliked] = useState(false);
-    const [value, setValue] = useState(input);
+    const [value, setValue] = useState(''); // Inicializa como cadena vacía
     const [errorMessage, setErrorMessage] = useState('');
 
     const handleClick = () => {
@@ -20,22 +20,22 @@ export const Header = () => {
 
     const handleSearch = async (e) => {
         e.preventDefault();
-        if (!value.trim()) { // Verificar si el campo de búsqueda está vacío o contiene solo espacios en blanco
+        if (!value.trim() || value === '') { // Verificar si el campo de búsqueda está vacío o contiene solo espacios en blanco
             setErrorMessage('Por favor, ingresa un término de búsqueda válido.');
             return;
         }
         setErrorMessage(''); // Limpiar el mensaje de error si el campo de búsqueda no está vacío
-
         try {
             await search(value);
         } catch(error) {
-
+            // Manejar error si es necesario
         }
     }
 
     const reload = () => {
         setControl(false);
         input.current.value = '';
+        setValue(''); // Reinicia el valor de la búsqueda
     }
 
     return (
@@ -52,10 +52,9 @@ export const Header = () => {
                     </div>
                     <form onSubmit={handleSearch}>
                         <input type="text" placeholder="Buscar..." onChange={(e) => setValue(e.target.value)} ref={input} />
-                        <button className="search-btn"><i className="fa-solid fa-magnifying-glass"></i></button>
+                        <button type='submit' className="search-btn"><i className="fa-solid fa-magnifying-glass"></i></button>
                     </form>
                     {errorMessage && <p className="error-message">{errorMessage}</p>}
-
                 </div>
             </nav>
         </header>

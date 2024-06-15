@@ -1,7 +1,7 @@
 import './profile.css';
 import { useAuth } from '../../contexts/AuthContext';
 import { useEffect, useRef, useState } from 'react';
-import { redirect, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import { Loader } from '../Partials/Loader/Loader';
 import { Link } from 'react-router-dom';
 
