@@ -23,7 +23,7 @@ export const SearchProvider = (props) => {
         } catch(error) {
             console.log(error);
             let {response} = error;
-            if (response.data.meta.status == 404) {
+            if (response.data.meta.status === 404) {
                 setMsg('No se encontro ' + textInput);
             }
         }

@@ -4,6 +4,7 @@ const {Op, where} = require('sequelize');
 const productAPIController = {
     list: async (req, res) => {
         try {
+            console.log('USUARIO LOGUEADO:::: ', req.session.userLogged);
             const productsInfo = await Product.findAll({
                 raw: true,
                 attributes: ['id', 'name', 'description', 'price', 'size', 'image'],
@@ -18,12 +19,13 @@ const productAPIController = {
 
             const products = productsInfo.map(product => ({
                 ...product,
-                image: req.protocol + '://' + req.get('host') + '/uploads/products/' + product.image
+                image: req.protocol + '://' + req.get('host') + '/uploads/products/' + product.image,
+                user: req.session.userLogged
             }))
 
             const lastProducts = getLastProducts.map(product => ({
                 ...product,
-                image: req.protocol + '://' + req.get('host') + '/uploads/products/' + product.image
+                image: req.protocol + '://' + req.get('host') + '/uploads/products/' + product.image,
             }))
 
             const countProducts = await Product.count();
@@ -50,7 +52,7 @@ const productAPIController = {
                 data: {
                     products,
                     lastProducts,
-                    productSelected
+                    productSelected,
                 }
             })
         }

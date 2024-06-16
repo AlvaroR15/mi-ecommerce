@@ -122,17 +122,7 @@ const usersController = {
     // Method to retrieve user profile
     profile: async (req, res) => {
         try {
-            // Check if user is logged in
-            if (!req.session.userLogged) {
-                return res.status(403).json({
-                    meta: {
-                        success: false,
-                        status: 403,
-                        msg: 'There is no registered user'
-                    }
-                });
-            }
-
+            console.log(req.session.userLogged);
             // Find user in database based on email stored in session
             const findUser = await User.findOne({
                 attributes: ['id', 'firstName', 'lastName', 'email', 'addres', 'country', 'picture'],
@@ -156,6 +146,14 @@ const usersController = {
                         picture: findUser.picture ? `${req.protocol}://${req.get('host')}/uploads/users/${findUser.picture}` : `${req.protocol}://${req.get('host')}${pictureDefault}`
                     }
                 });
+            } else {
+                return res.status(404).json({
+                    meta: {
+                        success: false,
+                        status: 404,
+                        msg: 'User not found'
+                    }
+                })
             }
         } catch (error) {
             console.error('Error during profile retrieval:', error);
@@ -171,6 +169,7 @@ const usersController = {
     },
     // Method to Edit User
     editDataUser: async (req, res) => {
+        console.log(req.session.userLogged);
         // Check if user is logged in
         try {
             if (!req.session.userLogged) {
@@ -206,6 +205,7 @@ const usersController = {
         }
     },
     editPhotoUser: async (req,res) => {
+        console.log(req.session.userLogged);
         if (req.file) {
             try {
                 await User.update({
@@ -242,6 +242,7 @@ const usersController = {
         try {
             // Destroy user session
             req.session.destroy();
+            res.clearCookie('user_sid');
             return res.status(200).json({
                 meta: {
                     success: true,

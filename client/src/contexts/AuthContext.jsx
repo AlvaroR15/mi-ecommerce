@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { getUser } from "../services/userServices";
 
 const AuthContext = createContext();
+axios.defaults.withCredentials = true;
 
 export const useAuth = () => useContext(AuthContext);
 
@@ -13,13 +14,12 @@ export const AuthProvider = (props) => {
     const [isLogged, setIslogged] = useState(false);
     const navigate = useNavigate();
 
-    axios.defaults.withCredentials = true;
     const login = async (email,password) => {
         try {
             const response = await axios.post('http://localhost:3099/api/users/login', {
                 email,
                 password
-            });
+            }, {withCredentials: true});
             if(response.data.meta.status === 200) {
                 setIslogged(true);
                 setTimeout(() => {
@@ -33,20 +33,25 @@ export const AuthProvider = (props) => {
 
     const getDataUser = async () => {
         try {
-            const response = await getUser();
-            const user = response.user;
-            const meta = response.meta;
-
-            setStatus(meta.status);
-
-            setUser({
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                adress: user.adress,
-                country: user.country,
-                picture: user.picture
-            })
+            if (isLogged) {
+                const response = await getUser();
+                const user = response.user;
+                const meta = response.meta;
+    
+                setStatus(meta.status);
+    
+                setUser({
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    adress: user.adress,
+                    country: user.country,
+                    picture: user.picture
+                })
+            } else {
+                setUser(null);
+                navigate('/login')
+            }
 
         } catch (error) {
             console.log(error);
@@ -66,7 +71,6 @@ export const AuthProvider = (props) => {
     const editPhoto = async(picture) => {
         const data = new FormData();
         data.append('picture', picture);
-        axios.defaults.withCredentials = true;
         try {
             const response = await axios.put('http://localhost:3099/api/users/editPhoto', data, { Headers: { 'Content-Type': 'multipart/form-data' } })
             if (response.success) {

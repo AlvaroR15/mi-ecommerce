@@ -4,6 +4,7 @@ const path = require('path'); // Core Node.js module for handling file paths
 
 const usersAPIController = require('../controllers/API/usersAPIController'); // Importing user API controller
 const validations = require('../middlewares/validationUser');
+const authMiddleware = require('../middlewares/authMiddleware');
 
 const router = express.Router(); // Creating an instance of Express Router
 
@@ -18,11 +19,11 @@ const storage = multer.diskStorage({
 const upload = multer({ storage }); // Initializing multer middleware with the defined storage configuration
 
 // Define routes for user-related API endpoints
-router.get('/profile', usersAPIController.profile);
-router.post('/register', upload.single('picture'), validations,usersAPIController.register);
-router.post('/login', validations,usersAPIController.login);
-router.put('/edit', usersAPIController.editDataUser);
-router.put('/editPhoto', upload.single('picture'), usersAPIController.editPhotoUser);
+router.get('/profile', authMiddleware, usersAPIController.profile);
+router.post('/register', upload.single('picture'), validations, usersAPIController.register);
+router.post('/login', validations, usersAPIController.login);
+router.put('/edit', authMiddleware, usersAPIController.editDataUser);
+router.put('/editPhoto', authMiddleware, upload.single('picture'), usersAPIController.editPhotoUser);
 router.post('/logout', usersAPIController.logout);
 
 module.exports = router;

@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require('cors');
 const session = require('express-session');
 const path = require('path');
+const {v4: uuidv4} = require('uuid');
 
 const usersRoutes = require("./routes/users");
 const productApiRoutes = require('./routes/products');
@@ -26,9 +27,18 @@ app.use(cors({
 
 // Session middleware to manage user sessions
 app.use(session({
+    genid: (req) => {
+        return uuidv4();
+    },
     secret: 'MySecret',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 60*60*1000,
+        secure: false,
+        httpOnly: true,
+        sameSite: 'lax'
+    }
 }));
 
 // Serve static files from the 'uploads' directory
