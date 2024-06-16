@@ -5,9 +5,11 @@ import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom'
 
 import { useSearch } from '../../../contexts/SearchContext';
+import { useAuth } from '../../../contexts/AuthContext';
 
 export const Header = () => {
     const { search, setControl } = useSearch();
+    const {isLogged} = useAuth();
     const input = useRef('');
 
     const [clicked, setCliked] = useState(false);
@@ -46,7 +48,7 @@ export const Header = () => {
                     <div>
                         <Link to='/' onClick={reload}><img className="header-logo" src={logo} alt="Logo de la marca" /></Link>
                         <div>
-                            <Link to='/cart'><i className="fa-solid fa-cart-shopping"></i></Link>
+                            <Link to={`${isLogged ? '/cart' : '/login'}`}><i className="fa-solid fa-cart-shopping"></i></Link>
                             <i onClick={handleClick} className="fa-solid fa-bars"></i>
                         </div>
                     </div>

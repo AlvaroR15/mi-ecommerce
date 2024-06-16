@@ -8,6 +8,7 @@ export const Cart = () => {
     const [products, setProducts] = useState(null);
     const [total, setTotal] = useState(0);
     const [status, setStatus] = useState(null);
+    const [cartUpdated, setCartUpdated] = useState(false);
 
     const navigate = useNavigate();
 
@@ -20,6 +21,8 @@ export const Cart = () => {
                 if (status === 403) navigate('/login');
                 if (meta.success) {
                     setProducts(data.products);
+                } else {
+                    setProducts([]);
                 }
             } catch (error) {
                 console.log(error);
@@ -27,7 +30,7 @@ export const Cart = () => {
         }
 
         getCart()
-    }, [products]);
+    }, [cartUpdated]);
 
 
 
@@ -37,6 +40,10 @@ export const Cart = () => {
             setTotal(totalAmount);
         }
     }, [products]);
+
+    const handleCartUpdate = () => {
+        setCartUpdated(prevState => !prevState);
+    }
 
     if (!products || products.length === 0) {
         return (
@@ -51,7 +58,15 @@ export const Cart = () => {
             <div className='container-cart'>
                 {
                     Array.isArray(products) && products.map((product, i) => (
-                        <BoxCart cartId={product.cartDetail.cartId} productId={product.id} key={i} image={product.image} name={product.name} quantity={product.cartDetail.quantity} price={product.cartDetail.subtotal} />
+                        <BoxCart 
+                        cartId={product.cartDetail.cartId}
+                        productId={product.id} 
+                        key={i} 
+                        image={product.image} 
+                        name={product.name} 
+                        quantity={product.cartDetail.quantity} 
+                        price={product.cartDetail.subtotal} 
+                        onCartUpdate={handleCartUpdate} />
                     ))
                 }
             </div>

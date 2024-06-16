@@ -36,7 +36,7 @@ export const NavMobile = (props) => {
                 }
                 <ul className="nav-bar">
                     <li><Link to='/'>Inicio</Link></li>
-                    <li><Link to='/cart'>Carrito de compras</Link></li>
+                    <li><Link to={`${isLogged ? '/cart' : '/login'}`}>Carrito de compras</Link></li>
                     <li><Link to="#">Favoritos</Link></li>
                     <li><Link to="#">Promos</Link></li>
                     <li><Link to="#">Ayuda</Link></li>
