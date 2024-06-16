@@ -67,9 +67,11 @@ const usersController = {
                 return res.status(422).json({
                     meta: {
                         success: false,
-                        status: 422
+                        status: 422,
+                        errors: {
+                            email: {msg: 'Este email no está registrado.'}
+                        }
                     },
-                    msg: 'This email is not registered.'
                 });
             }
 
@@ -79,9 +81,11 @@ const usersController = {
                 return res.status(401).json({
                     meta: {
                         success: false,
-                        status: 401
-                    },
-                    msg: 'Incorrect password.'
+                        status: 401,
+                        errors: {
+                            password: {msg: 'Las credenciales que pusiste son inválidas.'}
+                        }
+                    }
                 });
             }
 
@@ -100,12 +104,10 @@ const usersController = {
                     email: req.session.userLogged,
                     addres: user.addres,
                     country: user.country
-                },
-                emailSession: req.session.userLogged
+                }
             });
 
         } catch (error) {
-            console.error('Error during login:', error);
             return res.status(500).json({
                 meta: {
                     success: false,

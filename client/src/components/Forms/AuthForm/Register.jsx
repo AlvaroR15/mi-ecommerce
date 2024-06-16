@@ -1,7 +1,7 @@
 import './authForm.css'
 import { BoxInput } from "./BoxInput/BoxInput";
 import axios from 'axios';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 export const Register = () => {
@@ -18,6 +18,16 @@ export const Register = () => {
     const [oldData, setOldData] = useState({});
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (Object.keys(oldData).length > 0) {
+            setFirstName(oldData.firstName || '');
+            setLastName(oldData.lastName || '');
+            setEmail(oldData.email || '');
+            setAddres(oldData.addres || '');
+            setCountry(oldData.country || '');
+        }
+    }, [oldData]);
 
     const store = async (e) => {
         e.preventDefault();

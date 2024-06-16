@@ -16,16 +16,18 @@ export const AuthProvider = (props) => {
     axios.defaults.withCredentials = true;
     const login = async (email,password) => {
         try {
-            await axios.post('http://localhost:3099/api/users/login', {
+            const response = await axios.post('http://localhost:3099/api/users/login', {
                 email,
                 password
             });
-            setIslogged(true);
-            setTimeout(() => {
-                navigate('/profile')
-            }, 400)
+            if(response.data.meta.status === 200) {
+                setIslogged(true);
+                setTimeout(() => {
+                    navigate('/profile')
+                }, 400)
+            }
         } catch(error) {
-            console.log(error);
+            throw error;
         }
     }
 
