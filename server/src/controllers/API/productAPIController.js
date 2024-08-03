@@ -1,10 +1,9 @@
-const { Product, User, Cart, CartDetail, sequelize } = require('../../database/models/index');
-const {Op, where} = require('sequelize');
+const { Product, User, Cart, CartDetail } = require('../../database/models/index');
+const {Op} = require('sequelize');
 
 const productAPIController = {
     list: async (req, res) => {
         try {
-            console.log('USUARIO LOGUEADO:::: ', req.session.userLogged);
             const productsInfo = await Product.findAll({
                 raw: true,
                 attributes: ['id', 'name', 'description', 'price', 'size', 'image'],
@@ -19,8 +18,7 @@ const productAPIController = {
 
             const products = productsInfo.map(product => ({
                 ...product,
-                image: req.protocol + '://' + req.get('host') + '/uploads/products/' + product.image,
-                user: req.session.userLogged
+                image: req.protocol + '://' + req.get('host') + '/uploads/products/' + product.image
             }))
 
             const lastProducts = getLastProducts.map(product => ({
@@ -57,7 +55,6 @@ const productAPIController = {
             })
         }
         catch (error) {
-            console.error(error);
             return res.status(500).json({ error: 'Ha ocurrido un error.', errorDetails: error });
         }
     },
@@ -133,19 +130,10 @@ const productAPIController = {
     },
     cart: async (req, res) => {
         try {
-            if (!req.session.userLogged) {
-                return res.status(403).json({
-                    meta: {
-                        success: false,
-                        status: 403,
-                        msg: "There is no registered user"
-                    }
-                })
-            }
-
+            const userId = req.user.id;
             const userCart = await User.findOne({
                 attributes: ['id','email'],
-                where: {email: req.session.userLogged},
+                where: {id:userId},
                 include: {
                     model: Cart,
                     as: 'userCart',
@@ -213,17 +201,9 @@ const productAPIController = {
 
     },
     addCart: async (req, res) => {
-        if (!req.session.userLogged) {
-            return res.status(403).json({
-                meta: {
-                    success: false,
-                    status: 403,
-                    msg: "There is no registered user"
-                }
-            })
-        }
         try {
-            const user = await User.findOne({ where: { email: req.session.userLogged } });
+            const userId = req.user.id;
+            const user = await User.findByPk(userId);
             const newCart = await Cart.create({
                 userId: user.id,
                 state: 'Pendiente'
@@ -262,15 +242,6 @@ const productAPIController = {
         }
     },
     deleteCart: async (req,res) => {
-        if (!req.session.userLogged) {
-            return res.status(403).json({
-                meta: {
-                    success: false,
-                    status: 403,
-                    msg: "There is no registered user"
-                }
-            })
-        }
         try {
 
             // Cancelar el carrito

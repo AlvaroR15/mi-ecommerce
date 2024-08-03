@@ -5,6 +5,7 @@ const router = express.Router();
 
 
 const productAPIController = require('../controllers/API/productAPIController.js');
+const verifyToken = require('../middlewares/verifyTokenMiddleware.js');
 
 const storage = multer.diskStorage({
     destination:path.join(__dirname, '../uploads/products'), 
@@ -14,7 +15,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({storage});
 
-router.get('/cart', productAPIController.cart);
+router.get('/cart', verifyToken,productAPIController.cart);
 
 router.get('/',productAPIController.list);
 
@@ -23,7 +24,7 @@ router.get('/:id', productAPIController.detail);
 
 router.post('/create', upload.single('image'), productAPIController.saveProduct);
 
-router.post('/add', productAPIController.addCart);
+router.post('/add', verifyToken,productAPIController.addCart);
 
 router.delete('/delete-cart', productAPIController.deleteCart);
 

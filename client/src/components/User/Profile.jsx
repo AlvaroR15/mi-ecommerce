@@ -15,11 +15,12 @@ export const Profile = () => {
 
 
     useEffect(() => {
-        const getUser = async () => {
-            await getDataUser();
+        if(!isLogged) {
+            navigate('/login');
+        } else {
+            getDataUser();
         }
-        getUser();
-    }, []);
+    }, [isLogged]);
 
     const handleClick = (e) => {
         e.preventDefault();

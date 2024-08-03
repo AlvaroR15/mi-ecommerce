@@ -3,6 +3,7 @@ import { cartProducts } from '../../../services/cartProductService';
 import { useEffect, useState } from 'react';
 import { BoxCart } from './BoxCart/BoxCart';
 import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
 
 export const Cart = () => {
     const [products, setProducts] = useState(null);
@@ -11,6 +12,7 @@ export const Cart = () => {
     const [cartUpdated, setCartUpdated] = useState(false);
 
     const navigate = useNavigate();
+    axios.defaults.withCredentials = true;
 
     useEffect(() => {
         const getCart = async () => {

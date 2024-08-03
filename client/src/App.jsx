@@ -14,12 +14,14 @@ import { Cart } from './components/ListProducts/Cart/Cart'
 import { Detail } from './components/ListProducts/Detail/Detail';
 import { Profile } from './components/User/Profile';
 import { Search } from './components/ListProducts/Search/Search';
-
 import { useSearch } from './contexts/SearchContext';
 import { EditUser } from './components/Forms/AuthForm/EditUser';
+import { useAuth } from './contexts/AuthContext';
+
 
 function App() {
    const {control} = useSearch();
+   const {isLogged} = useAuth();
 
    return (
       <>
@@ -46,11 +48,11 @@ function App() {
 
                < Route path='/login' exact={true} element={<AuthForm title='¡Que gusto verte de nuevo!'>< Login /></AuthForm>} />
 
-               <Route path='/profile' exact={true} element={<Profile />} />
+               <Route path='/profile' exact={true} element={isLogged? <Profile/> : <Login/>} />
 
-               < Route path='/edit-my-profile' exact={true} element={
+               < Route path='/edit-my-profile' exact={true} element={isLogged ?
                   
-               <AuthForm title='Actualiza tus datos'>< EditUser /></AuthForm>} />
+               <AuthForm title='Actualiza tus datos'>< EditUser /></AuthForm>: <Login/>} />
             </Routes>
          </main>
          < Footer />

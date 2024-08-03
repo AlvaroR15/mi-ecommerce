@@ -30,7 +30,11 @@ export const Detail = () => {
                 productId: product.id,
                 quantity: quantity,
                 price: product.price
-            });
+            }, { mode: 'cors',
+                credentials:'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }});
         }
 
     }

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 import './authForm.css';
 
-export const Login = () => {
+export const Login = ({setCurrentUser}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
@@ -14,7 +14,8 @@ export const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await login(email,password)
+            const user = await login(email,password);
+            setCurrentUser(user);
         } catch(error) {
             if (error.response && error.response.data.meta) {
                 setErrors(error.response.data.meta.errors);
