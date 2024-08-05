@@ -17,7 +17,11 @@ const upload = multer({storage});
 
 router.get('/cart', verifyToken,productAPIController.cart);
 
-router.get('/',productAPIController.list);
+router.get('/list',productAPIController.list);
+
+router.get('/latest', productAPIController.lastProducts);
+
+router.get('/offer', productAPIController.productOnOffer);
 
 router.get('/:id', productAPIController.detail);
 

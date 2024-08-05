@@ -4,16 +4,15 @@ const {Op} = require('sequelize');
 const productAPIController = {
     list: async (req, res) => {
         try {
-            const productsInfo = await Product.findAll({
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 5;
+            const offset = (page - 1) * limit;
+
+            const {count, rows: productsInfo} = await Product.findAndCountAll({
                 raw: true,
-                attributes: ['id', 'name', 'description', 'price', 'size', 'image'],
-                include: ['categories']
-            })
-            const getLastProducts = await Product.findAll({
-                raw: true,
-                attributes: ['id', 'name', 'price', 'image'],
-                order: [['id', 'DESC']],
-                limit: 4
+                attributes: ['id','name','description','price','size','image'],
+                limit: limit,
+                offset: offset
             })
 
             const products = productsInfo.map(product => ({
@@ -21,42 +20,69 @@ const productAPIController = {
                 image: req.protocol + '://' + req.get('host') + '/uploads/products/' + product.image
             }))
 
-            const lastProducts = getLastProducts.map(product => ({
-                ...product,
-                image: req.protocol + '://' + req.get('host') + '/uploads/products/' + product.image,
-            }))
-
-            const countProducts = await Product.count();
-            const idRandom = Math.floor(Math.random() * countProducts + 1);
-            const chooseProduct = await Product.findOne({
-                raw: true,
-                attributes: ['id', 'name', 'price', 'image', 'size'],
-                where: { id: idRandom }
-            })
-
-            const productSelected = chooseProduct ? {
-                id: chooseProduct.id,
-                name: chooseProduct.name,
-                price: Math.round(chooseProduct.price),
-                size: chooseProduct.size,
-                image: req.protocol + '://' + req.get('host') + '/uploads/products/' + chooseProduct.image
-            } : null;
-
             return res.status(200).json({
                 meta: {
                     success: true,
-                    status: 200
+                    status: 200,
+                    totalProducts: count,
+                    totalPages: Math.ceil(count / limit),
+                    currentPage: page
                 },
-                data: {
-                    products,
-                    lastProducts,
-                    productSelected,
-                }
+                data: products
             })
         }
         catch (error) {
             return res.status(500).json({ error: 'Ha ocurrido un error.', errorDetails: error });
         }
+    },
+    lastProducts: async(req,res) => {
+        try {
+            const getLastProducts = await Product.findAll({
+                raw: true,
+                attributes: ['id', 'name', 'price', 'image'],
+                order: [['id', 'DESC']],
+                limit: 4
+            })
+            const lastProducts = getLastProducts.map(product => ({
+                ...product,
+                image: req.protocol + '://' + req.get('host') + '/uploads/products/' + product.image,
+            }))
+            return res.status(200).json({
+                meta: {
+                    success: true,
+                    status: 200
+                },
+                data: lastProducts
+            })
+            
+        } catch (error) {
+            return res.status(500).json({msg: 'Ha ocurrido un error', error: error})
+        }
+    },
+    productOnOffer: async (req,res) => {
+        const countProducts = await Product.count();
+        const idRandom = Math.floor(Math.random() * countProducts + 1);
+        const chooseProduct = await Product.findOne({
+            raw: true,
+            attributes: ['id', 'name', 'price', 'image', 'size'],
+            where: { id: idRandom }
+        })
+
+        const productSelected = chooseProduct ? {
+            id: chooseProduct.id,
+            name: chooseProduct.name,
+            price: Math.round(chooseProduct.price),
+            size: chooseProduct.size,
+            image: req.protocol + '://' + req.get('host') + '/uploads/products/' + chooseProduct.image
+        } : null;
+
+        return res.status(200).json({
+            meta: {
+                success: true,
+                status: 200
+            },
+            data: productSelected
+        })
     },
     detail: async (req, res) => {
         try {
