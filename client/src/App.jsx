@@ -14,12 +14,14 @@ import { Cart } from './components/ListProducts/Cart/Cart'
 import { Detail } from './components/ListProducts/Detail/Detail';
 import { Profile } from './components/User/Profile';
 import { Search } from './components/ListProducts/Search/Search';
-
 import { useSearch } from './contexts/SearchContext';
 import { EditUser } from './components/Forms/AuthForm/EditUser';
+import { useAuth } from './contexts/AuthContext';
+
 
 function App() {
    const {control} = useSearch();
+   const {isLogged} = useAuth();
 
    return (
       <>
@@ -33,17 +35,24 @@ function App() {
                   (control) && <Route path='/' exact={true} element={<Search/>} />
                }
                < Route path='/' exact={true} element={<FilterProducts />} />
+
                < Route path='/' exact={true} element={<BannerMain />} />
+
                < Route path='/products' exact={true} element={<ListProducts />} />
+
                < Route path='/products/:id' exact={true} element={<Detail />} />
+
                < Route path='/cart' exact={true} element={<Cart />} />
-               < Route path='/register' exact={true} element={
-               <AuthForm title='Completa el formulario con tus datos'>< Register /></AuthForm>} />
-               < Route path='/login' exact={true} element={
-               <AuthForm title='¡Que gusto verte de nuevo!'>< Login /></AuthForm>} />
-               <Route path='/profile' exact={true} element={<Profile />} />
-               < Route path='/edit-my-profile' exact={true} element={
-               <AuthForm title='Actualiza tus datos'>< EditUser /></AuthForm>} />
+               
+               < Route path='/register' exact={true} element={<AuthForm title='Completa el formulario con tus datos'>< Register /></AuthForm>} />
+
+               < Route path='/login' exact={true} element={<AuthForm title='¡Que gusto verte de nuevo!'>< Login /></AuthForm>} />
+
+               <Route path='/profile' exact={true} element={isLogged? <Profile/> : <Login/>} />
+
+               < Route path='/edit-my-profile' exact={true} element={isLogged ?
+                  
+               <AuthForm title='Actualiza tus datos'>< EditUser /></AuthForm>: <Login/>} />
             </Routes>
          </main>
          < Footer />

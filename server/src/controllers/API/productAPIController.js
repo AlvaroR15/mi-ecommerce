@@ -1,19 +1,18 @@
-const { Product, User, Cart, CartDetail, sequelize } = require('../../database/models/index');
-const {Op, where} = require('sequelize');
+const { Product, User, Cart, CartDetail } = require('../../database/models/index');
+const {Op} = require('sequelize');
 
 const productAPIController = {
     list: async (req, res) => {
         try {
-            const productsInfo = await Product.findAll({
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 5;
+            const offset = (page - 1) * limit;
+
+            const {count, rows: productsInfo} = await Product.findAndCountAll({
                 raw: true,
-                attributes: ['id', 'name', 'description', 'price', 'size', 'image'],
-                include: ['categories']
-            })
-            const getLastProducts = await Product.findAll({
-                raw: true,
-                attributes: ['id', 'name', 'price', 'image'],
-                order: [['id', 'DESC']],
-                limit: 4
+                attributes: ['id','name','description','price','size','image'],
+                limit: limit,
+                offset: offset
             })
 
             const products = productsInfo.map(product => ({
@@ -21,43 +20,69 @@ const productAPIController = {
                 image: req.protocol + '://' + req.get('host') + '/uploads/products/' + product.image
             }))
 
+            return res.status(200).json({
+                meta: {
+                    success: true,
+                    status: 200,
+                    totalProducts: count,
+                    totalPages: Math.ceil(count / limit),
+                    currentPage: page
+                },
+                data: products
+            })
+        }
+        catch (error) {
+            return res.status(500).json({ error: 'Ha ocurrido un error.', errorDetails: error });
+        }
+    },
+    lastProducts: async(req,res) => {
+        try {
+            const getLastProducts = await Product.findAll({
+                raw: true,
+                attributes: ['id', 'name', 'price', 'image'],
+                order: [['id', 'DESC']],
+                limit: 4
+            })
             const lastProducts = getLastProducts.map(product => ({
                 ...product,
-                image: req.protocol + '://' + req.get('host') + '/uploads/products/' + product.image
+                image: req.protocol + '://' + req.get('host') + '/uploads/products/' + product.image,
             }))
-
-            const countProducts = await Product.count();
-            const idRandom = Math.floor(Math.random() * countProducts + 1);
-            const chooseProduct = await Product.findOne({
-                raw: true,
-                attributes: ['id', 'name', 'price', 'image', 'size'],
-                where: { id: idRandom }
-            })
-
-            const productSelected = chooseProduct ? {
-                id: chooseProduct.id,
-                name: chooseProduct.name,
-                price: Math.round(chooseProduct.price),
-                size: chooseProduct.size,
-                image: req.protocol + '://' + req.get('host') + '/uploads/products/' + chooseProduct.image
-            } : null;
-
             return res.status(200).json({
                 meta: {
                     success: true,
                     status: 200
                 },
-                data: {
-                    products,
-                    lastProducts,
-                    productSelected
-                }
+                data: lastProducts
             })
+            
+        } catch (error) {
+            return res.status(500).json({msg: 'Ha ocurrido un error', error: error})
         }
-        catch (error) {
-            console.error(error);
-            return res.status(500).json({ error: 'Ha ocurrido un error.', errorDetails: error });
-        }
+    },
+    productOnOffer: async (req,res) => {
+        const countProducts = await Product.count();
+        const idRandom = Math.floor(Math.random() * countProducts + 1);
+        const chooseProduct = await Product.findOne({
+            raw: true,
+            attributes: ['id', 'name', 'price', 'image', 'size'],
+            where: { id: idRandom }
+        })
+
+        const productSelected = chooseProduct ? {
+            id: chooseProduct.id,
+            name: chooseProduct.name,
+            price: Math.round(chooseProduct.price),
+            size: chooseProduct.size,
+            image: req.protocol + '://' + req.get('host') + '/uploads/products/' + chooseProduct.image
+        } : null;
+
+        return res.status(200).json({
+            meta: {
+                success: true,
+                status: 200
+            },
+            data: productSelected
+        })
     },
     detail: async (req, res) => {
         try {
@@ -131,19 +156,10 @@ const productAPIController = {
     },
     cart: async (req, res) => {
         try {
-            if (!req.session.userLogged) {
-                return res.status(403).json({
-                    meta: {
-                        success: false,
-                        status: 403,
-                        msg: "There is no registered user"
-                    }
-                })
-            }
-
+            const userId = req.user.id;
             const userCart = await User.findOne({
                 attributes: ['id','email'],
-                where: {email: req.session.userLogged},
+                where: {id:userId},
                 include: {
                     model: Cart,
                     as: 'userCart',
@@ -211,17 +227,9 @@ const productAPIController = {
 
     },
     addCart: async (req, res) => {
-        if (!req.session.userLogged) {
-            return res.status(403).json({
-                meta: {
-                    success: false,
-                    status: 403,
-                    msg: "There is no registered user"
-                }
-            })
-        }
         try {
-            const user = await User.findOne({ where: { email: req.session.userLogged } });
+            const userId = req.user.id;
+            const user = await User.findByPk(userId);
             const newCart = await Cart.create({
                 userId: user.id,
                 state: 'Pendiente'
@@ -260,15 +268,6 @@ const productAPIController = {
         }
     },
     deleteCart: async (req,res) => {
-        if (!req.session.userLogged) {
-            return res.status(403).json({
-                meta: {
-                    success: false,
-                    status: 403,
-                    msg: "There is no registered user"
-                }
-            })
-        }
         try {
 
             // Cancelar el carrito

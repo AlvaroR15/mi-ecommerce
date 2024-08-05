@@ -1,7 +1,7 @@
 const { validationResult } = require('express-validator');
 const { User } = require('../../database/models/index');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { where } = require('sequelize');
 const pictureDefault = '/uploads/users/user.webp';
 
 // Controller for user-related operations
@@ -13,8 +13,12 @@ const usersController = {
             let resultValidation = validationResult(req);
             if (!resultValidation.isEmpty()) {
                 return res.status(422).json({
-                    errors: resultValidation.mapped(),
-                    oldData: req.body
+                    meta: {
+                        success: false,
+                        status: 422,
+                        errors: resultValidation.mapped(),
+                        oldData: req.body
+                    }
                 });
             }
 
@@ -54,55 +58,52 @@ const usersController = {
     // Method to login a user
     login: async (req, res) => {
         try {
-            // Extract email and password from request body
             const { email, password } = req.body;
-            // Find user in database based on email
             const user = await User.findOne({ where: { email: email } });
-
-            // If user does not exist, return error
+    
             if (!user) {
                 return res.status(422).json({
                     meta: {
                         success: false,
-                        status: 422
+                        status: 422,
+                        errors: {
+                            email: { msg: 'Este email no está registrado.' }
+                        }
                     },
-                    msg: 'This email is not registered.'
                 });
             }
-
-            // Validate password
+    
             const isPasswordValid = bcrypt.compareSync(password, user.password);
             if (!isPasswordValid) {
                 return res.status(401).json({
                     meta: {
                         success: false,
-                        status: 401
-                    },
-                    msg: 'Incorrect password.'
+                        status: 401,
+                        errors: {
+                            password: { msg: 'Las credenciales que pusiste son inválidas.' }
+                        }
+                    }
                 });
             }
-
-            // Store user's email in session to indicate login status
-            req.session.userLogged = user.email;
+    
+            const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
+                expiresIn: '1h'
+            });
+    
+            res.cookie('token', token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'strict'
+            });
+    
             return res.status(200).json({
                 meta: {
                     success: true,
                     status: 200,
-                    msg: 'User logged in successfully'
-                },
-                user: {
-                    id: user.id,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    email: req.session.userLogged,
-                    addres: user.addres,
-                    country: user.country
-                },
-                emailSession: req.session.userLogged
+                    msg: 'User logged successfully'
+                }
             });
-
         } catch (error) {
-            console.error('Error during login:', error);
             return res.status(500).json({
                 meta: {
                     success: false,
@@ -117,21 +118,11 @@ const usersController = {
     // Method to retrieve user profile
     profile: async (req, res) => {
         try {
-            // Check if user is logged in
-            if (!req.session.userLogged) {
-                return res.status(403).json({
-                    meta: {
-                        success: false,
-                        status: 403,
-                        msg: 'There is no registered user'
-                    }
-                });
-            }
-
+            const userId = req.user.id;
+            console.log('COOKIES PROFILE :::::',req.user);
             // Find user in database based on email stored in session
-            const findUser = await User.findOne({
-                attributes: ['id', 'firstName', 'lastName', 'email', 'addres', 'country', 'picture'],
-                where: { email: req.session.userLogged }
+            const findUser = await User.findByPk(userId,{
+                attributes: ['id', 'firstName', 'lastName', 'email', 'addres', 'country', 'picture']
             });
 
             // If user exists, return user profile
@@ -151,6 +142,14 @@ const usersController = {
                         picture: findUser.picture ? `${req.protocol}://${req.get('host')}/uploads/users/${findUser.picture}` : `${req.protocol}://${req.get('host')}${pictureDefault}`
                     }
                 });
+            } else {
+                return res.status(404).json({
+                    meta: {
+                        success: false,
+                        status: 404,
+                        msg: 'User not found'
+                    }
+                })
             }
         } catch (error) {
             console.error('Error during profile retrieval:', error);
@@ -178,7 +177,7 @@ const usersController = {
                 })
             }
 
-            const user = await User.findOne({where: {email: req.session.userLogged}});
+            const userId = req.user.id;
             // Captures the data of inputs form
             const { firstName, lastName, addres, country } = req.body;
             // Set data of inputs form in the user
@@ -187,7 +186,7 @@ const usersController = {
                 lastName: lastName,
                 addres: addres,
                 country: country,
-            }, { where: { id: user.id} });
+            }, { where: { id: userId} });
             return res.status(200).json({
                 meta: {
                     success: true,
@@ -203,12 +202,13 @@ const usersController = {
     editPhotoUser: async (req,res) => {
         if (req.file) {
             try {
+                const userId = req.user.id;
                 await User.update({
                     picture: req.file.filename
                 }, {
-                    where: {email: req.session.userLogged}
+                    where: {id: userId}
                 })
-                const userEdited = await User.findOne({where: {email: req.session.userLogged}})
+                const userEdited = await User.findByPk(userId);
                 return res.status(200).json({
                     meta: {
                         success: true,
@@ -235,8 +235,11 @@ const usersController = {
     // Method to logout user
     logout: (req, res) => {
         try {
-            // Destroy user session
-            req.session.destroy();
+            res.clearCookie('token', {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'Strict'
+            });
             return res.status(200).json({
                 meta: {
                     success: true,

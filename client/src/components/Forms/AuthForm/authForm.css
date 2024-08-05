@@ -67,3 +67,9 @@ input[type="text"]::placeholder, input[type="email"]::placeholder, input[type="p
 .span-question {
     margin: 10px auto;
 }
+
+.error-msg {
+    color: #a31414;
+    font-size: 0.7em;
+    margin-bottom: 0.5em ;
+}

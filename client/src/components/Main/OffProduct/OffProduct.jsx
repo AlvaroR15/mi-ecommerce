@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getProducts } from "../../../services/productsService";
+import { productOnOffer } from "../../../services/productsService";
 import { Card } from "../../Partials/Card";
 import './offProduct.css'
 import { Link } from "react-router-dom";
@@ -8,8 +8,8 @@ export const OffProduct = () => {
     const [product, setProduct] = useState({});
     useEffect(() => {
         const getProduct = async () => {
-            const response = await getProducts();
-            setProduct(response.productSelected);
+            const response = await productOnOffer();
+            setProduct(response.data);
         }
         getProduct();
     }, [])
