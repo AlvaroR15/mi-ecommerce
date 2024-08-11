@@ -1,6 +1,6 @@
 .nav-mobile-container {
     position: absolute;
-    height: 80vh;
+    height: 50vh;
     width: 80vw;
     top: 0;
     background-color: #333;
@@ -38,7 +38,8 @@
 .nav-mobile-container .nav-bar a, .login-bar a {
     color: #eee;
     display: block;
-    margin-bottom: 4px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #444;
 }
 
 
@@ -49,17 +50,4 @@
     position: absolute;
     top: 0px;
     right: 12px;
-}
-
-
-@media (min-width: 768px) {
-    .nav-mobile-container {
-        display: none;
-    }
-}
-
-@media (min-width: 1024px) {
-    .nav-mobile-container {
-        display: none;
-    }
 }

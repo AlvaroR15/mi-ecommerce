@@ -1,0 +1,59 @@
+.buy-container {
+    height: 40vh;
+}
+
+.title-buy {
+    font-size: 2.8rem;
+    letter-spacing: 5px;
+    word-spacing: 5px;
+    padding: 5vw;
+    margin: 3vh;
+}
+
+/* Estilos para el contenedor */
+.container-check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* Ocultar el checkbox real */
+.container-check input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Estilos para el checkmark */
+.container-check .checkmark {
+    width: 3rem;
+    height: 3rem;
+    background-color: #4caf50;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+/* Crear el símbolo de tilde */
+.container-check .checkmark::after {
+    content: '';
+    width: 0.6rem;
+    height: 1rem;
+    border: solid white;
+    border-width: 0 0.3rem 0.3rem 0;
+    transform: rotate(45deg);
+    display: none;
+}
+
+/* Mostrar el símbolo de tilde cuando el checkbox está marcado */
+.container-check input[type="checkbox"]:checked + .checkmark::after {
+    display: block;
+}
+
+/* Cambiar el color de fondo del checkmark cuando el checkbox no está marcado */
+.container-check input[type="checkbox"]:not(:checked) + .checkmark {
+    background-color: #ccc;
+}

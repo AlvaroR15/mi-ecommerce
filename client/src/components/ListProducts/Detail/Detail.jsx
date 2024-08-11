@@ -4,6 +4,7 @@ import { getProduct } from '../../../services/detailProductService';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../../contexts/AuthContext';
+import { Link } from 'react-router-dom';
 
 export const Detail = () => {
     const [product, setProduct] = useState(null);
@@ -72,7 +73,7 @@ export const Detail = () => {
                                 <option value="5">5</option>
                             </select>
                             <div className="button">
-                                <button className="boton-primario">Comprar ahora</button>
+                                <Link to='/buy'><button className="boton-primario">Comprar ahora</button></Link>
                                 <button onClick={addToCart} className="boton-secundario">Agregar al carrito</button>
                             </div>
                         </div>
