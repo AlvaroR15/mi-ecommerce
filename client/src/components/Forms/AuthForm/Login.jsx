@@ -9,7 +9,7 @@ export const Login = ({setCurrentUser}) => {
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
 
-    const {login} = useAuth();
+    const {login,isLogged} = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -27,6 +27,8 @@ export const Login = ({setCurrentUser}) => {
             console.log(errors);
         }
     }
+    console.log(isLogged, Date.now());
+    
 
     return (
         <form onSubmit={handleSubmit}>

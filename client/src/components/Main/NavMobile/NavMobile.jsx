@@ -1,15 +1,21 @@
 import './navMobile.css';
 import { useAuth } from '../../../contexts/AuthContext';
-
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export const NavMobile = (props) => {
     const nav = useRef();
+    const overlay = useRef();
     const { getDataUser, user, isLogged, logout } = useAuth();
 
     const changeClass = () => {
-        nav.current.classList.toggle('show')
+        nav.current.classList.toggle('show');
+        overlay.current.classList.toggle('show');
+    }
+
+    const closeNav = () => {
+        nav.current.classList.remove('show');
+        overlay.current.classList.remove('show');
     }
 
     useEffect(() => {
@@ -22,9 +28,9 @@ export const NavMobile = (props) => {
 
     }, [])
 
-
     return (
         <>
+            <div ref={overlay} className="overlay" onClick={closeNav}></div>
             <nav ref={nav} className={`nav-mobile-container ${props.clicked ? 'show' : ''}`}>
                 <span onClick={changeClass} className='close-nav'>X</span>
                 {

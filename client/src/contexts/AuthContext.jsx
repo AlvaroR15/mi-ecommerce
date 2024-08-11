@@ -3,18 +3,27 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getUser } from "../services/userServices";
 
+// Create an authentication context
 const AuthContext = createContext();
 
+// Custom hook to use the authentication context
 export const useAuth = () => useContext(AuthContext);
 
+// Authentication context provider component
 export const AuthProvider = (props) => {
+    // State to store user information
     const [user, setUser] = useState(null);
+    // State to manage login status
     const [isLogged, setIslogged] = useState(false);
+    // State to manage request status
     const [status, setStatus] = useState(false);
+    // Hook for navigation
     const navigate = useNavigate();
 
+    // Configure axios to include credentials with all requests
     axios.defaults.withCredentials = true;
 
+    // Effect to check user authentication on component mount
     useEffect(() => {
         const checkAuth = async () => {
             try {
@@ -33,6 +42,7 @@ export const AuthProvider = (props) => {
         checkAuth();
     }, []);
 
+    // Function to handle user login
     const login = async (email, password) => {
         try {
             const response = await axios.post('http://localhost:3099/api/users/login', {
@@ -40,7 +50,7 @@ export const AuthProvider = (props) => {
                 password
             }, { 
                 mode: 'cors',
-                credentials:'include',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -58,14 +68,12 @@ export const AuthProvider = (props) => {
         }
     };
 
+    // Function to get user data
     const getDataUser = async () => {
         try {
             const response = await getUser();
-            const user = response.user;
-            // const meta = response.meta;
-
-            // setStatus(meta.status);
-
+            const user = response.data.user;
+            
             setUser({
                 firstName: user.firstName,
                 lastName: user.lastName,
@@ -79,6 +87,7 @@ export const AuthProvider = (props) => {
         }
     };
 
+    // Function to handle user logout
     const logout = async () => {
         try {
             await axios.post('http://localhost:3099/api/users/logout', {}, { withCredentials: true });
@@ -92,13 +101,14 @@ export const AuthProvider = (props) => {
         }
     };
 
+    // Function to edit user profile picture
     const editPhoto = async (picture) => {
         const data = new FormData();
         data.append('picture', picture);
         try {
             const response = await axios.put('http://localhost:3099/api/users/editPhoto', data, {
                 headers: { 'Content-Type': 'multipart/form-data' },
-                withCredentials: true // Asegúrate de incluir las cookies
+                withCredentials: true // Ensure cookies are included
             });
             if (response.data.meta.success) {
                 setUser(response.data.user);
@@ -108,6 +118,7 @@ export const AuthProvider = (props) => {
         }
     };
 
+    // Provide authentication methods and state to child components
     return (
         <AuthContext.Provider value={{ user, login, logout, getDataUser, isLogged, status, editPhoto }}>
             {props.children}

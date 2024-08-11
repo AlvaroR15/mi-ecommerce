@@ -17,6 +17,7 @@ import { Search } from './components/ListProducts/Search/Search';
 import { useSearch } from './contexts/SearchContext';
 import { EditUser } from './components/Forms/AuthForm/EditUser';
 import { useAuth } from './contexts/AuthContext';
+import { BuyProduct } from './components/ListProducts/Buy/BuyProduct';
 
 
 function App() {
@@ -39,6 +40,8 @@ function App() {
                < Route path='/' exact={true} element={<BannerMain />} />
 
                < Route path='/products' exact={true} element={<ListProducts />} />
+
+               <Route path='/buy' exact={true} element={<BuyProduct/>} />
 
                < Route path='/products/:id' exact={true} element={<Detail />} />
 

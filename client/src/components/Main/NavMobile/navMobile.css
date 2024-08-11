@@ -51,15 +51,3 @@
     right: 12px;
 }
 
-
-@media (min-width: 768px) {
-    .nav-mobile-container {
-        display: none;
-    }
-}
-
-@media (min-width: 1024px) {
-    .nav-mobile-container {
-        display: none;
-    }
-}
