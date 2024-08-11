@@ -1,4 +1,4 @@
-import logo from '../../../assets/partials-img/Logo.png'
+import logo from '../../../assets/partials-img/mi_ecommerce_logo.jfif'
 import './header.css'
 import { NavMobile } from '../../Main/NavMobile/NavMobile';
 import { useState, useRef } from 'react';
@@ -45,8 +45,8 @@ export const Header = () => {
             <NavMobile clicked={clicked} handleClick={handleClick} />
             <nav>
                 <div className="nav-mobile">
-                    <div>
-                        <Link to='/' onClick={reload}><img className="header-logo" src={logo} alt="Logo de la marca" /></Link>
+                    <div className='navigator'>
+                        <Link className='link-img-header' to='/' onClick={reload}><img className="header-logo" src={logo} alt="Logo de la marca" /></Link>
                         <div>
                             <Link to={`${isLogged ? '/cart' : '/login'}`}><i className="fa-solid fa-cart-shopping"></i></Link>
                             <i onClick={handleClick} className="fa-solid fa-bars"></i>

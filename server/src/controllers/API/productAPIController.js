@@ -1,24 +1,29 @@
 const { Product, User, Cart, CartDetail } = require('../../database/models/index');
-const {Op} = require('sequelize');
+const { Op } = require('sequelize');
 
 const productAPIController = {
+    /**
+     * List all products with pagination.
+     * @param {Object} req - Express request object.
+     * @param {Object} res - Express response object.
+     */
     list: async (req, res) => {
         try {
             const page = parseInt(req.query.page) || 1;
             const limit = parseInt(req.query.limit) || 5;
             const offset = (page - 1) * limit;
 
-            const {count, rows: productsInfo} = await Product.findAndCountAll({
+            const { count, rows: productsInfo } = await Product.findAndCountAll({
                 raw: true,
-                attributes: ['id','name','description','price','size','image'],
+                attributes: ['id', 'name', 'description', 'price', 'size', 'image'],
                 limit: limit,
                 offset: offset
-            })
+            });
 
             const products = productsInfo.map(product => ({
                 ...product,
                 image: req.protocol + '://' + req.get('host') + '/uploads/products/' + product.image
-            }))
+            }));
 
             return res.status(200).json({
                 meta: {
@@ -29,44 +34,56 @@ const productAPIController = {
                     currentPage: page
                 },
                 data: products
-            })
-        }
-        catch (error) {
+            });
+        } catch (error) {
             return res.status(500).json({ error: 'Ha ocurrido un error.', errorDetails: error });
         }
     },
-    lastProducts: async(req,res) => {
+
+    /**
+     * Get the latest products (up to 4 items).
+     * @param {Object} req - Express request object.
+     * @param {Object} res - Express response object.
+     */
+    lastProducts: async (req, res) => {
         try {
             const getLastProducts = await Product.findAll({
                 raw: true,
                 attributes: ['id', 'name', 'price', 'image'],
                 order: [['id', 'DESC']],
                 limit: 4
-            })
+            });
+
             const lastProducts = getLastProducts.map(product => ({
                 ...product,
                 image: req.protocol + '://' + req.get('host') + '/uploads/products/' + product.image,
-            }))
+            }));
+
             return res.status(200).json({
                 meta: {
                     success: true,
                     status: 200
                 },
                 data: lastProducts
-            })
-            
+            });
         } catch (error) {
-            return res.status(500).json({msg: 'Ha ocurrido un error', error: error})
+            return res.status(500).json({ msg: 'Ha ocurrido un error', error: error });
         }
     },
-    productOnOffer: async (req,res) => {
+
+    /**
+     * Get a random product on offer.
+     * @param {Object} req - Express request object.
+     * @param {Object} res - Express response object.
+     */
+    productOnOffer: async (req, res) => {
         const countProducts = await Product.count();
         const idRandom = Math.floor(Math.random() * countProducts + 1);
         const chooseProduct = await Product.findOne({
             raw: true,
             attributes: ['id', 'name', 'price', 'image', 'size'],
             where: { id: idRandom }
-        })
+        });
 
         const productSelected = chooseProduct ? {
             id: chooseProduct.id,
@@ -82,14 +99,21 @@ const productAPIController = {
                 status: 200
             },
             data: productSelected
-        })
+        });
     },
+
+    /**
+     * Get detailed information about a specific product by ID.
+     * @param {Object} req - Express request object.
+     * @param {Object} res - Express response object.
+     */
     detail: async (req, res) => {
         try {
             const searchProduct = await Product.findOne({
                 where: { id: req.params.id },
                 attributes: ['id', 'name', 'description', 'price', 'size', 'image']
             });
+
             const product = searchProduct ? {
                 id: searchProduct.id,
                 name: searchProduct.name,
@@ -98,23 +122,29 @@ const productAPIController = {
                 size: searchProduct.size,
                 image: req.protocol + '://' + req.get('host') + '/uploads/products/' + searchProduct.image
             } : null;
-            return res.status(200).json({ product })
 
+            return res.status(200).json({ product });
         } catch (error) {
             console.log(error);
-            res.status(500).json({ 'Ha ocurrido un error.': error })
+            res.status(500).json({ 'Ha ocurrido un error.': error });
         }
     },
+
+    /**
+     * Search for products by name.
+     * @param {Object} req - Express request object.
+     * @param {Object} res - Express response object.
+     */
     searchProduct: async (req, res) => {
         const textInput = req.body.search;
         try {
             const searchProducts = await Product.findAll({
                 where: {
                     name: {
-                         [Op.like]: `%${textInput}%` 
-                        }
+                        [Op.like]: `%${textInput}%`
+                    }
                 },
-                attributes: ['name', 'description', 'price', 'image']
+                attributes: ['id', 'name', 'description', 'price', 'image']
             });
 
             if (searchProducts.length == 0) {
@@ -124,7 +154,7 @@ const productAPIController = {
                         status: 404,
                         msg: 'Products not found'
                     }
-                })
+                });
             }
 
             const productsFound = searchProducts.map(product => ({
@@ -133,7 +163,8 @@ const productAPIController = {
                 description: product.description,
                 price: product.price,
                 image: `${req.protocol}://${req.get('host')}/uploads/products/${product.image}`
-            }))
+            }));
+
             return res.status(200).json({
                 meta: {
                     success: true,
@@ -141,7 +172,7 @@ const productAPIController = {
                     msg: 'Products found'
                 },
                 data: productsFound
-            })
+            });
         } catch (error) {
             console.log(error);
             return res.status(500).json({
@@ -149,29 +180,35 @@ const productAPIController = {
                     success: false,
                     status: 500,
                     msg: 'Occurred an error'
-                }, 
+                },
                 error
             });
         }
     },
+
+    /**
+     * Get the user's cart.
+     * @param {Object} req - Express request object.
+     * @param {Object} res - Express response object.
+     */
     cart: async (req, res) => {
         try {
             const userId = req.user.id;
             const userCart = await User.findOne({
-                attributes: ['id','email'],
-                where: {id:userId},
+                attributes: ['id', 'email'],
+                where: { id: userId },
                 include: {
                     model: Cart,
                     as: 'userCart',
-                    where: {state: 'Pendiente'},
+                    where: { state: 'Pendiente' },
                     include: {
                         model: Product,
                         as: 'products',
-                        through: {model: CartDetail},
-                        attributes: ['id','name','price','image'],
+                        through: { model: CartDetail },
+                        attributes: ['id', 'name', 'price', 'image'],
                     }
                 }
-            })
+            });
 
             if (!userCart) {
                 return res.status(404).json({
@@ -181,10 +218,9 @@ const productAPIController = {
                         msg: "User's cart not found"
                     },
                     data: {}
-                })
+                });
             }
-            
-            
+
             const productsData = userCart.userCart.flatMap(cartItem => cartItem.products);
             const products = productsData.map(product => ({
                 id: product.id,
@@ -199,11 +235,8 @@ const productAPIController = {
                     subtotal: product.cartdetail.subtotal
                 }
             }));
-            
 
-            
-            const data = {products};
-            
+            const data = { products };
 
             return res.status(200).json({
                 meta: {
@@ -212,8 +245,7 @@ const productAPIController = {
                     msg: "User's products"
                 },
                 data
-            })
-
+            });
         } catch (error) {
             console.log(error);
             return res.status(500).json({
@@ -222,10 +254,15 @@ const productAPIController = {
                     status: 500,
                     msg: 'Occurred an error'
                 }
-            })
+            });
         }
-
     },
+
+    /**
+     * Add a product to the user's cart.
+     * @param {Object} req - Express request object.
+     * @param {Object} res - Express response object.
+     */
     addCart: async (req, res) => {
         try {
             const userId = req.user.id;
@@ -241,7 +278,8 @@ const productAPIController = {
                     productId: req.body.productId,
                     quantity: req.body.quantity,
                     subtotal: (req.body.price * req.body.quantity)
-                })
+                });
+
                 return res.status(201).json({
                     meta: {
                         success: true,
@@ -252,10 +290,8 @@ const productAPIController = {
                         cart: newCart,
                         cartProductInfo
                     }
-                })    
+                });
             }
-
-            
         } catch (error) {
             console.log(error);
             return res.status(500).json({
@@ -264,48 +300,57 @@ const productAPIController = {
                     status: 500,
                     msg: 'Occurred an error'
                 }
-            })
+            });
         }
     },
-    deleteCart: async (req,res) => {
-        try {
 
-            // Cancelar el carrito
+    /**
+     * Delete a cart and its details.
+     * @param {Object} req - Express request object.
+     * @param {Object} res - Express response object.
+     */
+    deleteCart: async (req, res) => {
+        try {
+            // Cancel the cart
             await Cart.update({
                 state: 'Cancelado'
-            }, {where: {id:req.body.cartId}})
+            }, { where: { id: req.body.cartId } });
 
-   
-            // Eliminar el registro del detalle del carrito
+            // Delete cart details
             await CartDetail.destroy({
-                where: { cartId: req.body.cartId}
-            })
+                where: { cartId: req.body.cartId }
+            });
 
             return res.status(200).json({
                 meta: {
                     success: true,
                     status: 200,
-                    msg: 'Producto eliminado del carrito exitosamente'
+                    msg: 'Cart deleted successfully'
                 }
             });
-
-        } catch(error) {
+        } catch (error) {
             console.log(error);
             return res.status(500).json({
                 meta: {
                     success: false,
-                    status:500,
+                    status: 500,
                     msg: 'Occurred an error'
                 }
-            })
+            });
         }
     },
+
+    /**
+     * Create a new product.
+     * @param {Object} req - Express request object.
+     * @param {Object} res - Express response object.
+     */
     saveProduct: async (req, res) => {
         try {
             let file;
             if (req.file.filename) {
                 file = req.file.filename;
-            };
+            }
 
             const product = await Product.create({
                 name: req.body.name,
@@ -318,17 +363,23 @@ const productAPIController = {
 
             return res.status(201).json({
                 success: true,
-                msg: 'successfully created product',
+                msg: 'Product successfully created',
                 product: product
-            })
+            });
         } catch (error) {
             console.log(error);
             return res.status(500).json({
                 success: false,
-                msg: 'error saving product'
-            })
+                msg: 'Error saving product'
+            });
         }
     },
+
+    /**
+     * Edit an existing product.
+     * @param {Object} req - Express request object.
+     * @param {Object} res - Express response object.
+     */
     editProduct: async (req, res) => {
         try {
             const productToUpdate = await Product.findByPk(req.params.id, { raw: true });
@@ -341,23 +392,29 @@ const productAPIController = {
                 size: req.body.size,
                 image: file,
                 categoryId: +req.body.categoryId,
-            }
+            };
 
             if (file) {
-                productUpdate.picture = file.filename;
+                productUpdate.image = file.filename;
             } else {
-                productUpdate.picture = productToUpdate.picture;
+                productUpdate.image = productToUpdate.image;
             }
 
-            await Product.update(productUpdate, { where: { id: req.params.id } })
+            await Product.update(productUpdate, { where: { id: req.params.id } });
 
-            return res.status(500).json({
-                status: 'ojjjj'
-            })
+            return res.status(200).json({
+                status: 'Product updated successfully'
+            });
         } catch (error) {
             console.log(error);
         }
     },
+
+    /**
+     * Delete a product by ID.
+     * @param {Object} req - Express request object.
+     * @param {Object} res - Express response object.
+     */
     deleteProduct: async (req, res) => {
         try {
             await Product.destroy({
@@ -365,11 +422,11 @@ const productAPIController = {
             });
             return res.status(200).json({
                 msg: 'Product deleted'
-            })
+            });
         } catch (error) {
-            res.status(500).json('Ha ocurrido un error.', error)
+            res.status(500).json('Ha ocurrido un error.', error);
         }
     }
-}
+};
 
 module.exports = productAPIController;

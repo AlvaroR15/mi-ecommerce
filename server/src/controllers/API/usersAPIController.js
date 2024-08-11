@@ -2,6 +2,7 @@ const { validationResult } = require('express-validator');
 const { User } = require('../../database/models/index');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const { succesResponse, errorResponse, userProfileResponse } = require('../../utils/responseHelpers');
 const pictureDefault = '/uploads/users/user.webp';
 
 // Controller for user-related operations
@@ -35,23 +36,10 @@ const usersController = {
                 picture: file ? file.filename : 'user.webp'
             });
 
-            return res.status(200).json({
-                meta: {
-                    success: true,
-                    status: 200,
-                    msg: 'User created successfully'
-                }
-            });
+            return res.status(200).json(succesResponse(null, 'User created successfully'));
         } catch (error) {
             console.error('Error during user registration:', error);
-            return res.status(500).json({
-                meta: {
-                    success: false,
-                    status: 500,
-                    msg: 'An error occurred during user registration'
-                },
-                error: error.message
-            });
+            return res.status(500).json(errorResponse('An error ocurred during user registration',error));
         }
     },
 
@@ -96,22 +84,9 @@ const usersController = {
                 sameSite: 'strict'
             });
     
-            return res.status(200).json({
-                meta: {
-                    success: true,
-                    status: 200,
-                    msg: 'User logged successfully'
-                }
-            });
+            return res.status(200).json(succesResponse(null,'User logged successfully'));
         } catch (error) {
-            return res.status(500).json({
-                meta: {
-                    success: false,
-                    status: 500,
-                    msg: 'An error occurred during login'
-                },
-                error: error.message
-            });
+            return res.status(500).json(errorResponse('An error ocurred during login'));
         }
     },
 
@@ -119,64 +94,20 @@ const usersController = {
     profile: async (req, res) => {
         try {
             const userId = req.user.id;
-            console.log('COOKIES PROFILE :::::',req.user);
-            // Find user in database based on email stored in session
-            const findUser = await User.findByPk(userId,{
-                attributes: ['id', 'firstName', 'lastName', 'email', 'addres', 'country', 'picture']
-            });
-
-            // If user exists, return user profile
-            if (findUser) {
-                return res.status(200).json({
-                    meta: {
-                        success: true,
-                        status: 200,
-                        msg: 'Registered user found'
-                    },
-                    user: {
-                        firstName: findUser.firstName,
-                        lastName: findUser.lastName,
-                        email: findUser.email,
-                        adress: findUser.addres,
-                        country: findUser.country,
-                        picture: findUser.picture ? `${req.protocol}://${req.get('host')}/uploads/users/${findUser.picture}` : `${req.protocol}://${req.get('host')}${pictureDefault}`
-                    }
-                });
-            } else {
-                return res.status(404).json({
-                    meta: {
-                        success: false,
-                        status: 404,
-                        msg: 'User not found'
-                    }
-                })
-            }
+    
+            const response = await userProfileResponse(userId, req, pictureDefault);
+    
+            // Send the response to the client
+            return res.status(response.meta.status).json(response);
         } catch (error) {
             console.error('Error during profile retrieval:', error);
-            return res.status(500).json({
-                meta: {
-                    success: false,
-                    status: 500,
-                    msg: 'An error occurred during profile retrieval'
-                },
-                error: error.message
-            });
+            return res.status(500).json(errorResponse('An error occurred during profile retrieval',error));
         }
     },
     // Method to Edit User
     editDataUser: async (req, res) => {
         // Check if user is logged in
         try {
-            if (!req.session.userLogged) {
-                return res.status(403).json({
-                    meta: {
-                        success: false,
-                        status: 403,
-                        msg: 'There is no registered user'
-                    }
-                })
-            }
-
             const userId = req.user.id;
             // Captures the data of inputs form
             const { firstName, lastName, addres, country } = req.body;
@@ -187,16 +118,9 @@ const usersController = {
                 addres: addres,
                 country: country,
             }, { where: { id: userId} });
-            return res.status(200).json({
-                meta: {
-                    success: true,
-                    status: 200,
-                    msg: 'User edited successfully'
-                }
-            })
+            return res.status(200).json(succesResponse(null,'User edited successfully'))
         } catch (error) {
-            console.log(error);
-            return res.status(500).json(error);
+            return res.status(500).json(errorResponse('An error occurred during profile retrieval',error))
         }
     },
     editPhotoUser: async (req,res) => {
@@ -218,14 +142,7 @@ const usersController = {
                     data: userEdited
                 })
             } catch (error) {
-                console.log(error);
-                return res.status(500).json({
-                    meta: {
-                        success: false,
-                        status: 500,
-                        msg: 'An error occurred during the picture editing'
-                    }
-                })
+                return res.status(500).json(errorResponse('An error occurred during the picture editing',error))
             }
         }
         
@@ -240,23 +157,9 @@ const usersController = {
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'Strict'
             });
-            return res.status(200).json({
-                meta: {
-                    success: true,
-                    status: 200,
-                    msg: 'User logged out successfully'
-                }
-            });
+            return res.status(200).json(succesResponse(null, 'User logged out successfully'));
         } catch (error) {
-            console.error('Error during logout:', error);
-            return res.status(500).json({
-                meta: {
-                    success: false,
-                    status: 500,
-                    msg: 'An error occurred during logout'
-                },
-                error: error.message
-            });
+            return res.status(500).json(errorResponse('An error occurred during logout',error));
         }
     }
 };

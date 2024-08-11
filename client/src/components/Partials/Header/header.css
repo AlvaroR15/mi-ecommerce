@@ -15,36 +15,42 @@ header nav .nav-mobile {
 
 }
 
-header nav .nav-mobile div .header-logo {
-    width: 100px;
+.navigator .link-img-header {
     display: block;
-    margin: 5px;
+    width: 90px;
+    height: 80px;
 }
 
-header nav .nav-mobile div {
+
+.fa-cart-shopping, .fa-bars {
+    font-size: 1.5rem;
+}
+
+.fa-bars {
+    margin-right: 13px;
+}
+
+.navigator {
     width: 85vw;
-    margin: 1px 3px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+}
+.navigator > div {
+    width: 30%;
+    height: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-header nav .nav-mobile div > div {
-    width: 20%;
-    display: flex;
     color: #000;
-    font-size: 1.2rem;
-}
-
-header nav .nav-md-lg {
-    display: none;
 }
 
 
 header nav .nav-mobile form {
     margin: 1rem 0 0;
-    width: 78%;
-    height: 8vh;
+    width: 80%;
+    height: 6vh;
     box-shadow: 0 0 5px #222;
     border-radius: 5px;
     display: flex;
@@ -57,10 +63,10 @@ header nav .nav-mobile form {
 header nav .nav-mobile form input {
     position: absolute;
     top: 3px;
-    left: 2px;
+    left: 7px;
     display: block;
     background-color: transparent;
-    width: 87%;
+    width: 85%;
     font-size: 1rem;
     border: none;
     outline: none;
@@ -69,11 +75,11 @@ header nav .nav-mobile form input {
 
 header nav .nav-mobile form i {
     position: absolute;
-    top: 15px;
+    top: 8px;
     right: 10px;
     display: block;
     font-size: 1.1rem;
-    color: #000;
+    color: #333;
 }
 
 .error-message {
